@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix
+    xmlns="http://schemas.microsoft.com/wix/2006/wi"
+    xmlns:bal="http://schemas.microsoft.com/wix/BalExtension"
+    xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+
+    <?include Configuration.wxi?>
+
+    <Bundle	Name="$(var.Suite_ProductName)" Version="$(var.Suite_Version)" Manufacturer="$(var.Suite_Manufacturer)"
+		UpgradeCode="$(var.Suite_UpgradeCode)" AboutUrl="$(var.Suite_ProductUrl)"
+		IconSourceFile="Resources\Product.ico" Condition="(VersionNT &gt;= v6.0)" >
+
+        <bal:Condition Message ="Setup has detected that $(var.Suite_PrereqsName) it wasn't installed.&#13;&#10;In order to install $(var.Suite_ProductName) you need to install $(var.Suite_PrereqsName) first.">InstallFolder</bal:Condition>
+
+        <BootstrapperApplicationRef Id="WixExtendedBootstrapperApplication.RtfLicense"  >
+            <Payload SourceFile="Resources\Header.png" />
+            <Payload SourceFile="Resources\Footer.png" />
+            <bal:WixExtendedBootstrapperApplication
+                LicenseFile="Resources\SuiteEULA.rtf"
+                ThemeFile="Resources\BundleTheme.xml"
+                LocalizationFile="Resources\BundleTheme.wxl"
+                ShowFilesInUse="yes" ShowVersion="yes" SuppressOptionsUI="yes" />
+        </BootstrapperApplicationRef>
+
+        <Variable Name="CustomProductName" Persisted="yes" Type="string" Value="$(var.Suite_ProdShort)" />
+                  
+        <Variable Name="TermsUrl"       Persisted="yes" Type="string" Value="[WixBundleTempPath]License.rtf" />
+        <Variable Name="InstallRegPath" Persisted="yes" Type="string" Value="SOFTWARE\$(var.Suite_ManufShort)\$(var.Suite_ProdShort)" />
+
+        <util:RegistrySearch  Id="Detect_InstallFolder_x86" Variable="InstallFolder" Result="value" Root="HKLM" Key="[InstallRegPath]" Value="SUITE_INSTALLDIR" Win64="no" Condition="NOT VersionNT64"/>
+        <util:RegistrySearch  Id="Detect_InstallFolder_x64" Variable="InstallFolder" Result="value" Root="HKLM" Key="[InstallRegPath]" Value="SUITE_INSTALLDIR" Win64="yes" Condition="VersionNT64"/>
+
+        <Chain>
+            <MsiPackage Id="SuiteWeb_x86" Compressed="yes" InstallCondition="NOT VersionNT64"
+				SourceFile="bin\$(var.Configuration)\SuiteWeb_x86.msi" Vital="yes" ForcePerMachine="yes" >
+                <MsiProperty Name="SUITE_INSTALLDIR" Value="[InstallFolder]" />
+                <MsiProperty Name="INSTALL_REG_PATH" Value="[InstallRegPath]"/>
+            </MsiPackage>
+            <MsiPackage Id="SuiteWeb_x64" Compressed="yes" InstallCondition="VersionNT64"
+				SourceFile="bin\$(var.Configuration)\SuiteWeb_x64.msi" Vital="yes" ForcePerMachine="yes" >
+                <MsiProperty Name="SUITE_INSTALLDIR" Value="[InstallFolder]" />
+                <MsiProperty Name="INSTALL_REG_PATH" Value="[InstallRegPath]"/>
+            </MsiPackage>
+
+            <MsiPackage Id="SuiteEng_x86" Compressed="yes" InstallCondition="NOT VersionNT64"
+                SourceFile="bin\$(var.Configuration)\SuiteEng_x86.msi" Vital="yes" ForcePerMachine="yes" >
+                <MsiProperty Name="SUITE_INSTALLDIR" Value="[InstallFolder]" />
+                <MsiProperty Name="INSTALL_REG_PATH" Value="[InstallRegPath]"/>
+            </MsiPackage>
+            <MsiPackage Id="SuiteEng_x64" Compressed="yes" InstallCondition="VersionNT64"
+				SourceFile="bin\$(var.Configuration)\SuiteEng_x64.msi" Vital="yes" ForcePerMachine="yes" >
+                <MsiProperty Name="SUITE_INSTALLDIR" Value="[InstallFolder]" />
+                <MsiProperty Name="INSTALL_REG_PATH" Value="[InstallRegPath]"/>
+            </MsiPackage>
+        </Chain>
+	</Bundle>
+</Wix>

@@ -1,0 +1,1508 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+
+    <?include Configuration.wxi?>
+    
+    <?if $(var.Platform)="x86"?>
+    <Fragment>
+        <DirectoryRef Id="DIR_MYSQL">
+            <Component Id="COPYING" Guid="{C7BD3E59-42B9-4D50-A559-75896860FD77}">
+                <File Id="COPYING" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\COPYING" />
+            </Component>
+            <Component Id="my.ini" Guid="{0541AE19-2E8B-4C23-B9FB-B5BF0EACEF5A}">
+                <File Id="my.ini" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\my.ini" />
+            </Component>
+            <Component Id="README" Guid="{FE632B8A-DF9A-42BA-83F0-0B06D50EAAE1}">
+                <File Id="README" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\README" />
+            </Component>
+            <Directory Id="bin" Name="bin">
+                <Component Id="echo.exe" Guid="{AD04FF28-054F-4759-84A6-A55DB24E5746}">
+                    <File Id="echo.exe" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\bin\echo.exe" />
+                </Component>
+                <Component Id="innochecksum.exe" Guid="{9359C79A-8408-4402-B4D0-D8D8CB105298}">
+                    <File Id="innochecksum.exe" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\bin\innochecksum.exe" />
+                </Component>
+                <Component Id="libmecab.dll" Guid="{2F4F5FC4-F05B-45B9-95B7-0677CB58CB55}">
+                    <File Id="libmecab.dll" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\bin\libmecab.dll" />
+                </Component>
+                <Component Id="lz4_decompress.exe" Guid="{AD92ABDE-1BB7-47A2-8382-7D64AD7A5981}">
+                    <File Id="lz4_decompress.exe" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\bin\lz4_decompress.exe" />
+                </Component>
+                <Component Id="msvcp120.dll" Guid="{BDE3CC10-EBD7-4C27-B457-43100AEF03D6}">
+                    <File Id="msvcp120.dll" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\bin\msvcp120.dll" />
+                </Component>
+                <Component Id="msvcr120.dll" Guid="{B0FDD854-F1D3-4DFE-99D4-694A0A4BBB9D}">
+                    <File Id="msvcr120.dll" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\bin\msvcr120.dll" />
+                </Component>
+                <Component Id="myisamchk.exe" Guid="{CC3AA1B0-7A80-4D77-802D-2AD71F890D30}">
+                    <File Id="myisamchk.exe" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\bin\myisamchk.exe" />
+                </Component>
+                <Component Id="myisamlog.exe" Guid="{76E089C8-0423-4E2C-8268-54B7466B3DB4}">
+                    <File Id="myisamlog.exe" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\bin\myisamlog.exe" />
+                </Component>
+                <Component Id="myisampack.exe" Guid="{95277873-2C7A-4A9B-ADE9-1470CD940F79}">
+                    <File Id="myisampack.exe" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\bin\myisampack.exe" />
+                </Component>
+                <Component Id="myisam_ftdump.exe" Guid="{F3F4DD9D-2B2B-4795-8868-452ECD262FA8}">
+                    <File Id="myisam_ftdump.exe" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\bin\myisam_ftdump.exe" />
+                </Component>
+                <Component Id="mysql.exe" Guid="{748155AE-5CA5-4D40-B3BC-99607FBDA11D}">
+                    <File Id="mysql.exe" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\bin\mysql.exe" />
+                </Component>
+                <Component Id="mysqladmin.exe" Guid="{0ED84916-B5E1-41B3-8B56-A1C4D70F85EE}">
+                    <File Id="mysqladmin.exe" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\bin\mysqladmin.exe" />
+                </Component>
+                <Component Id="mysqlbinlog.exe" Guid="{56FC8D14-8707-444E-8B25-CA2683529174}">
+                    <File Id="mysqlbinlog.exe" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\bin\mysqlbinlog.exe" />
+                </Component>
+                <Component Id="mysqlcheck.exe" Guid="{38EFDA67-4F6C-459B-ACEE-09C671795EDB}">
+                    <File Id="mysqlcheck.exe" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\bin\mysqlcheck.exe" />
+                </Component>
+                <!--                
+                <Component Id="mysqld.exe" Guid="{3D3EB4E8-4794-439E-8067-D9151EB7819F}">
+                    <File Id="mysqld.exe" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\bin\mysqld.exe" />
+                </Component>
+                <Component Id="mysqld.pdb" Guid="{3BFD8DB6-E348-49F5-9562-E406A996033D}">
+                    <File Id="mysqld.pdb" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\bin\mysqld.pdb" />
+                </Component>
+                <Component Id="mysqltest_embedded.exe" Guid="{462784E6-0743-4CCB-8E02-C75783E83060}">
+                    <File Id="mysqltest_embedded.exe" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\bin\mysqltest_embedded.exe" />
+                </Component>
+                <Component Id="mysql_client_test_embedded.exe" Guid="{C64C34D6-1907-477B-9963-F2891D2A9641}">
+                    <File Id="mysql_client_test_embedded.exe" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\bin\mysql_client_test_embedded.exe" />
+                </Component>
+                <Component Id="mysql_embedded.exe" Guid="{FA17FF86-DFB9-49B7-8B6A-592EA741D9BB}">
+                    <File Id="mysql_embedded.exe" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\bin\mysql_embedded.exe" />
+                </Component>
+                -->
+                <Component Id="mysqldump.exe" Guid="{667C50CF-4A10-40D6-98CE-F45DD40A7FA3}">
+                    <File Id="mysqldump.exe" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\bin\mysqldump.exe" />
+                </Component>
+                <Component Id="mysqldumpslow.pl" Guid="{1B412F57-315F-4302-9A32-30FB73EB6ED1}">
+                    <File Id="mysqldumpslow.pl" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\bin\mysqldumpslow.pl" />
+                </Component>
+                <Component Id="mysqld_multi.pl" Guid="{BAD6AAB2-6930-4638-AB6F-2466F833F8C9}">
+                    <File Id="mysqld_multi.pl" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\bin\mysqld_multi.pl" />
+                </Component>
+                <Component Id="mysqlimport.exe" Guid="{243B5E79-B115-4978-A2CF-8034E1917567}">
+                    <File Id="mysqlimport.exe" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\bin\mysqlimport.exe" />
+                </Component>
+                <Component Id="mysqlpump.exe" Guid="{CC993F07-14EA-441D-9B0F-6563FE358C22}">
+                    <File Id="mysqlpump.exe" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\bin\mysqlpump.exe" />
+                </Component>
+                <Component Id="mysqlshow.exe" Guid="{294E5F1D-8783-473D-93AF-55259F5622A3}">
+                    <File Id="mysqlshow.exe" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\bin\mysqlshow.exe" />
+                </Component>
+                <Component Id="mysqlslap.exe" Guid="{39739362-96EA-4399-8479-378D3868DE8C}">
+                    <File Id="mysqlslap.exe" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\bin\mysqlslap.exe" />
+                </Component>
+                <Component Id="mysql_config.pl" Guid="{14021581-A68A-4F15-96CE-381E1807ABC2}">
+                    <File Id="mysql_config.pl" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\bin\mysql_config.pl" />
+                </Component>
+                <Component Id="mysql_config_editor.exe" Guid="{4D9E0A23-86A4-4345-B480-6E51DB891FEA}">
+                    <File Id="mysql_config_editor.exe" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\bin\mysql_config_editor.exe" />
+                </Component>
+                <Component Id="mysql_plugin.exe" Guid="{DA834CBB-D875-4DF9-8C07-DF873859E2E0}">
+                    <File Id="mysql_plugin.exe" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\bin\mysql_plugin.exe" />
+                </Component>
+                <Component Id="mysql_secure_installation.exe" Guid="{3241F4E6-D2D7-4A09-A243-04FE898B84DF}">
+                    <File Id="mysql_secure_installation.exe" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\bin\mysql_secure_installation.exe" />
+                </Component>
+                <Component Id="mysql_ssl_rsa_setup.exe" Guid="{084B8F3A-E427-4D3A-A3B3-38965B193F78}">
+                    <File Id="mysql_ssl_rsa_setup.exe" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\bin\mysql_ssl_rsa_setup.exe" />
+                </Component>
+                <Component Id="mysql_tzinfo_to_sql.exe" Guid="{B7BAC596-1034-47A2-AA89-518B0CA75779}">
+                    <File Id="mysql_tzinfo_to_sql.exe" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\bin\mysql_tzinfo_to_sql.exe" />
+                </Component>
+                <Component Id="mysql_upgrade.exe" Guid="{0A591C9C-038D-4A32-A8FE-61F74E3A8CC0}">
+                    <File Id="mysql_upgrade.exe" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\bin\mysql_upgrade.exe" />
+                </Component>
+                <Component Id="my_print_defaults.exe" Guid="{D337DC50-46F5-406A-A512-EDCBCC6DC51B}">
+                    <File Id="my_print_defaults.exe" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\bin\my_print_defaults.exe" />
+                </Component>
+                <Component Id="perror.exe" Guid="{AE729A23-9746-4CD4-BF26-91C4C4D3B56B}">
+                    <File Id="perror.exe" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\bin\perror.exe" />
+                </Component>
+                <Component Id="replace.exe" Guid="{A13838F5-3ADA-44CF-9B6F-F5A63AB6C178}">
+                    <File Id="replace.exe" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\bin\replace.exe" />
+                </Component>
+                <Component Id="resolveip.exe" Guid="{169BAE26-BFB9-4EC1-9915-E43A573DF46E}">
+                    <File Id="resolveip.exe" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\bin\resolveip.exe" />
+                </Component>
+                <Component Id="zlib_decompress.exe" Guid="{D2ABFF81-7C91-4B0E-9740-935491690195}">
+                    <File Id="zlib_decompress.exe" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\bin\zlib_decompress.exe" />
+                </Component>
+            </Directory>
+            <Directory Id="docs" Name="docs">
+                <Component Id="ChangeLog" Guid="{80C1FB1A-AF83-4080-A913-31A8FD23461B}">
+                    <File Id="ChangeLog" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\docs\ChangeLog" />
+                </Component>
+                <Component Id="INFO_BIN" Guid="{63F56C6C-581C-4D62-B8AA-30AFA7ACDC69}">
+                    <File Id="INFO_BIN" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\docs\INFO_BIN" />
+                </Component>
+                <Component Id="INFO_SRC" Guid="{0085DE0C-13DF-4008-9006-5246AD56A6F3}">
+                    <File Id="INFO_SRC" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\docs\INFO_SRC" />
+                </Component>
+                <Component Id="INSTALL_BINARY" Guid="{35535D3C-007E-43CD-B45F-808110E09DD8}">
+                    <File Id="INSTALL_BINARY" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\docs\INSTALL-BINARY" />
+                </Component>
+            </Directory>
+            <Directory Id="include" Name="include">
+                <Component Id="big_endian.h" Guid="{CD8B0E14-BAD5-4E7F-8BFA-802F4F72EEB1}">
+                    <File Id="big_endian.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\big_endian.h" />
+                </Component>
+                <Component Id="binary_log_types.h" Guid="{871F1727-A0FF-4BAE-BF0A-EF31CA3395F7}">
+                    <File Id="binary_log_types.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\binary_log_types.h" />
+                </Component>
+                <Component Id="byte_order_generic.h" Guid="{A7EC324C-9E45-45D8-83EE-63D0A1157044}">
+                    <File Id="byte_order_generic.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\byte_order_generic.h" />
+                </Component>
+                <Component Id="byte_order_generic_x86.h" Guid="{D5314E1E-7505-4A5F-B1F7-38F8423F70C2}">
+                    <File Id="byte_order_generic_x86.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\byte_order_generic_x86.h" />
+                </Component>
+                <Component Id="decimal.h" Guid="{4B8E24E0-967A-4D0C-8FEB-93E2524FF268}">
+                    <File Id="decimal.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\decimal.h" />
+                </Component>
+                <Component Id="errmsg.h" Guid="{88772558-C2FC-4C38-8FBE-21685D0BA1EB}">
+                    <File Id="errmsg.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\errmsg.h" />
+                </Component>
+                <Component Id="keycache.h" Guid="{71DCCF66-41C0-4636-BB83-F6405115CE98}">
+                    <File Id="keycache.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\keycache.h" />
+                </Component>
+                <Component Id="little_endian.h" Guid="{17658148-5471-43C4-9954-E7197FB8833E}">
+                    <File Id="little_endian.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\little_endian.h" />
+                </Component>
+                <Component Id="mysql.h" Guid="{09ECAAFF-DD61-4882-8377-1E01C2A21D84}">
+                    <File Id="mysql.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\mysql.h" />
+                </Component>
+                <Component Id="mysqld_ername.h" Guid="{E2A39AB8-05CA-4A16-B7A2-8FAB523AFFE2}">
+                    <File Id="mysqld_ername.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\mysqld_ername.h" />
+                </Component>
+                <Component Id="mysqld_error.h" Guid="{FCF9935E-C272-4F0C-BF8D-A4B4A68DFD9F}">
+                    <File Id="mysqld_error.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\mysqld_error.h" />
+                </Component>
+                <Component Id="mysql_com.h" Guid="{A15E92AA-DF5A-49C2-A4BF-1CD11647156C}">
+                    <File Id="mysql_com.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\mysql_com.h" />
+                </Component>
+                <Component Id="mysql_com_server.h" Guid="{BA74FF4F-1E19-4754-A3AB-64F5D7094439}">
+                    <File Id="mysql_com_server.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\mysql_com_server.h" />
+                </Component>
+                <Component Id="mysql_embed.h" Guid="{A72574CC-0ABA-4BDE-8539-C3AA49C7354B}">
+                    <File Id="mysql_embed.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\mysql_embed.h" />
+                </Component>
+                <Component Id="mysql_time.h" Guid="{06BA08BB-4C28-4D47-9F98-6A2BF295AB43}">
+                    <File Id="mysql_time.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\mysql_time.h" />
+                </Component>
+                <Component Id="mysql_version.h" Guid="{FD4C9CF2-EFE1-4A4A-BB30-A3D65C221FF1}">
+                    <File Id="mysql_version.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\mysql_version.h" />
+                </Component>
+                <Component Id="my_alloc.h" Guid="{9B908E50-70D7-46D6-A37B-612A1A720B3B}">
+                    <File Id="my_alloc.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\my_alloc.h" />
+                </Component>
+                <Component Id="my_byteorder.h" Guid="{F55B41FC-6CAE-43B6-B4EE-448FE7EC7CC8}">
+                    <File Id="my_byteorder.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\my_byteorder.h" />
+                </Component>
+                <Component Id="my_command.h" Guid="{83A8C583-9B55-459D-A400-C1A3558EBDDF}">
+                    <File Id="my_command.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\my_command.h" />
+                </Component>
+                <Component Id="my_compiler.h" Guid="{EFD00E96-9D8B-4DA3-9C96-125C9DE57FB1}">
+                    <File Id="my_compiler.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\my_compiler.h" />
+                </Component>
+                <Component Id="my_config.h" Guid="{FBD08F36-9FB4-429F-B974-DE32A11DC852}">
+                    <File Id="my_config.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\my_config.h" />
+                </Component>
+                <Component Id="my_dbug.h" Guid="{6C4A75EA-7141-4F13-96B5-A398A0428190}">
+                    <File Id="my_dbug.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\my_dbug.h" />
+                </Component>
+                <Component Id="my_dir.h" Guid="{2FA542A3-8B05-41E6-97F5-4E93391BB3D3}">
+                    <File Id="my_dir.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\my_dir.h" />
+                </Component>
+                <Component Id="my_getopt.h" Guid="{8E19F418-5731-497B-AE1A-ACDA7DE754CA}">
+                    <File Id="my_getopt.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\my_getopt.h" />
+                </Component>
+                <Component Id="my_global.h" Guid="{5951BF8A-7C1D-4013-9D09-AB4A7AE49E29}">
+                    <File Id="my_global.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\my_global.h" />
+                </Component>
+                <Component Id="my_list.h" Guid="{6EAEC19C-F69C-4A38-8FC9-78C75FC0677E}">
+                    <File Id="my_list.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\my_list.h" />
+                </Component>
+                <Component Id="my_sys.h" Guid="{D83EBC94-3F0C-45F6-B46E-491C09A71AB8}">
+                    <File Id="my_sys.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\my_sys.h" />
+                </Component>
+                <Component Id="my_thread.h" Guid="{954A4FAE-06C1-47CA-A552-675C409FA259}">
+                    <File Id="my_thread.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\my_thread.h" />
+                </Component>
+                <Component Id="my_thread_local.h" Guid="{FAF4ACC7-BD48-4F02-A74D-18FC045F7EE7}">
+                    <File Id="my_thread_local.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\my_thread_local.h" />
+                </Component>
+                <Component Id="my_xml.h" Guid="{D7BF4062-F1DD-4CA6-A16B-93235D1C5842}">
+                    <File Id="my_xml.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\my_xml.h" />
+                </Component>
+                <Component Id="m_ctype.h" Guid="{6FF6D34F-6F8A-43A1-A0E2-C9035DF8AA43}">
+                    <File Id="m_ctype.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\m_ctype.h" />
+                </Component>
+                <Component Id="m_string.h" Guid="{AD559D9F-3E1E-46E0-AF06-866B6BC3006F}">
+                    <File Id="m_string.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\m_string.h" />
+                </Component>
+                <Component Id="plugin.h" Guid="{4A98CBDD-E6A5-4BA2-B5DE-AFA08202B898}">
+                    <File Id="plugin.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\plugin.h" />
+                </Component>
+                <Component Id="plugin_audit.h" Guid="{EE5DA7F5-C7DA-491D-A547-EF4B0104D056}">
+                    <File Id="plugin_audit.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\plugin_audit.h" />
+                </Component>
+                <Component Id="plugin_ftparser.h" Guid="{5171149C-7F5F-4177-B761-F50FBDC89EE0}">
+                    <File Id="plugin_ftparser.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\plugin_ftparser.h" />
+                </Component>
+                <Component Id="plugin_group_replication.h" Guid="{3DD82068-B9E5-4BA7-93F9-EF6E6BB4AB68}">
+                    <File Id="plugin_group_replication.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\plugin_group_replication.h" />
+                </Component>
+                <Component Id="plugin_keyring.h" Guid="{B2477130-A063-45EE-B688-19D1D23D7473}">
+                    <File Id="plugin_keyring.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\plugin_keyring.h" />
+                </Component>
+                <Component Id="plugin_validate_password.h" Guid="{01CDAF6F-8A59-4990-841D-98C645D6C84D}">
+                    <File Id="plugin_validate_password.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\plugin_validate_password.h" />
+                </Component>
+                <Component Id="sql_common.h" Guid="{78FA9FF2-443B-4272-A3DD-04E93328BB0E}">
+                    <File Id="sql_common.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\sql_common.h" />
+                </Component>
+                <Component Id="sql_state.h" Guid="{78FC55EB-D2DE-427D-BBC9-CCB4CF63E7AC}">
+                    <File Id="sql_state.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\sql_state.h" />
+                </Component>
+                <Component Id="sslopt_case.h" Guid="{A6F2B503-21EA-4908-B497-861B8B56A3F8}">
+                    <File Id="sslopt_case.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\sslopt-case.h" />
+                </Component>
+                <Component Id="sslopt_longopts.h" Guid="{A44FC5C5-4C40-4E6E-9C85-C8F3CB27CEFB}">
+                    <File Id="sslopt_longopts.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\sslopt-longopts.h" />
+                </Component>
+                <Component Id="sslopt_vars.h" Guid="{B1753E04-6FB2-4FD6-B998-3A7E1FB3997F}">
+                    <File Id="sslopt_vars.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\sslopt-vars.h" />
+                </Component>
+                <Component Id="thr_cond.h" Guid="{35AE9379-6E96-4BD5-8BB7-2F750D8EF8F3}">
+                    <File Id="thr_cond.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\thr_cond.h" />
+                </Component>
+                <Component Id="thr_mutex.h" Guid="{B569DB06-19C6-4E0B-9D36-EAED198FCC01}">
+                    <File Id="thr_mutex.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\thr_mutex.h" />
+                </Component>
+                <Component Id="thr_rwlock.h" Guid="{5FA55455-6B07-4B3B-8CBC-735103A86D4B}">
+                    <File Id="thr_rwlock.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\thr_rwlock.h" />
+                </Component>
+                <Component Id="typelib.h" Guid="{C5E42E06-CBE6-45B2-9C16-A1F17A724FB1}">
+                    <File Id="typelib.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\typelib.h" />
+                </Component>
+                <Directory Id="mysql" Name="mysql">
+                    <Component Id="client_authentication.h" Guid="{803FBED8-08D6-44B5-BCEB-26942B1B668D}">
+                        <File Id="client_authentication.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\mysql\client_authentication.h" />
+                    </Component>
+                    <Component Id="client_plugin.h" Guid="{9D146BA9-1016-4E62-9C9B-371AB3223C64}">
+                        <File Id="client_plugin.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\mysql\client_plugin.h" />
+                    </Component>
+                    <Component Id="client_plugin.h.pp" Guid="{BC35E4F9-08CE-4D21-84FC-6228E8BE58AB}">
+                        <File Id="client_plugin.h.pp" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\mysql\client_plugin.h.pp" />
+                    </Component>
+                    <Component Id="com_data.h" Guid="{00EF1B85-114B-4FDE-9296-9B85BECF8E52}">
+                        <File Id="com_data.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\mysql\com_data.h" />
+                    </Component>
+                    <Component Id="get_password.h" Guid="{4A6C2A78-7B22-4E3F-9935-A3C36F7194C0}">
+                        <File Id="get_password.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\mysql\get_password.h" />
+                    </Component>
+                    <Component Id="group_replication_priv.h" Guid="{F85B30FF-11DD-419A-A22A-4AF6D401D93B}">
+                        <File Id="group_replication_priv.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\mysql\group_replication_priv.h" />
+                    </Component>
+                    <Component Id="innodb_priv.h" Guid="{72E23912-9C5D-48AC-A78D-9E1427601F66}">
+                        <File Id="innodb_priv.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\mysql\innodb_priv.h" />
+                    </Component>
+                    <Component Id="mysql_lex_string.h" Guid="{BCA346BD-A0B8-4562-96D6-F7D4D6D2400A}">
+                        <File Id="mysql_lex_string.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\mysql\mysql_lex_string.h" />
+                    </Component>
+                    <Component Id="plugin.h_1" Guid="{949E6121-CEA4-4D2A-A3EC-5918AC37E1EA}">
+                        <File Id="plugin.h_1" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\mysql\plugin.h" />
+                    </Component>
+                    <Component Id="plugin_audit.h_1" Guid="{18F0EE38-A74D-4813-B319-9D55F2769008}">
+                        <File Id="plugin_audit.h_1" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\mysql\plugin_audit.h" />
+                    </Component>
+                    <Component Id="plugin_audit.h.pp" Guid="{EF4EA36D-ED0F-4C9F-AE14-0AF0B900BB04}">
+                        <File Id="plugin_audit.h.pp" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\mysql\plugin_audit.h.pp" />
+                    </Component>
+                    <Component Id="plugin_auth.h" Guid="{6203668A-D095-46D1-A224-364067DF355E}">
+                        <File Id="plugin_auth.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\mysql\plugin_auth.h" />
+                    </Component>
+                    <Component Id="plugin_auth.h.pp" Guid="{EA0B7313-DF90-46A8-9C7A-449FCB07BCDB}">
+                        <File Id="plugin_auth.h.pp" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\mysql\plugin_auth.h.pp" />
+                    </Component>
+                    <Component Id="plugin_auth_common.h" Guid="{04A23DD7-42F5-4053-88E1-6C5ECE6086E4}">
+                        <File Id="plugin_auth_common.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\mysql\plugin_auth_common.h" />
+                    </Component>
+                    <Component Id="plugin_ftparser.h_1" Guid="{F0D893AD-8FDF-4529-BAF2-F5E142E443F1}">
+                        <File Id="plugin_ftparser.h_1" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\mysql\plugin_ftparser.h" />
+                    </Component>
+                    <Component Id="plugin_ftparser.h.pp" Guid="{9BC5362C-995E-4ED8-931D-7ACD3F550DDE}">
+                        <File Id="plugin_ftparser.h.pp" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\mysql\plugin_ftparser.h.pp" />
+                    </Component>
+                    <Component Id="plugin_group_replication.h_1" Guid="{039B2893-53CF-4416-81E7-3E3FCCB97592}">
+                        <File Id="plugin_group_replication.h_1" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\mysql\plugin_group_replication.h" />
+                    </Component>
+                    <Component Id="plugin_keyring.h_1" Guid="{373E51EC-078A-497A-AA72-0B6E87D7A642}">
+                        <File Id="plugin_keyring.h_1" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\mysql\plugin_keyring.h" />
+                    </Component>
+                    <Component Id="plugin_keyring.h.pp" Guid="{1E18FD02-97A8-4436-9E0D-6547BE8C944D}">
+                        <File Id="plugin_keyring.h.pp" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\mysql\plugin_keyring.h.pp" />
+                    </Component>
+                    <Component Id="plugin_trace.h" Guid="{41195699-D81C-46D8-A5D5-98BEEBF9239A}">
+                        <File Id="plugin_trace.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\mysql\plugin_trace.h" />
+                    </Component>
+                    <Component Id="plugin_validate_password.h_1" Guid="{C242CC34-6788-41FE-8C86-8778C96CCF08}">
+                        <File Id="plugin_validate_password.h_1" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\mysql\plugin_validate_password.h" />
+                    </Component>
+                    <Component Id="services.h" Guid="{992E6F85-EFB9-4703-936B-F1310D331AEC}">
+                        <File Id="services.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\mysql\services.h" />
+                    </Component>
+                    <Component Id="services.h.pp" Guid="{D1AF0FB6-739A-4D1A-835B-C2718278CEAC}">
+                        <File Id="services.h.pp" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\mysql\services.h.pp" />
+                    </Component>
+                    <Component Id="service_command.h" Guid="{30D7B683-F659-4A92-88FC-35CA0982BA29}">
+                        <File Id="service_command.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\mysql\service_command.h" />
+                    </Component>
+                    <Component Id="service_locking.h" Guid="{D096481A-B969-49EE-AB30-2BFF8F1CC55F}">
+                        <File Id="service_locking.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\mysql\service_locking.h" />
+                    </Component>
+                    <Component Id="service_mysql_alloc.h" Guid="{C642B40D-61F4-4477-82DC-C49B650E4506}">
+                        <File Id="service_mysql_alloc.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\mysql\service_mysql_alloc.h" />
+                    </Component>
+                    <Component Id="service_mysql_keyring.h" Guid="{DE2F5964-375D-4DA8-B2F3-CD864CF8EE50}">
+                        <File Id="service_mysql_keyring.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\mysql\service_mysql_keyring.h" />
+                    </Component>
+                    <Component Id="service_mysql_password_policy.h" Guid="{25258E9D-FCE7-4CE2-815B-73E56F2BEEE6}">
+                        <File Id="service_mysql_password_policy.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\mysql\service_mysql_password_policy.h" />
+                    </Component>
+                    <Component Id="service_mysql_string.h" Guid="{9C197A9C-DA40-4EDC-BA32-F7CD7B4E7FE5}">
+                        <File Id="service_mysql_string.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\mysql\service_mysql_string.h" />
+                    </Component>
+                    <Component Id="service_my_plugin_log.h" Guid="{E3F1B5B0-7659-43B4-B4E8-15DBE6AAF9C0}">
+                        <File Id="service_my_plugin_log.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\mysql\service_my_plugin_log.h" />
+                    </Component>
+                    <Component Id="service_my_snprintf.h" Guid="{87DDA5BA-B6A2-4C49-BDA9-1AC0A8E764C7}">
+                        <File Id="service_my_snprintf.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\mysql\service_my_snprintf.h" />
+                    </Component>
+                    <Component Id="service_parser.h" Guid="{3812F197-B00A-4E33-B49C-B1E65EAD3E40}">
+                        <File Id="service_parser.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\mysql\service_parser.h" />
+                    </Component>
+                    <Component Id="service_rpl_transaction_ctx.h" Guid="{568A6F70-563B-498E-BA0F-4669E8CD3294}">
+                        <File Id="service_rpl_transaction_ctx.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\mysql\service_rpl_transaction_ctx.h" />
+                    </Component>
+                    <Component Id="service_rpl_transaction_write_set.h" Guid="{A03A71A8-D23D-446A-9769-96AE69A4F5F5}">
+                        <File Id="service_rpl_transaction_write_set.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\mysql\service_rpl_transaction_write_set.h" />
+                    </Component>
+                    <Component Id="service_rules_table.h" Guid="{81D82253-0CBD-4740-BCC6-F2C085A10B16}">
+                        <File Id="service_rules_table.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\mysql\service_rules_table.h" />
+                    </Component>
+                    <Component Id="service_security_context.h" Guid="{F1650ED5-0F5C-437C-AB55-2A533CD2D689}">
+                        <File Id="service_security_context.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\mysql\service_security_context.h" />
+                    </Component>
+                    <Component Id="service_srv_session.h" Guid="{FACF7A56-2536-4D88-8DD1-2052371BA6A2}">
+                        <File Id="service_srv_session.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\mysql\service_srv_session.h" />
+                    </Component>
+                    <Component Id="service_srv_session_info.h" Guid="{F0BED0EB-34B1-4E6D-A1B7-ED089698699F}">
+                        <File Id="service_srv_session_info.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\mysql\service_srv_session_info.h" />
+                    </Component>
+                    <Component Id="service_thd_alloc.h" Guid="{C9B442BD-D4FC-4243-AFCD-F17BC0543163}">
+                        <File Id="service_thd_alloc.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\mysql\service_thd_alloc.h" />
+                    </Component>
+                    <Component Id="service_thd_engine_lock.h" Guid="{4EDED8FD-01FB-49F3-B385-08C921C26145}">
+                        <File Id="service_thd_engine_lock.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\mysql\service_thd_engine_lock.h" />
+                    </Component>
+                    <Component Id="service_thd_wait.h" Guid="{DE2EAF46-98D1-452E-AF0D-264979C40409}">
+                        <File Id="service_thd_wait.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\mysql\service_thd_wait.h" />
+                    </Component>
+                    <Component Id="service_thread_scheduler.h" Guid="{D370E0E9-C90E-4698-A977-C0CA46D065F9}">
+                        <File Id="service_thread_scheduler.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\mysql\service_thread_scheduler.h" />
+                    </Component>
+                    <Component Id="thread_pool_priv.h" Guid="{39A3B3B2-FFC8-4F6E-B959-3303D8541805}">
+                        <File Id="thread_pool_priv.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\mysql\thread_pool_priv.h" />
+                    </Component>
+                    <Component Id="thread_type.h" Guid="{A36C7B75-092C-4028-81A6-072FEEEF64BD}">
+                        <File Id="thread_type.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\mysql\thread_type.h" />
+                    </Component>
+                    <Directory Id="psi" Name="psi">
+                        <Component Id="mysql_file.h" Guid="{074661F8-CF58-4157-B9CE-1420F34574DE}">
+                            <File Id="mysql_file.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\mysql\psi\mysql_file.h" />
+                        </Component>
+                        <Component Id="mysql_idle.h" Guid="{02F9FF8B-DBE7-462B-8777-BB8294ED02D4}">
+                            <File Id="mysql_idle.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\mysql\psi\mysql_idle.h" />
+                        </Component>
+                        <Component Id="mysql_mdl.h" Guid="{7AC90733-C76C-4BC7-9FE3-374AA5693D49}">
+                            <File Id="mysql_mdl.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\mysql\psi\mysql_mdl.h" />
+                        </Component>
+                        <Component Id="mysql_memory.h" Guid="{6391208E-8570-4837-9BD6-5408F866AB29}">
+                            <File Id="mysql_memory.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\mysql\psi\mysql_memory.h" />
+                        </Component>
+                        <Component Id="mysql_ps.h" Guid="{648AEA40-898C-4333-A87D-5DEC330CE833}">
+                            <File Id="mysql_ps.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\mysql\psi\mysql_ps.h" />
+                        </Component>
+                        <Component Id="mysql_socket.h" Guid="{E1655BA4-ACFA-41EF-A3C4-21685914C159}">
+                            <File Id="mysql_socket.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\mysql\psi\mysql_socket.h" />
+                        </Component>
+                        <Component Id="mysql_sp.h" Guid="{2984159F-2BE2-49D2-9797-8196C51EA486}">
+                            <File Id="mysql_sp.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\mysql\psi\mysql_sp.h" />
+                        </Component>
+                        <Component Id="mysql_stage.h" Guid="{F0BBFF92-047B-4EE7-A8F5-C7EE1D6E8C76}">
+                            <File Id="mysql_stage.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\mysql\psi\mysql_stage.h" />
+                        </Component>
+                        <Component Id="mysql_statement.h" Guid="{7461C5F2-1B2F-43D7-8168-82A7DDBE93AC}">
+                            <File Id="mysql_statement.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\mysql\psi\mysql_statement.h" />
+                        </Component>
+                        <Component Id="mysql_table.h" Guid="{CD25A549-35CC-4BF3-B42D-D1338434728E}">
+                            <File Id="mysql_table.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\mysql\psi\mysql_table.h" />
+                        </Component>
+                        <Component Id="mysql_thread.h" Guid="{90355CD2-244A-421D-B493-AC830B96D2AC}">
+                            <File Id="mysql_thread.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\mysql\psi\mysql_thread.h" />
+                        </Component>
+                        <Component Id="mysql_transaction.h" Guid="{7CEC3792-C088-43AE-BF3D-980BFCCCEBE4}">
+                            <File Id="mysql_transaction.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\mysql\psi\mysql_transaction.h" />
+                        </Component>
+                        <Component Id="psi.h" Guid="{227C9179-52A9-4380-91CE-46EF82801B5D}">
+                            <File Id="psi.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\mysql\psi\psi.h" />
+                        </Component>
+                        <Component Id="psi_base.h" Guid="{7781415B-8D34-4C39-A05B-A157CF8FA938}">
+                            <File Id="psi_base.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\mysql\psi\psi_base.h" />
+                        </Component>
+                        <Component Id="psi_memory.h" Guid="{71D59371-55D0-45F9-9CE3-FEE65B56AC6A}">
+                            <File Id="psi_memory.h" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\include\mysql\psi\psi_memory.h" />
+                        </Component>
+                    </Directory>
+                </Directory>
+            </Directory>
+            <Directory Id="lib" Name="lib">
+                <Component Id="libmysql.dll" Guid="{35C00E08-A4AD-40DB-876F-B7E3A8B05914}">
+                    <File Id="libmysql.dll" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\libmysql.dll" />
+                </Component>
+                <Component Id="libmysql.lib" Guid="{0246DF1E-6E84-4A7F-BBA7-F49BE7CF315E}">
+                    <File Id="libmysql.lib" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\libmysql.lib" />
+                </Component>
+                <Component Id="libmysqld.dll" Guid="{44FF896C-FA7A-49E6-8182-2C29500F9D31}">
+                    <File Id="libmysqld.dll" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\libmysqld.dll" />
+                </Component>
+                <Component Id="libmysqld.lib" Guid="{68C7423A-D929-462B-AAEE-6D44E84C967A}">
+                    <File Id="libmysqld.lib" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\libmysqld.lib" />
+                </Component>
+				<!--
+                <Component Id="mysqlclient.lib" Guid="{C404174D-416D-4B16-BFEE-480059E4B8DD}">
+                    <File Id="mysqlclient.lib" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\mysqlclient.lib" />
+                </Component>
+                <Component Id="mysqlserver.lib" Guid="{8095B947-B9A5-43C9-9350-817996DAF11D}">
+                    <File Id="mysqlserver.lib" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\mysqlserver.lib" />
+                </Component>
+                <Component Id="mysqlservices.lib" Guid="{655D9435-40F5-42E8-A1AD-8DF28E7B2F6A}">
+                    <File Id="mysqlservices.lib" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\mysqlservices.lib" />
+                </Component>
+				-->
+                <Directory Id="mecab" Name="mecab">
+                    <Directory Id="dic" Name="dic">
+                        <Directory Id="ipadic_euc_jp" Name="ipadic_euc-jp">
+                            <Component Id="char.bin" Guid="{F5FF66C7-564F-4A22-8231-210D84EAE016}">
+                                <File Id="char.bin" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\mecab\dic\ipadic_euc-jp\char.bin" />
+                            </Component>
+                            <Component Id="dicrc" Guid="{7C612844-000A-4A7D-AD0D-5E9DC74B83E2}">
+                                <File Id="dicrc" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\mecab\dic\ipadic_euc-jp\dicrc" />
+                            </Component>
+                            <Component Id="left_id.def" Guid="{6DC03C45-C3FB-41DF-8876-00CD0197E982}">
+                                <File Id="left_id.def" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\mecab\dic\ipadic_euc-jp\left-id.def" />
+                            </Component>
+                            <Component Id="matrix.bin" Guid="{2CAF4A12-65B2-4A52-A053-8C2FD3ABF66B}">
+                                <File Id="matrix.bin" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\mecab\dic\ipadic_euc-jp\matrix.bin" />
+                            </Component>
+                            <Component Id="pos_id.def" Guid="{F7DB6CBC-3871-4BDB-BEB6-47BBA541FDCB}">
+                                <File Id="pos_id.def" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\mecab\dic\ipadic_euc-jp\pos-id.def" />
+                            </Component>
+                            <Component Id="rewrite.def" Guid="{2107810E-8586-4400-A04A-E383E8067C22}">
+                                <File Id="rewrite.def" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\mecab\dic\ipadic_euc-jp\rewrite.def" />
+                            </Component>
+                            <Component Id="right_id.def" Guid="{13697D49-9C92-4764-9B41-F676C3E4EA16}">
+                                <File Id="right_id.def" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\mecab\dic\ipadic_euc-jp\right-id.def" />
+                            </Component>
+                            <Component Id="sys.dic" Guid="{87793BA6-748A-4357-A34F-42699F0CECD8}">
+                                <File Id="sys.dic" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\mecab\dic\ipadic_euc-jp\sys.dic" />
+                            </Component>
+                            <Component Id="unk.dic" Guid="{D2C40259-35DA-495C-9C69-E1D179EA37BC}">
+                                <File Id="unk.dic" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\mecab\dic\ipadic_euc-jp\unk.dic" />
+                            </Component>
+                        </Directory>
+                        <Directory Id="ipadic_sjis" Name="ipadic_sjis">
+                            <Component Id="char.bin_1" Guid="{255C8D8A-B1DA-4F9C-B5CF-7848D2DC5400}">
+                                <File Id="char.bin_1" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\mecab\dic\ipadic_sjis\char.bin" />
+                            </Component>
+                            <Component Id="dicrc_1" Guid="{29EA379B-3F18-4618-A8A7-43D202D28307}">
+                                <File Id="dicrc_1" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\mecab\dic\ipadic_sjis\dicrc" />
+                            </Component>
+                            <Component Id="left_id.def_1" Guid="{5B67926C-25DF-472F-AA94-9361AA7C487A}">
+                                <File Id="left_id.def_1" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\mecab\dic\ipadic_sjis\left-id.def" />
+                            </Component>
+                            <Component Id="matrix.bin_1" Guid="{87D003C6-9424-40BF-BD2D-27B6E5EA15F0}">
+                                <File Id="matrix.bin_1" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\mecab\dic\ipadic_sjis\matrix.bin" />
+                            </Component>
+                            <Component Id="pos_id.def_1" Guid="{396C3BE2-640A-4C4F-AF9D-DE5547DB26BF}">
+                                <File Id="pos_id.def_1" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\mecab\dic\ipadic_sjis\pos-id.def" />
+                            </Component>
+                            <Component Id="rewrite.def_1" Guid="{5E8DEDC2-70E1-4E77-8DBC-C69A75D49237}">
+                                <File Id="rewrite.def_1" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\mecab\dic\ipadic_sjis\rewrite.def" />
+                            </Component>
+                            <Component Id="right_id.def_1" Guid="{6B55C054-960C-42B4-B606-988826A0D96F}">
+                                <File Id="right_id.def_1" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\mecab\dic\ipadic_sjis\right-id.def" />
+                            </Component>
+                            <Component Id="sys.dic_1" Guid="{DC8AF205-2E0C-4454-A930-E6BBB912D682}">
+                                <File Id="sys.dic_1" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\mecab\dic\ipadic_sjis\sys.dic" />
+                            </Component>
+                            <Component Id="unk.dic_1" Guid="{809E2BD4-677A-43D2-9742-8E48283A8B03}">
+                                <File Id="unk.dic_1" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\mecab\dic\ipadic_sjis\unk.dic" />
+                            </Component>
+                        </Directory>
+                        <Directory Id="ipadic_utf_8" Name="ipadic_utf-8">
+                            <Component Id="char.bin_2" Guid="{AED28D98-3849-4A3A-ADB6-E2DBF3C940A1}">
+                                <File Id="char.bin_2" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\mecab\dic\ipadic_utf-8\char.bin" />
+                            </Component>
+                            <Component Id="dicrc_2" Guid="{A2418FF8-0B28-4889-8BC1-7192BEAF7A96}">
+                                <File Id="dicrc_2" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\mecab\dic\ipadic_utf-8\dicrc" />
+                            </Component>
+                            <Component Id="left_id.def_2" Guid="{05AFBF1D-4F69-4073-AF5E-CE727B974B5F}">
+                                <File Id="left_id.def_2" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\mecab\dic\ipadic_utf-8\left-id.def" />
+                            </Component>
+                            <Component Id="matrix.bin_2" Guid="{CAE89498-5D0C-4FF8-9B03-A2CA5A413CF1}">
+                                <File Id="matrix.bin_2" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\mecab\dic\ipadic_utf-8\matrix.bin" />
+                            </Component>
+                            <Component Id="pos_id.def_2" Guid="{4B1893DA-6851-45D4-AE39-90973D529799}">
+                                <File Id="pos_id.def_2" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\mecab\dic\ipadic_utf-8\pos-id.def" />
+                            </Component>
+                            <Component Id="rewrite.def_2" Guid="{4D92766E-A8A2-482E-A32B-E0A581683DD2}">
+                                <File Id="rewrite.def_2" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\mecab\dic\ipadic_utf-8\rewrite.def" />
+                            </Component>
+                            <Component Id="right_id.def_2" Guid="{5379673C-687D-4A2F-AAFF-2E40DB252D95}">
+                                <File Id="right_id.def_2" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\mecab\dic\ipadic_utf-8\right-id.def" />
+                            </Component>
+                            <Component Id="sys.dic_2" Guid="{9C6EECB1-6504-4FA5-A29E-260F88ECBF6F}">
+                                <File Id="sys.dic_2" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\mecab\dic\ipadic_utf-8\sys.dic" />
+                            </Component>
+                            <Component Id="unk.dic_2" Guid="{2A2AB654-F069-4A3F-9B5D-48E54B701986}">
+                                <File Id="unk.dic_2" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\mecab\dic\ipadic_utf-8\unk.dic" />
+                            </Component>
+                        </Directory>
+                    </Directory>
+                    <Directory Id="etc" Name="etc">
+                        <Component Id="mecabrc" Guid="{F2C1DCF0-DC95-4828-93F7-7E3B0382F257}">
+                            <File Id="mecabrc" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\mecab\etc\mecabrc" />
+                        </Component>
+                    </Directory>
+                </Directory>
+                <Directory Id="plugin" Name="plugin">
+                    <Component Id="adt_null.dll" Guid="{D05D7FE9-C745-4F92-B259-5A8E16B93A3D}">
+                        <File Id="adt_null.dll" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\adt_null.dll" />
+                    </Component>
+                    <Component Id="ha_example.dll" Guid="{2D0C2147-59C7-434E-88C8-CFD09D44043A}">
+                        <File Id="ha_example.dll" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\ha_example.dll" />
+                    </Component>
+                    <Component Id="keyring_file.dll" Guid="{FD28FAB3-548C-433F-82B3-5794EBE89897}">
+                        <File Id="keyring_file.dll" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\keyring_file.dll" />
+                    </Component>
+                    <Component Id="libpluginmecab.dll" Guid="{41762BB3-B9E5-4F52-8B3A-B03CD4DD3A40}">
+                        <File Id="libpluginmecab.dll" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\libpluginmecab.dll" />
+                    </Component>
+                    <Component Id="libtest_framework.dll" Guid="{CE6E7239-E5CA-49FE-89E0-917FE15F1441}">
+                        <File Id="libtest_framework.dll" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\libtest_framework.dll" />
+                    </Component>
+                    <Component Id="libtest_services.dll" Guid="{58861086-EE7D-45D6-B6E4-4477F2C8D22B}">
+                        <File Id="libtest_services.dll" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\libtest_services.dll" />
+                    </Component>
+                    <Component Id="libtest_services_threaded.dll" Guid="{818AD208-71EC-44EA-80F6-C6CEEB280F68}">
+                        <File Id="libtest_services_threaded.dll" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\libtest_services_threaded.dll" />
+                    </Component>
+                    <Component Id="libtest_session_detach.dll" Guid="{92CE64CB-4C53-4E9A-87FA-06902A224013}">
+                        <File Id="libtest_session_detach.dll" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\libtest_session_detach.dll" />
+                    </Component>
+                    <Component Id="libtest_session_info.dll" Guid="{234908B7-81F2-4710-8E50-786FE8460A12}">
+                        <File Id="libtest_session_info.dll" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\libtest_session_info.dll" />
+                    </Component>
+                    <Component Id="libtest_session_in_thd.dll" Guid="{182B1A2B-DA85-4F81-A5C6-B13C18E9ECA1}">
+                        <File Id="libtest_session_in_thd.dll" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\libtest_session_in_thd.dll" />
+                    </Component>
+                    <Component Id="libtest_sql_2_sessions.dll" Guid="{316F51B9-160E-4398-A0ED-9B9FCE938759}">
+                        <File Id="libtest_sql_2_sessions.dll" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\libtest_sql_2_sessions.dll" />
+                    </Component>
+                    <Component Id="libtest_sql_all_col_types.dll" Guid="{1D5893A2-21B9-4506-A4CD-475BA56BF4D8}">
+                        <File Id="libtest_sql_all_col_types.dll" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\libtest_sql_all_col_types.dll" />
+                    </Component>
+                    <Component Id="libtest_sql_cmds_1.dll" Guid="{F5E34175-CEC5-4820-B470-05099FBE8E0C}">
+                        <File Id="libtest_sql_cmds_1.dll" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\libtest_sql_cmds_1.dll" />
+                    </Component>
+                    <Component Id="libtest_sql_commit.dll" Guid="{F4933645-EC2A-4DED-9C2E-D5527F54941B}">
+                        <File Id="libtest_sql_commit.dll" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\libtest_sql_commit.dll" />
+                    </Component>
+                    <Component Id="libtest_sql_complex.dll" Guid="{60A159D5-8A75-44EA-A343-BDCF4BCBB607}">
+                        <File Id="libtest_sql_complex.dll" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\libtest_sql_complex.dll" />
+                    </Component>
+                    <Component Id="libtest_sql_errors.dll" Guid="{86695623-B87D-4027-8520-3BF7D99A1C22}">
+                        <File Id="libtest_sql_errors.dll" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\libtest_sql_errors.dll" />
+                    </Component>
+                    <Component Id="libtest_sql_lock.dll" Guid="{C2296517-071B-440D-A447-D8E49E8B5AF1}">
+                        <File Id="libtest_sql_lock.dll" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\libtest_sql_lock.dll" />
+                    </Component>
+                    <Component Id="libtest_sql_processlist.dll" Guid="{AFE72911-64C2-45B3-A258-89A8BBB08139}">
+                        <File Id="libtest_sql_processlist.dll" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\libtest_sql_processlist.dll" />
+                    </Component>
+                    <Component Id="libtest_sql_replication.dll" Guid="{3CE0349C-EFFE-4D82-AF4F-DBEBC0DA4BFE}">
+                        <File Id="libtest_sql_replication.dll" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\libtest_sql_replication.dll" />
+                    </Component>
+                    <Component Id="libtest_sql_shutdown.dll" Guid="{2C93773E-E4A3-410A-AAFA-B0A65DAE5B1E}">
+                        <File Id="libtest_sql_shutdown.dll" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\libtest_sql_shutdown.dll" />
+                    </Component>
+                    <Component Id="libtest_sql_sqlmode.dll" Guid="{08B87868-6003-4915-9780-E7D328E48226}">
+                        <File Id="libtest_sql_sqlmode.dll" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\libtest_sql_sqlmode.dll" />
+                    </Component>
+                    <Component Id="libtest_sql_stored_procedures_functions.dll" Guid="{41EF58E0-F08F-40CA-BF52-9B796434BCCE}">
+                        <File Id="libtest_sql_stored_procedures_functions.dll" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\libtest_sql_stored_procedures_functions.dll" />
+                    </Component>
+                    <Component Id="libtest_sql_views_triggers.dll" Guid="{DB162532-79F2-474B-A96B-A3155BA7CF58}">
+                        <File Id="libtest_sql_views_triggers.dll" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\libtest_sql_views_triggers.dll" />
+                    </Component>
+                    <Component Id="libtest_x_sessions_deinit.dll" Guid="{2ABA239D-9678-417D-943A-3AB178898056}">
+                        <File Id="libtest_x_sessions_deinit.dll" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\libtest_x_sessions_deinit.dll" />
+                    </Component>
+                    <Component Id="libtest_x_sessions_init.dll" Guid="{B5B21F92-7ABA-4689-B108-EA49F1024425}">
+                        <File Id="libtest_x_sessions_init.dll" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\libtest_x_sessions_init.dll" />
+                    </Component>
+                    <Component Id="locking_service.dll" Guid="{D8979A58-45CF-449F-9264-244BF8CB10A7}">
+                        <File Id="locking_service.dll" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\locking_service.dll" />
+                    </Component>
+                    <Component Id="mypluglib.dll" Guid="{02B1EF70-2E0D-4594-A60D-833C2AB459D0}">
+                        <File Id="mypluglib.dll" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\mypluglib.dll" />
+                    </Component>
+                    <Component Id="mysql_no_login.dll" Guid="{02110F9C-5282-4ED2-9422-B3D7C8EE0011}">
+                        <File Id="mysql_no_login.dll" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\mysql_no_login.dll" />
+                    </Component>
+                    <Component Id="rewriter.dll" Guid="{362FCE95-B549-40E5-A613-0EAF5DE28617}">
+                        <File Id="rewriter.dll" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\rewriter.dll" />
+                    </Component>
+                    <Component Id="rewrite_example.dll" Guid="{6AF00623-6CBA-4876-AA4C-E872F95E06DA}">
+                        <File Id="rewrite_example.dll" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\rewrite_example.dll" />
+                    </Component>
+                    <Component Id="semisync_master.dll" Guid="{74C02921-A91F-419E-A656-0FD5C777CA4E}">
+                        <File Id="semisync_master.dll" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\semisync_master.dll" />
+                    </Component>
+                    <Component Id="semisync_slave.dll" Guid="{A84D8FEC-793C-4712-8DEC-29254B2F87CF}">
+                        <File Id="semisync_slave.dll" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\semisync_slave.dll" />
+                    </Component>
+                    <Component Id="test_security_context.dll" Guid="{0B34D41E-1CB4-4D0E-88D5-31E4367C4395}">
+                        <File Id="test_security_context.dll" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\test_security_context.dll" />
+                    </Component>
+                    <Component Id="validate_password.dll" Guid="{E43B9DE8-0A6B-4F87-B399-FC6E3B70BAAB}">
+                        <File Id="validate_password.dll" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\validate_password.dll" />
+                    </Component>
+                    <Component Id="version_token.dll" Guid="{3ADFBAF6-CDEF-4D41-B11C-1B28CCBA03B6}">
+                        <File Id="version_token.dll" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\version_token.dll" />
+                    </Component>
+                    <!--
+                    <Directory Id="debug" Name="debug">
+                        <Component Id="adt_null.dll_1" Guid="{B3E68446-3E34-4B96-B5DD-DC75975C9155}">
+                            <File Id="adt_null.dll_1" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\debug\adt_null.dll" />
+                        </Component>
+                        <Component Id="adt_null.pdb" Guid="{D25EC772-A870-4713-886B-B6D5A23917D5}">
+                            <File Id="adt_null.pdb" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\debug\adt_null.pdb" />
+                        </Component>
+                        <Component Id="ha_example.dll_1" Guid="{D23359AE-B5B8-42E1-89C2-84FDB5108272}">
+                            <File Id="ha_example.dll_1" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\debug\ha_example.dll" />
+                        </Component>
+                        <Component Id="ha_example.pdb" Guid="{C506A71D-E368-4990-9FC7-1C2A5350F888}">
+                            <File Id="ha_example.pdb" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\debug\ha_example.pdb" />
+                        </Component>
+                        <Component Id="keyring_file.dll_1" Guid="{30BEA6FE-F4B4-47AA-9C7B-AE9775DE60F5}">
+                            <File Id="keyring_file.dll_1" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\debug\keyring_file.dll" />
+                        </Component>
+                        <Component Id="keyring_file.pdb" Guid="{A6945DA0-F8E5-4EEA-B8DD-55377BC60548}">
+                            <File Id="keyring_file.pdb" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\debug\keyring_file.pdb" />
+                        </Component>
+                        <Component Id="libpluginmecab.dll_1" Guid="{9E0A366D-15B4-42C3-B4D1-9ECAD8F90645}">
+                            <File Id="libpluginmecab.dll_1" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\debug\libpluginmecab.dll" />
+                        </Component>
+                        <Component Id="libpluginmecab.pdb" Guid="{0753FE82-48B6-4B36-8087-A886343019DD}">
+                            <File Id="libpluginmecab.pdb" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\debug\libpluginmecab.pdb" />
+                        </Component>
+                        <Component Id="libtest_framework.dll_1" Guid="{80E8B6A5-1352-46C0-8B94-036052560430}">
+                            <File Id="libtest_framework.dll_1" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\debug\libtest_framework.dll" />
+                        </Component>
+                        <Component Id="libtest_framework.pdb" Guid="{04233F57-BC43-47FD-8EF1-414CDB1A3BD7}">
+                            <File Id="libtest_framework.pdb" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\debug\libtest_framework.pdb" />
+                        </Component>
+                        <Component Id="libtest_services.dll_1" Guid="{A2E8A812-1580-4CF0-A57D-B116A0EEC3B2}">
+                            <File Id="libtest_services.dll_1" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\debug\libtest_services.dll" />
+                        </Component>
+                        <Component Id="libtest_services.pdb" Guid="{11431138-DF94-49F7-9FF8-DCEAA3E94FD4}">
+                            <File Id="libtest_services.pdb" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\debug\libtest_services.pdb" />
+                        </Component>
+                        <Component Id="libtest_services_threaded.dll_1" Guid="{697828FB-47B3-4CE6-BB6A-E0CDA8F6B686}">
+                            <File Id="libtest_services_threaded.dll_1" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\debug\libtest_services_threaded.dll" />
+                        </Component>
+                        <Component Id="libtest_services_threaded.pdb" Guid="{CD270795-2461-4564-A830-C4192125EE5F}">
+                            <File Id="libtest_services_threaded.pdb" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\debug\libtest_services_threaded.pdb" />
+                        </Component>
+                        <Component Id="libtest_session_detach.dll_1" Guid="{B4A49F38-4C9E-4D22-84CD-CCD8722DCA9D}">
+                            <File Id="libtest_session_detach.dll_1" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\debug\libtest_session_detach.dll" />
+                        </Component>
+                        <Component Id="libtest_session_detach.pdb" Guid="{EA4E521F-B787-4A8D-AF72-36B1E118E65D}">
+                            <File Id="libtest_session_detach.pdb" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\debug\libtest_session_detach.pdb" />
+                        </Component>
+                        <Component Id="libtest_session_info.dll_1" Guid="{F71ABB37-CB8D-4F6C-B4F6-B163B3E0E3ED}">
+                            <File Id="libtest_session_info.dll_1" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\debug\libtest_session_info.dll" />
+                        </Component>
+                        <Component Id="libtest_session_info.pdb" Guid="{FA48DB14-3A63-412B-B9D8-BAABD469F7FC}">
+                            <File Id="libtest_session_info.pdb" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\debug\libtest_session_info.pdb" />
+                        </Component>
+                        <Component Id="libtest_session_in_thd.dll_1" Guid="{724EF46E-F43F-452C-AC04-CC305D95DE41}">
+                            <File Id="libtest_session_in_thd.dll_1" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\debug\libtest_session_in_thd.dll" />
+                        </Component>
+                        <Component Id="libtest_session_in_thd.pdb" Guid="{C490E915-491B-4656-AB02-FBE056EB1FC3}">
+                            <File Id="libtest_session_in_thd.pdb" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\debug\libtest_session_in_thd.pdb" />
+                        </Component>
+                        <Component Id="libtest_sql_2_sessions.dll_1" Guid="{22046518-BCFE-4681-884D-ABE35AC96C61}">
+                            <File Id="libtest_sql_2_sessions.dll_1" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\debug\libtest_sql_2_sessions.dll" />
+                        </Component>
+                        <Component Id="libtest_sql_2_sessions.pdb" Guid="{50512C08-6B40-4F44-8FBA-B4AECBCEAB24}">
+                            <File Id="libtest_sql_2_sessions.pdb" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\debug\libtest_sql_2_sessions.pdb" />
+                        </Component>
+                        <Component Id="libtest_sql_all_col_types.dll_1" Guid="{2177C9E0-AB5D-4089-905F-4DFDB0C2FCB7}">
+                            <File Id="libtest_sql_all_col_types.dll_1" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\debug\libtest_sql_all_col_types.dll" />
+                        </Component>
+                        <Component Id="libtest_sql_all_col_types.pdb" Guid="{77B205C6-E175-45BE-827F-C66DEFB32067}">
+                            <File Id="libtest_sql_all_col_types.pdb" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\debug\libtest_sql_all_col_types.pdb" />
+                        </Component>
+                        <Component Id="libtest_sql_cmds_1.dll_1" Guid="{DA2C7820-9A6C-4403-9F0C-C973FE89ADC6}">
+                            <File Id="libtest_sql_cmds_1.dll_1" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\debug\libtest_sql_cmds_1.dll" />
+                        </Component>
+                        <Component Id="libtest_sql_cmds_1.pdb" Guid="{B2BD20E1-837E-444B-9A0D-1D46F0415AD5}">
+                            <File Id="libtest_sql_cmds_1.pdb" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\debug\libtest_sql_cmds_1.pdb" />
+                        </Component>
+                        <Component Id="libtest_sql_commit.dll_1" Guid="{E1C7981A-9B1E-421B-8A5E-C78BF7DCBA4E}">
+                            <File Id="libtest_sql_commit.dll_1" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\debug\libtest_sql_commit.dll" />
+                        </Component>
+                        <Component Id="libtest_sql_commit.pdb" Guid="{D274B610-3038-49FB-BC38-D85DCB4E4052}">
+                            <File Id="libtest_sql_commit.pdb" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\debug\libtest_sql_commit.pdb" />
+                        </Component>
+                        <Component Id="libtest_sql_complex.dll_1" Guid="{A4C0D342-FD20-4AA8-ADCF-3E21CC82D8B3}">
+                            <File Id="libtest_sql_complex.dll_1" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\debug\libtest_sql_complex.dll" />
+                        </Component>
+                        <Component Id="libtest_sql_complex.pdb" Guid="{6420A144-02C4-4965-AA99-5738515C0515}">
+                            <File Id="libtest_sql_complex.pdb" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\debug\libtest_sql_complex.pdb" />
+                        </Component>
+                        <Component Id="libtest_sql_errors.dll_1" Guid="{FF2B192B-A0EC-46C3-AFBD-0A2A130D6BD6}">
+                            <File Id="libtest_sql_errors.dll_1" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\debug\libtest_sql_errors.dll" />
+                        </Component>
+                        <Component Id="libtest_sql_errors.pdb" Guid="{3D3DE323-8979-44DC-B603-8B01F07FB3F9}">
+                            <File Id="libtest_sql_errors.pdb" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\debug\libtest_sql_errors.pdb" />
+                        </Component>
+                        <Component Id="libtest_sql_lock.dll_1" Guid="{D402BFE4-87AB-4C95-B0C7-584E706AB05E}">
+                            <File Id="libtest_sql_lock.dll_1" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\debug\libtest_sql_lock.dll" />
+                        </Component>
+                        <Component Id="libtest_sql_lock.pdb" Guid="{C65B48B5-D09A-45A2-9440-D8612A28A72B}">
+                            <File Id="libtest_sql_lock.pdb" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\debug\libtest_sql_lock.pdb" />
+                        </Component>
+                        <Component Id="libtest_sql_processlist.dll_1" Guid="{F66AC6FF-9576-49B6-B737-C7D42D2F1D5D}">
+                            <File Id="libtest_sql_processlist.dll_1" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\debug\libtest_sql_processlist.dll" />
+                        </Component>
+                        <Component Id="libtest_sql_processlist.pdb" Guid="{2B2A32C5-C8FD-4D6E-A681-A77DBE35B26D}">
+                            <File Id="libtest_sql_processlist.pdb" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\debug\libtest_sql_processlist.pdb" />
+                        </Component>
+                        <Component Id="libtest_sql_replication.dll_1" Guid="{2070ABCB-F335-4D08-8EAA-FB5BC047824B}">
+                            <File Id="libtest_sql_replication.dll_1" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\debug\libtest_sql_replication.dll" />
+                        </Component>
+                        <Component Id="libtest_sql_replication.pdb" Guid="{059F59F5-A761-4311-95C2-8FEB9DB6376E}">
+                            <File Id="libtest_sql_replication.pdb" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\debug\libtest_sql_replication.pdb" />
+                        </Component>
+                        <Component Id="libtest_sql_shutdown.dll_1" Guid="{1333F521-01B1-4BD4-A963-6AA9839C7559}">
+                            <File Id="libtest_sql_shutdown.dll_1" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\debug\libtest_sql_shutdown.dll" />
+                        </Component>
+                        <Component Id="libtest_sql_shutdown.pdb" Guid="{5C14E866-AEB8-4413-A8F3-B2839016F54E}">
+                            <File Id="libtest_sql_shutdown.pdb" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\debug\libtest_sql_shutdown.pdb" />
+                        </Component>
+                        <Component Id="libtest_sql_sqlmode.dll_1" Guid="{29B85064-270A-40A3-AC04-5D104E947218}">
+                            <File Id="libtest_sql_sqlmode.dll_1" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\debug\libtest_sql_sqlmode.dll" />
+                        </Component>
+                        <Component Id="libtest_sql_sqlmode.pdb" Guid="{40F1365F-46F7-4B36-BA6D-0BFA5C450A96}">
+                            <File Id="libtest_sql_sqlmode.pdb" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\debug\libtest_sql_sqlmode.pdb" />
+                        </Component>
+                        <Component Id="libtest_sql_stored_procedures_functions.dll_1" Guid="{C9D67968-4AE4-4F98-9B59-8E4AF21327B0}">
+                            <File Id="libtest_sql_stored_procedures_functions.dll_1" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\debug\libtest_sql_stored_procedures_functions.dll" />
+                        </Component>
+                        <Component Id="libtest_sql_stored_procedures_functions.pdb" Guid="{C58EA273-40CE-4731-BE2C-C149B4B90EE2}">
+                            <File Id="libtest_sql_stored_procedures_functions.pdb" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\debug\libtest_sql_stored_procedures_functions.pdb" />
+                        </Component>
+                        <Component Id="libtest_sql_views_triggers.dll_1" Guid="{AAC78EF2-0FF7-46EA-8C4A-BBD075CE94D6}">
+                            <File Id="libtest_sql_views_triggers.dll_1" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\debug\libtest_sql_views_triggers.dll" />
+                        </Component>
+                        <Component Id="libtest_sql_views_triggers.pdb" Guid="{FA56004D-60BB-49C0-BCEB-3064AC94650A}">
+                            <File Id="libtest_sql_views_triggers.pdb" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\debug\libtest_sql_views_triggers.pdb" />
+                        </Component>
+                        <Component Id="libtest_x_sessions_deinit.dll_1" Guid="{7BF9CF0C-51FF-4DCF-BC97-5C0DA394FF42}">
+                            <File Id="libtest_x_sessions_deinit.dll_1" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\debug\libtest_x_sessions_deinit.dll" />
+                        </Component>
+                        <Component Id="libtest_x_sessions_deinit.pdb" Guid="{F1AC939E-07AC-4B5E-BA6E-4DBB833BE8A5}">
+                            <File Id="libtest_x_sessions_deinit.pdb" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\debug\libtest_x_sessions_deinit.pdb" />
+                        </Component>
+                        <Component Id="libtest_x_sessions_init.dll_1" Guid="{ED42A267-12C4-49C3-B771-7ADA8DA893C0}">
+                            <File Id="libtest_x_sessions_init.dll_1" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\debug\libtest_x_sessions_init.dll" />
+                        </Component>
+                        <Component Id="libtest_x_sessions_init.pdb" Guid="{12E0655E-B640-4888-8266-7E036447D9DB}">
+                            <File Id="libtest_x_sessions_init.pdb" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\debug\libtest_x_sessions_init.pdb" />
+                        </Component>
+                        <Component Id="locking_service.dll_1" Guid="{088EE04C-1FA5-4658-A2B4-80735ED9284D}">
+                            <File Id="locking_service.dll_1" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\debug\locking_service.dll" />
+                        </Component>
+                        <Component Id="locking_service.pdb" Guid="{123FE42A-0F53-4F8A-A3C7-94C60E6CC949}">
+                            <File Id="locking_service.pdb" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\debug\locking_service.pdb" />
+                        </Component>
+                        <Component Id="mypluglib.dll_1" Guid="{9D892EA2-87CB-4B86-B429-2523524FC481}">
+                            <File Id="mypluglib.dll_1" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\debug\mypluglib.dll" />
+                        </Component>
+                        <Component Id="mypluglib.pdb" Guid="{F507E8E2-0C25-40DD-B837-E13A2BA6BC6F}">
+                            <File Id="mypluglib.pdb" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\debug\mypluglib.pdb" />
+                        </Component>
+                        <Component Id="mysql_no_login.dll_1" Guid="{AE9ADAC2-A127-483D-B46A-CF718BC50C63}">
+                            <File Id="mysql_no_login.dll_1" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\debug\mysql_no_login.dll" />
+                        </Component>
+                        <Component Id="mysql_no_login.pdb" Guid="{8BA95F76-C585-408C-99F1-9EA56E7AB692}">
+                            <File Id="mysql_no_login.pdb" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\debug\mysql_no_login.pdb" />
+                        </Component>
+                        <Component Id="rewriter.dll_1" Guid="{E31DFCCF-A225-4590-AC69-58331A63F7F1}">
+                            <File Id="rewriter.dll_1" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\debug\rewriter.dll" />
+                        </Component>
+                        <Component Id="rewriter.pdb" Guid="{821FC309-8984-4CBC-A7DC-B006BCCB9A36}">
+                            <File Id="rewriter.pdb" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\debug\rewriter.pdb" />
+                        </Component>
+                        <Component Id="rewrite_example.dll_1" Guid="{1A41F163-71EA-4EC8-8960-AA3075C10163}">
+                            <File Id="rewrite_example.dll_1" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\debug\rewrite_example.dll" />
+                        </Component>
+                        <Component Id="rewrite_example.pdb" Guid="{BDC9DDF3-B7E9-49B6-8E46-4E44DB976F11}">
+                            <File Id="rewrite_example.pdb" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\debug\rewrite_example.pdb" />
+                        </Component>
+                        <Component Id="semisync_master.dll_1" Guid="{4DE030F0-E068-47D9-A84D-FF1E91D8B49E}">
+                            <File Id="semisync_master.dll_1" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\debug\semisync_master.dll" />
+                        </Component>
+                        <Component Id="semisync_master.pdb" Guid="{0A94A0D0-CFFA-4771-A33D-CB09CCF65465}">
+                            <File Id="semisync_master.pdb" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\debug\semisync_master.pdb" />
+                        </Component>
+                        <Component Id="semisync_slave.dll_1" Guid="{42340156-799F-48D6-A719-9F74ED6036D6}">
+                            <File Id="semisync_slave.dll_1" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\debug\semisync_slave.dll" />
+                        </Component>
+                        <Component Id="semisync_slave.pdb" Guid="{AA8D53FC-B92C-442E-87BA-3F1CD5849786}">
+                            <File Id="semisync_slave.pdb" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\debug\semisync_slave.pdb" />
+                        </Component>
+                        <Component Id="test_security_context.dll_1" Guid="{C42B14EC-A5A8-4E28-ABE4-B58AD837F808}">
+                            <File Id="test_security_context.dll_1" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\debug\test_security_context.dll" />
+                        </Component>
+                        <Component Id="test_security_context.pdb" Guid="{3CBF5525-0217-4BB3-BC9F-34AD869576E1}">
+                            <File Id="test_security_context.pdb" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\debug\test_security_context.pdb" />
+                        </Component>
+                        <Component Id="validate_password.dll_1" Guid="{586F1C84-8503-49D9-B6E5-60979E24249D}">
+                            <File Id="validate_password.dll_1" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\debug\validate_password.dll" />
+                        </Component>
+                        <Component Id="validate_password.pdb" Guid="{519E9D2B-ADA4-44B4-8A27-E749C1F5ED5F}">
+                            <File Id="validate_password.pdb" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\debug\validate_password.pdb" />
+                        </Component>
+                        <Component Id="version_token.dll_1" Guid="{8252DE8F-C5C0-42B4-B888-9D25E27F6D80}">
+                            <File Id="version_token.dll_1" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\debug\version_token.dll" />
+                        </Component>
+                        <Component Id="version_token.pdb" Guid="{6281E9CC-A722-49A6-A628-4306A53650F4}">
+                            <File Id="version_token.pdb" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\lib\plugin\debug\version_token.pdb" />
+                        </Component>
+                    </Directory>
+                    -->
+                </Directory>
+            </Directory>
+            <Directory Id="share" Name="share">
+                <Component Id="dictionary.txt" Guid="{8397D5C6-4EB7-4E87-B870-5C6FA3ECF55C}">
+                    <File Id="dictionary.txt" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\share\dictionary.txt" />
+                </Component>
+                <Component Id="errmsg_utf8.txt" Guid="{82CA5AC9-C49B-4A1C-9734-B36450BD8429}">
+                    <File Id="errmsg_utf8.txt" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\share\errmsg-utf8.txt" />
+                </Component>
+                <Component Id="fill_help_tables.sql" Guid="{19134B51-FD6E-4060-AC53-BD598C3F8F98}">
+                    <File Id="fill_help_tables.sql" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\share\fill_help_tables.sql" />
+                </Component>
+                <Component Id="innodb_memcached_config.sql" Guid="{A20FEF85-F220-4E36-9AF0-CA5755527F74}">
+                    <File Id="innodb_memcached_config.sql" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\share\innodb_memcached_config.sql" />
+                </Component>
+                <Component Id="mysql_security_commands.sql" Guid="{01B32741-31AB-44D4-B8B3-4042EF17ED25}">
+                    <File Id="mysql_security_commands.sql" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\share\mysql_security_commands.sql" />
+                </Component>
+                <Component Id="mysql_system_tables.sql" Guid="{6C5A9A7A-0227-48C9-B7FE-C6E093532672}">
+                    <File Id="mysql_system_tables.sql" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\share\mysql_system_tables.sql" />
+                </Component>
+                <Component Id="mysql_system_tables_data.sql" Guid="{3381B935-9C71-48E0-9391-9ACC9D3FC195}">
+                    <File Id="mysql_system_tables_data.sql" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\share\mysql_system_tables_data.sql" />
+                </Component>
+                <Component Id="mysql_sys_schema.sql" Guid="{CC488FF1-4AF1-40A5-B952-85B4354D218F}">
+                    <File Id="mysql_sys_schema.sql" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\share\mysql_sys_schema.sql" />
+                </Component>
+                <Component Id="mysql_test_data_timezone.sql" Guid="{2BD1A280-192D-4E4A-8AD0-B35BEC8591F5}">
+                    <File Id="mysql_test_data_timezone.sql" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\share\mysql_test_data_timezone.sql" />
+                </Component>
+                <Directory Id="bulgarian" Name="bulgarian">
+                    <Component Id="errmsg.sys" Guid="{E3DA2F24-A3CB-44BE-B559-37A8F8404ABD}">
+                        <File Id="errmsg.sys" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\share\bulgarian\errmsg.sys" />
+                    </Component>
+                </Directory>
+                <Directory Id="charsets" Name="charsets">
+                    <Component Id="armscii8.xml" Guid="{8F61DB34-344E-4FD5-99CD-9D6546CEAF79}">
+                        <File Id="armscii8.xml" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\share\charsets\armscii8.xml" />
+                    </Component>
+                    <Component Id="ascii.xml" Guid="{53CC8858-1A96-4890-9BA6-56DD949B91F6}">
+                        <File Id="ascii.xml" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\share\charsets\ascii.xml" />
+                    </Component>
+                    <Component Id="cp1250.xml" Guid="{F81A1EC2-C9A6-4E17-9C5F-BB4DA7BDE185}">
+                        <File Id="cp1250.xml" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\share\charsets\cp1250.xml" />
+                    </Component>
+                    <Component Id="cp1251.xml" Guid="{0A5786C9-F0CC-4B96-8C5D-23F22A03F70A}">
+                        <File Id="cp1251.xml" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\share\charsets\cp1251.xml" />
+                    </Component>
+                    <Component Id="cp1256.xml" Guid="{7ADAB6B5-7037-45A3-9607-95ABE690A1DE}">
+                        <File Id="cp1256.xml" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\share\charsets\cp1256.xml" />
+                    </Component>
+                    <Component Id="cp1257.xml" Guid="{6A893D1E-C979-49B8-BE0F-D5DB66F509AC}">
+                        <File Id="cp1257.xml" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\share\charsets\cp1257.xml" />
+                    </Component>
+                    <Component Id="cp850.xml" Guid="{ABE03776-3BDE-4516-AAC6-1E8293CFC9BE}">
+                        <File Id="cp850.xml" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\share\charsets\cp850.xml" />
+                    </Component>
+                    <Component Id="cp852.xml" Guid="{FA5E6015-E6A6-4AD6-B97D-4C98A0D6F75F}">
+                        <File Id="cp852.xml" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\share\charsets\cp852.xml" />
+                    </Component>
+                    <Component Id="cp866.xml" Guid="{8856F19E-742D-45A1-82D3-4B600E0C0305}">
+                        <File Id="cp866.xml" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\share\charsets\cp866.xml" />
+                    </Component>
+                    <Component Id="dec8.xml" Guid="{8D1C0C45-8749-4837-A98B-07E8A1C49A0C}">
+                        <File Id="dec8.xml" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\share\charsets\dec8.xml" />
+                    </Component>
+                    <Component Id="geostd8.xml" Guid="{4CB812A8-C779-486D-8BCA-21E0860845DC}">
+                        <File Id="geostd8.xml" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\share\charsets\geostd8.xml" />
+                    </Component>
+                    <Component Id="greek.xml" Guid="{0DCC9E88-D863-4A46-BF97-E4A3E37437B1}">
+                        <File Id="greek.xml" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\share\charsets\greek.xml" />
+                    </Component>
+                    <Component Id="hebrew.xml" Guid="{748B164E-C9A5-4E52-9438-412F7E0B7953}">
+                        <File Id="hebrew.xml" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\share\charsets\hebrew.xml" />
+                    </Component>
+                    <Component Id="hp8.xml" Guid="{364F8DBE-DF04-4A96-9EE4-C6E32699F1E3}">
+                        <File Id="hp8.xml" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\share\charsets\hp8.xml" />
+                    </Component>
+                    <Component Id="Index.xml" Guid="{530F3AAA-7136-4185-BC25-0BF4FB8B6201}">
+                        <File Id="Index.xml" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\share\charsets\Index.xml" />
+                    </Component>
+                    <Component Id="keybcs2.xml" Guid="{D882FEE2-0417-4CFB-9A0C-97A13609F855}">
+                        <File Id="keybcs2.xml" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\share\charsets\keybcs2.xml" />
+                    </Component>
+                    <Component Id="koi8r.xml" Guid="{A3FBA753-693B-4B20-93DA-73B607E79A71}">
+                        <File Id="koi8r.xml" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\share\charsets\koi8r.xml" />
+                    </Component>
+                    <Component Id="koi8u.xml" Guid="{5D2BA8BE-5FC9-4139-B019-AC039A0FA568}">
+                        <File Id="koi8u.xml" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\share\charsets\koi8u.xml" />
+                    </Component>
+                    <Component Id="latin1.xml" Guid="{85C6FA49-BBF8-4A57-B3C9-D18D13E50D56}">
+                        <File Id="latin1.xml" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\share\charsets\latin1.xml" />
+                    </Component>
+                    <Component Id="latin2.xml" Guid="{9F75170F-95C8-42B8-8661-E26AA993F569}">
+                        <File Id="latin2.xml" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\share\charsets\latin2.xml" />
+                    </Component>
+                    <Component Id="latin5.xml" Guid="{5AD86AA9-2B9A-49F5-9069-6D110C9A62A9}">
+                        <File Id="latin5.xml" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\share\charsets\latin5.xml" />
+                    </Component>
+                    <Component Id="latin7.xml" Guid="{0FDE260C-7AAB-44B2-9796-821C779BA6FE}">
+                        <File Id="latin7.xml" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\share\charsets\latin7.xml" />
+                    </Component>
+                    <Component Id="macce.xml" Guid="{54FCD312-8233-4D52-BCCB-81B3322BDBE0}">
+                        <File Id="macce.xml" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\share\charsets\macce.xml" />
+                    </Component>
+                    <Component Id="macroman.xml" Guid="{1C96E3CE-5D64-4813-AF9B-3E2E7D1459B2}">
+                        <File Id="macroman.xml" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\share\charsets\macroman.xml" />
+                    </Component>
+                    <Component Id="README_1" Guid="{CF797384-CCD6-4F61-8BB2-FE03CD12320C}">
+                        <File Id="README_1" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\share\charsets\README" />
+                    </Component>
+                    <Component Id="swe7.xml" Guid="{412CFBCC-A5AB-49D5-9A83-2089B312E116}">
+                        <File Id="swe7.xml" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\share\charsets\swe7.xml" />
+                    </Component>
+                </Directory>
+                <Directory Id="czech" Name="czech">
+                    <Component Id="errmsg.sys_1" Guid="{A76850C4-0608-4CD6-B071-F06A1D2588B8}">
+                        <File Id="errmsg.sys_1" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\share\czech\errmsg.sys" />
+                    </Component>
+                </Directory>
+                <Directory Id="danish" Name="danish">
+                    <Component Id="errmsg.sys_2" Guid="{BBFF81ED-C5CA-433F-8A8A-F4FEA9FF3849}">
+                        <File Id="errmsg.sys_2" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\share\danish\errmsg.sys" />
+                    </Component>
+                </Directory>
+                <Directory Id="dutch" Name="dutch">
+                    <Component Id="errmsg.sys_3" Guid="{83652D19-7AD5-4DEC-B50F-08991979EB3C}">
+                        <File Id="errmsg.sys_3" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\share\dutch\errmsg.sys" />
+                    </Component>
+                </Directory>
+                <Directory Id="english" Name="english">
+                    <Component Id="errmsg.sys_4" Guid="{042E431E-1173-4230-BA4E-FFD579D47EE8}">
+                        <File Id="errmsg.sys_4" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\share\english\errmsg.sys" />
+                    </Component>
+                </Directory>
+                <Directory Id="estonian" Name="estonian">
+                    <Component Id="errmsg.sys_5" Guid="{89AB0C97-C14E-4065-B1DA-404C5ECF8499}">
+                        <File Id="errmsg.sys_5" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\share\estonian\errmsg.sys" />
+                    </Component>
+                </Directory>
+                <Directory Id="french" Name="french">
+                    <Component Id="errmsg.sys_6" Guid="{DA894885-E963-4E39-BEC4-EF771091DA80}">
+                        <File Id="errmsg.sys_6" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\share\french\errmsg.sys" />
+                    </Component>
+                </Directory>
+                <Directory Id="german" Name="german">
+                    <Component Id="errmsg.sys_7" Guid="{68BBD5BD-AB88-4640-8BE6-BCEF0A8610B4}">
+                        <File Id="errmsg.sys_7" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\share\german\errmsg.sys" />
+                    </Component>
+                </Directory>
+                <Directory Id="greek" Name="greek">
+                    <Component Id="errmsg.sys_8" Guid="{6307BEB2-8A91-4110-A2D5-2C6FE4C529B3}">
+                        <File Id="errmsg.sys_8" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\share\greek\errmsg.sys" />
+                    </Component>
+                </Directory>
+                <Directory Id="hungarian" Name="hungarian">
+                    <Component Id="errmsg.sys_9" Guid="{3A877D69-ECCA-46DC-9D42-94800E749F60}">
+                        <File Id="errmsg.sys_9" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\share\hungarian\errmsg.sys" />
+                    </Component>
+                </Directory>
+                <Directory Id="italian" Name="italian">
+                    <Component Id="errmsg.sys_10" Guid="{D58DA569-2DC9-41BE-9015-98C3D68A154C}">
+                        <File Id="errmsg.sys_10" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\share\italian\errmsg.sys" />
+                    </Component>
+                </Directory>
+                <Directory Id="japanese" Name="japanese">
+                    <Component Id="errmsg.sys_11" Guid="{64961B95-3226-4C1D-BC64-52D6AB2ABDEC}">
+                        <File Id="errmsg.sys_11" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\share\japanese\errmsg.sys" />
+                    </Component>
+                </Directory>
+                <Directory Id="korean" Name="korean">
+                    <Component Id="errmsg.sys_12" Guid="{8B03B4C8-234D-4511-A02F-E11593EFDA5C}">
+                        <File Id="errmsg.sys_12" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\share\korean\errmsg.sys" />
+                    </Component>
+                </Directory>
+                <Directory Id="norwegian" Name="norwegian">
+                    <Component Id="errmsg.sys_13" Guid="{C4A7F58A-210E-40DF-B845-61BBA177A456}">
+                        <File Id="errmsg.sys_13" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\share\norwegian\errmsg.sys" />
+                    </Component>
+                </Directory>
+                <Directory Id="norwegian_ny" Name="norwegian-ny">
+                    <Component Id="errmsg.sys_14" Guid="{0B0364C1-E1E6-4E73-809F-4790BC19FB6C}">
+                        <File Id="errmsg.sys_14" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\share\norwegian-ny\errmsg.sys" />
+                    </Component>
+                </Directory>
+                <Directory Id="polish" Name="polish">
+                    <Component Id="errmsg.sys_15" Guid="{AF712C33-88BE-4D41-A79B-120D1610DF4D}">
+                        <File Id="errmsg.sys_15" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\share\polish\errmsg.sys" />
+                    </Component>
+                </Directory>
+                <Directory Id="portuguese" Name="portuguese">
+                    <Component Id="errmsg.sys_16" Guid="{A6E79F4C-80A8-4FFE-9EB2-9B00E85C18E8}">
+                        <File Id="errmsg.sys_16" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\share\portuguese\errmsg.sys" />
+                    </Component>
+                </Directory>
+                <Directory Id="romanian" Name="romanian">
+                    <Component Id="errmsg.sys_17" Guid="{3CD44B21-401C-466F-B990-7790A72BF1ED}">
+                        <File Id="errmsg.sys_17" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\share\romanian\errmsg.sys" />
+                    </Component>
+                </Directory>
+                <Directory Id="russian" Name="russian">
+                    <Component Id="errmsg.sys_18" Guid="{04069936-B0F5-4E3E-8B02-5578EC164B82}">
+                        <File Id="errmsg.sys_18" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\share\russian\errmsg.sys" />
+                    </Component>
+                </Directory>
+                <Directory Id="serbian" Name="serbian">
+                    <Component Id="errmsg.sys_19" Guid="{C4CB2BF8-8292-4656-B313-F69D00ADFB77}">
+                        <File Id="errmsg.sys_19" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\share\serbian\errmsg.sys" />
+                    </Component>
+                </Directory>
+                <Directory Id="slovak" Name="slovak">
+                    <Component Id="errmsg.sys_20" Guid="{0B456E28-3547-4C42-A469-50FF04A1CF6B}">
+                        <File Id="errmsg.sys_20" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\share\slovak\errmsg.sys" />
+                    </Component>
+                </Directory>
+                <Directory Id="spanish" Name="spanish">
+                    <Component Id="errmsg.sys_21" Guid="{0E9110A7-F40E-4ED1-9355-67C7533CCD25}">
+                        <File Id="errmsg.sys_21" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\share\spanish\errmsg.sys" />
+                    </Component>
+                </Directory>
+                <Directory Id="swedish" Name="swedish">
+                    <Component Id="errmsg.sys_22" Guid="{03CFEE77-97B7-4CB3-B55C-6E218CA24D2D}">
+                        <File Id="errmsg.sys_22" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\share\swedish\errmsg.sys" />
+                    </Component>
+                </Directory>
+                <Directory Id="ukrainian" Name="ukrainian">
+                    <Component Id="errmsg.sys_23" Guid="{6AC8D2DD-8AD4-454E-8128-04407521B315}">
+                        <File Id="errmsg.sys_23" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\share\ukrainian\errmsg.sys" />
+                    </Component>
+                </Directory>
+            </Directory>
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <ComponentGroup Id="CG_MySQL_ProductFiles">
+            <ComponentRef Id="COPYING" />
+            <ComponentRef Id="my.ini" />
+            <ComponentRef Id="README" />
+            <ComponentRef Id="echo.exe" />
+            <ComponentRef Id="innochecksum.exe" />
+            <ComponentRef Id="libmecab.dll" />
+            <ComponentRef Id="lz4_decompress.exe" />
+            <ComponentRef Id="msvcp120.dll" />
+            <ComponentRef Id="msvcr120.dll" />
+            <ComponentRef Id="myisamchk.exe" />
+            <ComponentRef Id="myisamlog.exe" />
+            <ComponentRef Id="myisampack.exe" />
+            <ComponentRef Id="myisam_ftdump.exe" />
+            <ComponentRef Id="mysql.exe" />
+            <ComponentRef Id="mysqladmin.exe" />
+            <ComponentRef Id="mysqlbinlog.exe" />
+            <ComponentRef Id="mysqlcheck.exe" />
+            <!--
+            <ComponentRef Id="mysqld.exe" />
+            <ComponentRef Id="mysqld.pdb" />
+            <ComponentRef Id="mysqltest_embedded.exe" />
+            <ComponentRef Id="mysql_client_test_embedded.exe" />
+            <ComponentRef Id="mysql_embedded.exe" />
+            -->
+            <ComponentRef Id="mysqldump.exe" />
+            <ComponentRef Id="mysqldumpslow.pl" />
+            <ComponentRef Id="mysqld_multi.pl" />
+            <ComponentRef Id="mysqlimport.exe" />
+            <ComponentRef Id="mysqlpump.exe" />
+            <ComponentRef Id="mysqlshow.exe" />
+            <ComponentRef Id="mysqlslap.exe" />
+            <ComponentRef Id="mysql_config.pl" />
+            <ComponentRef Id="mysql_config_editor.exe" />
+            <ComponentRef Id="mysql_plugin.exe" />
+            <ComponentRef Id="mysql_secure_installation.exe" />
+            <ComponentRef Id="mysql_ssl_rsa_setup.exe" />
+            <ComponentRef Id="mysql_tzinfo_to_sql.exe" />
+            <ComponentRef Id="mysql_upgrade.exe" />
+            <ComponentRef Id="my_print_defaults.exe" />
+            <ComponentRef Id="perror.exe" />
+            <ComponentRef Id="replace.exe" />
+            <ComponentRef Id="resolveip.exe" />
+            <ComponentRef Id="zlib_decompress.exe" />
+            <ComponentRef Id="ChangeLog" />
+            <ComponentRef Id="INFO_BIN" />
+            <ComponentRef Id="INFO_SRC" />
+            <ComponentRef Id="INSTALL_BINARY" />
+            <ComponentRef Id="big_endian.h" />
+            <ComponentRef Id="binary_log_types.h" />
+            <ComponentRef Id="byte_order_generic.h" />
+            <ComponentRef Id="byte_order_generic_x86.h" />
+            <ComponentRef Id="decimal.h" />
+            <ComponentRef Id="errmsg.h" />
+            <ComponentRef Id="keycache.h" />
+            <ComponentRef Id="little_endian.h" />
+            <ComponentRef Id="mysql.h" />
+            <ComponentRef Id="mysqld_ername.h" />
+            <ComponentRef Id="mysqld_error.h" />
+            <ComponentRef Id="mysql_com.h" />
+            <ComponentRef Id="mysql_com_server.h" />
+            <ComponentRef Id="mysql_embed.h" />
+            <ComponentRef Id="mysql_time.h" />
+            <ComponentRef Id="mysql_version.h" />
+            <ComponentRef Id="my_alloc.h" />
+            <ComponentRef Id="my_byteorder.h" />
+            <ComponentRef Id="my_command.h" />
+            <ComponentRef Id="my_compiler.h" />
+            <ComponentRef Id="my_config.h" />
+            <ComponentRef Id="my_dbug.h" />
+            <ComponentRef Id="my_dir.h" />
+            <ComponentRef Id="my_getopt.h" />
+            <ComponentRef Id="my_global.h" />
+            <ComponentRef Id="my_list.h" />
+            <ComponentRef Id="my_sys.h" />
+            <ComponentRef Id="my_thread.h" />
+            <ComponentRef Id="my_thread_local.h" />
+            <ComponentRef Id="my_xml.h" />
+            <ComponentRef Id="m_ctype.h" />
+            <ComponentRef Id="m_string.h" />
+            <ComponentRef Id="plugin.h" />
+            <ComponentRef Id="plugin_audit.h" />
+            <ComponentRef Id="plugin_ftparser.h" />
+            <ComponentRef Id="plugin_group_replication.h" />
+            <ComponentRef Id="plugin_keyring.h" />
+            <ComponentRef Id="plugin_validate_password.h" />
+            <ComponentRef Id="sql_common.h" />
+            <ComponentRef Id="sql_state.h" />
+            <ComponentRef Id="sslopt_case.h" />
+            <ComponentRef Id="sslopt_longopts.h" />
+            <ComponentRef Id="sslopt_vars.h" />
+            <ComponentRef Id="thr_cond.h" />
+            <ComponentRef Id="thr_mutex.h" />
+            <ComponentRef Id="thr_rwlock.h" />
+            <ComponentRef Id="typelib.h" />
+            <ComponentRef Id="client_authentication.h" />
+            <ComponentRef Id="client_plugin.h" />
+            <ComponentRef Id="client_plugin.h.pp" />
+            <ComponentRef Id="com_data.h" />
+            <ComponentRef Id="get_password.h" />
+            <ComponentRef Id="group_replication_priv.h" />
+            <ComponentRef Id="innodb_priv.h" />
+            <ComponentRef Id="mysql_lex_string.h" />
+            <ComponentRef Id="plugin.h_1" />
+            <ComponentRef Id="plugin_audit.h_1" />
+            <ComponentRef Id="plugin_audit.h.pp" />
+            <ComponentRef Id="plugin_auth.h" />
+            <ComponentRef Id="plugin_auth.h.pp" />
+            <ComponentRef Id="plugin_auth_common.h" />
+            <ComponentRef Id="plugin_ftparser.h_1" />
+            <ComponentRef Id="plugin_ftparser.h.pp" />
+            <ComponentRef Id="plugin_group_replication.h_1" />
+            <ComponentRef Id="plugin_keyring.h_1" />
+            <ComponentRef Id="plugin_keyring.h.pp" />
+            <ComponentRef Id="plugin_trace.h" />
+            <ComponentRef Id="plugin_validate_password.h_1" />
+            <ComponentRef Id="services.h" />
+            <ComponentRef Id="services.h.pp" />
+            <ComponentRef Id="service_command.h" />
+            <ComponentRef Id="service_locking.h" />
+            <ComponentRef Id="service_mysql_alloc.h" />
+            <ComponentRef Id="service_mysql_keyring.h" />
+            <ComponentRef Id="service_mysql_password_policy.h" />
+            <ComponentRef Id="service_mysql_string.h" />
+            <ComponentRef Id="service_my_plugin_log.h" />
+            <ComponentRef Id="service_my_snprintf.h" />
+            <ComponentRef Id="service_parser.h" />
+            <ComponentRef Id="service_rpl_transaction_ctx.h" />
+            <ComponentRef Id="service_rpl_transaction_write_set.h" />
+            <ComponentRef Id="service_rules_table.h" />
+            <ComponentRef Id="service_security_context.h" />
+            <ComponentRef Id="service_srv_session.h" />
+            <ComponentRef Id="service_srv_session_info.h" />
+            <ComponentRef Id="service_thd_alloc.h" />
+            <ComponentRef Id="service_thd_engine_lock.h" />
+            <ComponentRef Id="service_thd_wait.h" />
+            <ComponentRef Id="service_thread_scheduler.h" />
+            <ComponentRef Id="thread_pool_priv.h" />
+            <ComponentRef Id="thread_type.h" />
+            <ComponentRef Id="mysql_file.h" />
+            <ComponentRef Id="mysql_idle.h" />
+            <ComponentRef Id="mysql_mdl.h" />
+            <ComponentRef Id="mysql_memory.h" />
+            <ComponentRef Id="mysql_ps.h" />
+            <ComponentRef Id="mysql_socket.h" />
+            <ComponentRef Id="mysql_sp.h" />
+            <ComponentRef Id="mysql_stage.h" />
+            <ComponentRef Id="mysql_statement.h" />
+            <ComponentRef Id="mysql_table.h" />
+            <ComponentRef Id="mysql_thread.h" />
+            <ComponentRef Id="mysql_transaction.h" />
+            <ComponentRef Id="psi.h" />
+            <ComponentRef Id="psi_base.h" />
+            <ComponentRef Id="psi_memory.h" />
+            <ComponentRef Id="libmysql.dll" />
+            <ComponentRef Id="libmysql.lib" />
+            <ComponentRef Id="libmysqld.dll" />
+            <ComponentRef Id="libmysqld.lib" />
+			<!--
+            <ComponentRef Id="mysqlclient.lib" />
+            <ComponentRef Id="mysqlserver.lib" />
+            <ComponentRef Id="mysqlservices.lib" />
+			-->
+            <ComponentRef Id="char.bin" />
+            <ComponentRef Id="dicrc" />
+            <ComponentRef Id="left_id.def" />
+            <ComponentRef Id="matrix.bin" />
+            <ComponentRef Id="pos_id.def" />
+            <ComponentRef Id="rewrite.def" />
+            <ComponentRef Id="right_id.def" />
+            <ComponentRef Id="sys.dic" />
+            <ComponentRef Id="unk.dic" />
+            <ComponentRef Id="char.bin_1" />
+            <ComponentRef Id="dicrc_1" />
+            <ComponentRef Id="left_id.def_1" />
+            <ComponentRef Id="matrix.bin_1" />
+            <ComponentRef Id="pos_id.def_1" />
+            <ComponentRef Id="rewrite.def_1" />
+            <ComponentRef Id="right_id.def_1" />
+            <ComponentRef Id="sys.dic_1" />
+            <ComponentRef Id="unk.dic_1" />
+            <ComponentRef Id="char.bin_2" />
+            <ComponentRef Id="dicrc_2" />
+            <ComponentRef Id="left_id.def_2" />
+            <ComponentRef Id="matrix.bin_2" />
+            <ComponentRef Id="pos_id.def_2" />
+            <ComponentRef Id="rewrite.def_2" />
+            <ComponentRef Id="right_id.def_2" />
+            <ComponentRef Id="sys.dic_2" />
+            <ComponentRef Id="unk.dic_2" />
+            <ComponentRef Id="mecabrc" />
+            <ComponentRef Id="adt_null.dll" />
+            <ComponentRef Id="ha_example.dll" />
+            <ComponentRef Id="keyring_file.dll" />
+            <ComponentRef Id="libpluginmecab.dll" />
+            <ComponentRef Id="libtest_framework.dll" />
+            <ComponentRef Id="libtest_services.dll" />
+            <ComponentRef Id="libtest_services_threaded.dll" />
+            <ComponentRef Id="libtest_session_detach.dll" />
+            <ComponentRef Id="libtest_session_info.dll" />
+            <ComponentRef Id="libtest_session_in_thd.dll" />
+            <ComponentRef Id="libtest_sql_2_sessions.dll" />
+            <ComponentRef Id="libtest_sql_all_col_types.dll" />
+            <ComponentRef Id="libtest_sql_cmds_1.dll" />
+            <ComponentRef Id="libtest_sql_commit.dll" />
+            <ComponentRef Id="libtest_sql_complex.dll" />
+            <ComponentRef Id="libtest_sql_errors.dll" />
+            <ComponentRef Id="libtest_sql_lock.dll" />
+            <ComponentRef Id="libtest_sql_processlist.dll" />
+            <ComponentRef Id="libtest_sql_replication.dll" />
+            <ComponentRef Id="libtest_sql_shutdown.dll" />
+            <ComponentRef Id="libtest_sql_sqlmode.dll" />
+            <ComponentRef Id="libtest_sql_stored_procedures_functions.dll" />
+            <ComponentRef Id="libtest_sql_views_triggers.dll" />
+            <ComponentRef Id="libtest_x_sessions_deinit.dll" />
+            <ComponentRef Id="libtest_x_sessions_init.dll" />
+            <ComponentRef Id="locking_service.dll" />
+            <ComponentRef Id="mypluglib.dll" />
+            <ComponentRef Id="mysql_no_login.dll" />
+            <ComponentRef Id="rewriter.dll" />
+            <ComponentRef Id="rewrite_example.dll" />
+            <ComponentRef Id="semisync_master.dll" />
+            <ComponentRef Id="semisync_slave.dll" />
+            <ComponentRef Id="test_security_context.dll" />
+            <ComponentRef Id="validate_password.dll" />
+            <ComponentRef Id="version_token.dll" />
+            <!--
+            <ComponentRef Id="adt_null.dll_1" />
+            <ComponentRef Id="adt_null.pdb" />
+            <ComponentRef Id="ha_example.dll_1" />
+            <ComponentRef Id="ha_example.pdb" />
+            <ComponentRef Id="keyring_file.dll_1" />
+            <ComponentRef Id="keyring_file.pdb" />
+            <ComponentRef Id="libpluginmecab.dll_1" />
+            <ComponentRef Id="libpluginmecab.pdb" />
+            <ComponentRef Id="libtest_framework.dll_1" />
+            <ComponentRef Id="libtest_framework.pdb" />
+            <ComponentRef Id="libtest_services.dll_1" />
+            <ComponentRef Id="libtest_services.pdb" />
+            <ComponentRef Id="libtest_services_threaded.dll_1" />
+            <ComponentRef Id="libtest_services_threaded.pdb" />
+            <ComponentRef Id="libtest_session_detach.dll_1" />
+            <ComponentRef Id="libtest_session_detach.pdb" />
+            <ComponentRef Id="libtest_session_info.dll_1" />
+            <ComponentRef Id="libtest_session_info.pdb" />
+            <ComponentRef Id="libtest_session_in_thd.dll_1" />
+            <ComponentRef Id="libtest_session_in_thd.pdb" />
+            <ComponentRef Id="libtest_sql_2_sessions.dll_1" />
+            <ComponentRef Id="libtest_sql_2_sessions.pdb" />
+            <ComponentRef Id="libtest_sql_all_col_types.dll_1" />
+            <ComponentRef Id="libtest_sql_all_col_types.pdb" />
+            <ComponentRef Id="libtest_sql_cmds_1.dll_1" />
+            <ComponentRef Id="libtest_sql_cmds_1.pdb" />
+            <ComponentRef Id="libtest_sql_commit.dll_1" />
+            <ComponentRef Id="libtest_sql_commit.pdb" />
+            <ComponentRef Id="libtest_sql_complex.dll_1" />
+            <ComponentRef Id="libtest_sql_complex.pdb" />
+            <ComponentRef Id="libtest_sql_errors.dll_1" />
+            <ComponentRef Id="libtest_sql_errors.pdb" />
+            <ComponentRef Id="libtest_sql_lock.dll_1" />
+            <ComponentRef Id="libtest_sql_lock.pdb" />
+            <ComponentRef Id="libtest_sql_processlist.dll_1" />
+            <ComponentRef Id="libtest_sql_processlist.pdb" />
+            <ComponentRef Id="libtest_sql_replication.dll_1" />
+            <ComponentRef Id="libtest_sql_replication.pdb" />
+            <ComponentRef Id="libtest_sql_shutdown.dll_1" />
+            <ComponentRef Id="libtest_sql_shutdown.pdb" />
+            <ComponentRef Id="libtest_sql_sqlmode.dll_1" />
+            <ComponentRef Id="libtest_sql_sqlmode.pdb" />
+            <ComponentRef Id="libtest_sql_stored_procedures_functions.dll_1" />
+            <ComponentRef Id="libtest_sql_stored_procedures_functions.pdb" />
+            <ComponentRef Id="libtest_sql_views_triggers.dll_1" />
+            <ComponentRef Id="libtest_sql_views_triggers.pdb" />
+            <ComponentRef Id="libtest_x_sessions_deinit.dll_1" />
+            <ComponentRef Id="libtest_x_sessions_deinit.pdb" />
+            <ComponentRef Id="libtest_x_sessions_init.dll_1" />
+            <ComponentRef Id="libtest_x_sessions_init.pdb" />
+            <ComponentRef Id="locking_service.dll_1" />
+            <ComponentRef Id="locking_service.pdb" />
+            <ComponentRef Id="mypluglib.dll_1" />
+            <ComponentRef Id="mypluglib.pdb" />
+            <ComponentRef Id="mysql_no_login.dll_1" />
+            <ComponentRef Id="mysql_no_login.pdb" />
+            <ComponentRef Id="rewriter.dll_1" />
+            <ComponentRef Id="rewriter.pdb" />
+            <ComponentRef Id="rewrite_example.dll_1" />
+            <ComponentRef Id="rewrite_example.pdb" />
+            <ComponentRef Id="semisync_master.dll_1" />
+            <ComponentRef Id="semisync_master.pdb" />
+            <ComponentRef Id="semisync_slave.dll_1" />
+            <ComponentRef Id="semisync_slave.pdb" />
+            <ComponentRef Id="test_security_context.dll_1" />
+            <ComponentRef Id="test_security_context.pdb" />
+            <ComponentRef Id="validate_password.dll_1" />
+            <ComponentRef Id="validate_password.pdb" />
+            <ComponentRef Id="version_token.dll_1" />
+            <ComponentRef Id="version_token.pdb" />
+            -->
+            <ComponentRef Id="dictionary.txt" />
+            <ComponentRef Id="errmsg_utf8.txt" />
+            <ComponentRef Id="fill_help_tables.sql" />
+            <ComponentRef Id="innodb_memcached_config.sql" />
+            <ComponentRef Id="mysql_security_commands.sql" />
+            <ComponentRef Id="mysql_system_tables.sql" />
+            <ComponentRef Id="mysql_system_tables_data.sql" />
+            <ComponentRef Id="mysql_sys_schema.sql" />
+            <ComponentRef Id="mysql_test_data_timezone.sql" />
+            <ComponentRef Id="errmsg.sys" />
+            <ComponentRef Id="armscii8.xml" />
+            <ComponentRef Id="ascii.xml" />
+            <ComponentRef Id="cp1250.xml" />
+            <ComponentRef Id="cp1251.xml" />
+            <ComponentRef Id="cp1256.xml" />
+            <ComponentRef Id="cp1257.xml" />
+            <ComponentRef Id="cp850.xml" />
+            <ComponentRef Id="cp852.xml" />
+            <ComponentRef Id="cp866.xml" />
+            <ComponentRef Id="dec8.xml" />
+            <ComponentRef Id="geostd8.xml" />
+            <ComponentRef Id="greek.xml" />
+            <ComponentRef Id="hebrew.xml" />
+            <ComponentRef Id="hp8.xml" />
+            <ComponentRef Id="Index.xml" />
+            <ComponentRef Id="keybcs2.xml" />
+            <ComponentRef Id="koi8r.xml" />
+            <ComponentRef Id="koi8u.xml" />
+            <ComponentRef Id="latin1.xml" />
+            <ComponentRef Id="latin2.xml" />
+            <ComponentRef Id="latin5.xml" />
+            <ComponentRef Id="latin7.xml" />
+            <ComponentRef Id="macce.xml" />
+            <ComponentRef Id="macroman.xml" />
+            <ComponentRef Id="README_1" />
+            <ComponentRef Id="swe7.xml" />
+            <ComponentRef Id="errmsg.sys_1" />
+            <ComponentRef Id="errmsg.sys_2" />
+            <ComponentRef Id="errmsg.sys_3" />
+            <ComponentRef Id="errmsg.sys_4" />
+            <ComponentRef Id="errmsg.sys_5" />
+            <ComponentRef Id="errmsg.sys_6" />
+            <ComponentRef Id="errmsg.sys_7" />
+            <ComponentRef Id="errmsg.sys_8" />
+            <ComponentRef Id="errmsg.sys_9" />
+            <ComponentRef Id="errmsg.sys_10" />
+            <ComponentRef Id="errmsg.sys_11" />
+            <ComponentRef Id="errmsg.sys_12" />
+            <ComponentRef Id="errmsg.sys_13" />
+            <ComponentRef Id="errmsg.sys_14" />
+            <ComponentRef Id="errmsg.sys_15" />
+            <ComponentRef Id="errmsg.sys_16" />
+            <ComponentRef Id="errmsg.sys_17" />
+            <ComponentRef Id="errmsg.sys_18" />
+            <ComponentRef Id="errmsg.sys_19" />
+            <ComponentRef Id="errmsg.sys_20" />
+            <ComponentRef Id="errmsg.sys_21" />
+            <ComponentRef Id="errmsg.sys_22" />
+            <ComponentRef Id="errmsg.sys_23" />
+        </ComponentGroup>
+    </Fragment>
+    <?endif?>
+</Wix>

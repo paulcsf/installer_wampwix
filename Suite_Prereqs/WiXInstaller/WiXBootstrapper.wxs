@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix
+    xmlns="http://schemas.microsoft.com/wix/2006/wi"
+    xmlns:bal="http://schemas.microsoft.com/wix/BalExtension"
+    xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+
+    <?include Configuration.wxi?>
+
+    <Bundle	Name="$(var.Suite_ProductName)" Version="$(var.Suite_Version)" Manufacturer="$(var.Suite_Manufacturer)"
+		UpgradeCode="$(var.Suite_UpgradeCode)" AboutUrl="$(var.Suite_ProductUrl)"
+		IconSourceFile="Resources\Product.ico" Condition="(VersionNT &gt;= v6.0)" >
+
+        <BootstrapperApplicationRef Id="WixExtendedBootstrapperApplication.RtfLicense"  >
+            <Payload SourceFile="Resources\Header.png" />
+            <Payload SourceFile="Resources\Footer.png" />
+            <bal:WixExtendedBootstrapperApplication
+                LicenseFile="Resources\SuiteEULA.rtf"
+                ThemeFile="Resources\BundleTheme.xml"
+                LocalizationFile="Resources\BundleTheme.wxl"
+                ShowFilesInUse="yes" ShowVersion="yes" SuppressOptionsUI="no" />
+        </BootstrapperApplicationRef>
+
+        <Variable Name="CustomProductName" Persisted="yes" Type="string" Value="$(var.Suite_ProdShort)" />
+                  
+        <Variable Name="TermsUrl"       Persisted="yes" Type="string" Value="[WixBundleTempPath]License.rtf" />
+        <Variable Name="InstallFolder"  Persisted="yes" Type="string" Value="[WindowsVolume]$(var.Suite_InstallDir)" />
+        <Variable Name="InstallRegPath" Persisted="yes" Type="string" Value="SOFTWARE\$(var.Suite_ManufShort)\$(var.Suite_ProdShort)" />
+
+        <Variable Name="MySQLRootPass" Persisted="yes" Type="string" Value="$(var.Default_MySQL_Root_Pass)"/>
+        <Variable Name="MySQLPort"     Persisted="yes" Type="string" Value="$(var.Default_MySQL_Port)"/>
+        <Variable Name="ApachePort"    Persisted="yes" Type="string" Value="$(var.Default_Apache_Port)"/>
+
+		<!-- Folowing variable is used just by extended bootrapper app to identify the Prereqs installer -->
+        <Variable Name="XNDiagPrereqs"    Persisted="yes" Type="string" Value="$(var.Suite_ProductName)"/>
+		
+		<!-- Looking for previous installations -->
+		<util:RegistrySearch  Id="Detect_SuiteVersion_x86" Variable="SuiteVersionFound" Result="value" Root="HKLM" Key="[InstallRegPath]" Value="SUITE_VERSION" Win64="no" Condition="NOT VersionNT64"/>
+        <util:RegistrySearch  Id="Detect_SuiteVersion_x64" Variable="SuiteVersionFound" Result="value" Root="HKLM" Key="[InstallRegPath]" Value="SUITE_VERSION" Win64="yes" Condition="VersionNT64"/>
+
+        <util:RegistrySearch  Id="Detect_RegValExists_x86" Variable="PrevInstallFound" Result="exists" Root="HKLM" Key="[InstallRegPath]" Value="SUITE_INSTALLDIR" Win64="no" Condition="NOT VersionNT64"/>
+        <util:RegistrySearch  Id="Detect_RegValExists_x64" Variable="PrevInstallFound" Result="exists" Root="HKLM" Key="[InstallRegPath]" Value="SUITE_INSTALLDIR" Win64="yes" Condition="VersionNT64"/>
+       
+        <util:RegistrySearch  Id="Detect_InstallFolder_x86" Variable="InstallFolder" Result="value" Root="HKLM" Key="[InstallRegPath]" Value="SUITE_INSTALLDIR" Win64="no" Condition="PrevInstallFound AND NOT VersionNT64"/>
+        <util:RegistrySearch  Id="Detect_InstallFolder_x64" Variable="InstallFolder" Result="value" Root="HKLM" Key="[InstallRegPath]" Value="SUITE_INSTALLDIR" Win64="yes" Condition="PrevInstallFound AND VersionNT64"/>
+
+
+        <!--<Variable Name="DoNotCleanUpDataDir" Type="numeric"/>-->
+
+        <Chain>
+            <PackageGroupRef Id="VC2010SP1_Redistributable"/>  <!-- Required by MySQL ODBC Connector v.5.3.4 -->
+            <!-- <PackageGroupRef Id="VC2012UP4_Redistributable"/> -->
+            <PackageGroupRef Id="VC2015UP1_Redistributable"/>  <!-- Required by PHP v.7.0 and Apache v.2.4.18 -->
+            <PackageGroupRef Id="NetFX452_Redistributable"/>   <!-- Required by Suite-Apps -->
+            
+            <MsiPackage Id="MySQL_ODBCConn_x86" Compressed="yes" Visible="yes" Permanent="yes" InstallCondition="NOT VersionNT64" 
+				SourceFile="$(var.PrerequisitesPath)\mysql-connector-odbc-5.3.4-win32.msi" Vital="yes" ForcePerMachine="yes" >
+            </MsiPackage>
+            <MsiPackage Id="MySQL_ODBCConn_x64" Compressed="yes" Visible="yes" Permanent="yes" InstallCondition="VersionNT64"
+				SourceFile="$(var.PrerequisitesPath)\mysql-connector-odbc-5.3.4-winx64.msi" Vital="yes" ForcePerMachine="yes" >
+            </MsiPackage>
+
+            <MsiPackage Id="Suite_MySQL_x86" Compressed="yes" InstallCondition="NOT VersionNT64"
+				SourceFile="bin\$(var.Configuration)\Suite_MySQL_x86.msi" Vital="yes" ForcePerMachine="yes" >
+                <MsiProperty Name="SUITE_INSTALLDIR" Value="[InstallFolder]" />
+                <MsiProperty Name="INSTALL_REG_PATH" Value="[InstallRegPath]"/>
+                <MsiProperty Name="MYSQL_ROOT_PASS" Value="[MySQLRootPass]"/>
+                <MsiProperty Name="MYSQL_PORT" Value="[MySQLPort]"/>
+                <MsiProperty Name="NO_CLEANUP_DATADIR" Value="[DoNotCleanUpDataDir]"/>
+            </MsiPackage>
+            <MsiPackage Id="Suite_MySQL_x64" Compressed="yes" InstallCondition="VersionNT64"
+				SourceFile="bin\$(var.Configuration)\Suite_MySQL_x64.msi" Vital="yes" ForcePerMachine="yes" >
+                <MsiProperty Name="SUITE_INSTALLDIR" Value="[InstallFolder]" />
+                <MsiProperty Name="INSTALL_REG_PATH" Value="[InstallRegPath]"/>
+                <MsiProperty Name="MYSQL_ROOT_PASS" Value="[MySQLRootPass]"/>
+                <MsiProperty Name="MYSQL_PORT" Value="[MySQLPort]"/>
+                <MsiProperty Name="NO_CLEANUP_DATADIR" Value="[DoNotCleanUpDataDir]"/>
+            </MsiPackage>
+
+            <MsiPackage Id="Suite_PHP_x86" Compressed="yes" InstallCondition="NOT VersionNT64"
+				SourceFile="bin\$(var.Configuration)\Suite_PHP_x86.msi" Vital="yes" ForcePerMachine="yes" >
+                <MsiProperty Name="SUITE_INSTALLDIR" Value="[InstallFolder]" />
+                <MsiProperty Name="INSTALL_REG_PATH" Value="[InstallRegPath]"/>
+            </MsiPackage>
+            <MsiPackage Id="Suite_PHP_x64" Compressed="yes" InstallCondition="VersionNT64"
+				SourceFile="bin\$(var.Configuration)\Suite_PHP_x64.msi" Vital="yes" ForcePerMachine="yes" >
+                <MsiProperty Name="SUITE_INSTALLDIR" Value="[InstallFolder]" />
+                <MsiProperty Name="INSTALL_REG_PATH" Value="[InstallRegPath]"/>
+            </MsiPackage>
+
+            <MsiPackage Id="Suite_PHPMyAdmin_x86" Compressed="yes" InstallCondition="NOT VersionNT64"
+				SourceFile="bin\$(var.Configuration)\Suite_PHPMyAdmin_x86.msi" Vital="yes" ForcePerMachine="yes" >
+                <MsiProperty Name="SUITE_INSTALLDIR" Value="[InstallFolder]" />
+                <MsiProperty Name="INSTALL_REG_PATH" Value="[InstallRegPath]"/>
+                <MsiProperty Name="MYSQL_PORT" Value="[MySQLPort]"/>
+                <MsiProperty Name="APACHE_PORT" Value="[ApachePort]"/>
+            </MsiPackage>
+            <MsiPackage Id="Suite_PHPMyAdmin_x64" Compressed="yes" InstallCondition="VersionNT64"
+				SourceFile="bin\$(var.Configuration)\Suite_PHPMyAdmin_x64.msi" Vital="yes" ForcePerMachine="yes" >
+                <MsiProperty Name="SUITE_INSTALLDIR" Value="[InstallFolder]" />
+                <MsiProperty Name="INSTALL_REG_PATH" Value="[InstallRegPath]"/>
+                <MsiProperty Name="MYSQL_PORT" Value="[MySQLPort]"/>
+                <MsiProperty Name="APACHE_PORT" Value="[ApachePort]"/>
+            </MsiPackage>
+            
+            <MsiPackage Id="Suite_Apache_x86" Compressed="yes" InstallCondition="NOT VersionNT64"
+				SourceFile="bin\$(var.Configuration)\Suite_Apache_x86.msi" Vital="yes" ForcePerMachine="yes" >
+                <MsiProperty Name="SUITE_INSTALLDIR" Value="[InstallFolder]" />
+                <MsiProperty Name="INSTALL_REG_PATH" Value="[InstallRegPath]"/>
+                <MsiProperty Name="APACHE_PORT" Value="[ApachePort]"/>
+            </MsiPackage>
+            <MsiPackage Id="Suite_Apache_x64" Compressed="yes" InstallCondition="VersionNT64"
+				SourceFile="bin\$(var.Configuration)\Suite_Apache_x64.msi" Vital="yes" ForcePerMachine="yes" >
+                <MsiProperty Name="SUITE_INSTALLDIR" Value="[InstallFolder]" />
+                <MsiProperty Name="INSTALL_REG_PATH" Value="[InstallRegPath]"/>
+                <MsiProperty Name="APACHE_PORT" Value="[ApachePort]"/>
+            </MsiPackage>
+        </Chain>
+	</Bundle>
+
+
+    <Fragment>
+        <?define VC2010Sp1Redistx86Link  = http://download.microsoft.com/download/C/6/D/C6D0FD4E-9E53-4897-9B91-836EBA2AACD3/vcredist_x86.exe ?>
+        <?define VC2010Sp1Redistx64Link  = http://download.microsoft.com/download/A/8/0/A80747C3-41BD-45DF-B505-E9710D2744E0/vcredist_x64.exe ?>
+        <?define VC2012Up4Redistx86Link  = http://download.microsoft.com/download/1/6/B/16B06F60-3B20-4FF2-B699-5E9B7962F9AE/VSU_4/vcredist_x86.exe ?>
+        <?define VC2012Up4Redistx64Link  = http://download.microsoft.com/download/1/6/B/16B06F60-3B20-4FF2-B699-5E9B7962F9AE/VSU_4/vcredist_x64.exe ?>
+        <?define VC2015Up1Redistx86Link  = https://download.microsoft.com/download/C/E/5/CE514EAE-78A8-4381-86E8-29108D78DBD4/VC_redist.x86.exe ?>
+        <?define VC2015Up1Redistx64Link  = https://download.microsoft.com/download/C/E/5/CE514EAE-78A8-4381-86E8-29108D78DBD4/VC_redist.x64.exe ?>
+
+
+        <util:RegistrySearch Id="RegSerach_VC2010SP1REDISTX86" Variable="VC2010SP1REDISTX86" Root="HKLM" Key="SOFTWARE\Microsoft\VisualStudio\10.0\VC\VCRedist\x86" Value="Installed" Result="value" Win64="no" />
+        <util:RegistrySearch Id="RegSerach_VC2010SP1REDISTX64" Variable="VC2010SP1REDISTX64" Root="HKLM" Key="SOFTWARE\Wow6432Node\Microsoft\VisualStudio\10.0\VC\VCRedist\x64" Value="Installed" Result="value" Win64="no" />
+        <util:RegistrySearch Id="RegSerach_VC2012UP4REDISTX86" Variable="VC2012UP4REDISTX86" Root="HKLM" Key="SOFTWARE\Microsoft\VisualStudio\11.0\VC\Runtimes\x86" Value="Installed" Result="value" Win64="no" />
+        <util:RegistrySearch Id="RegSerach_VC2012UP4REDISTX64" Variable="VC2012UP4REDISTX64" Root="HKLM" Key="SOFTWARE\Wow6432Node\Microsoft\VisualStudio\11.0\VC\Runtimes\x64" Value="Installed" Result="value" Win64="no" />
+        <util:RegistrySearch Id="RegSerach_VC2015UP1REDISTX86" Variable="VC2015UP1REDISTX86" Root="HKLM" Key="SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\x86" Value="Installed" Result="value" Win64="no" />
+        <util:RegistrySearch Id="RegSerach_VC2015UP1REDISTX64" Variable="VC2015UP1REDISTX64" Root="HKLM" Key="SOFTWARE\Wow6432Node\Microsoft\VisualStudio\14.0\VC\Runtimes\x64" Value="Installed" Result="value" Win64="no" />
+
+
+        <PackageGroup Id="VC2010SP1_Redistributable">
+            <ExePackage
+                Id="VC2010Sp1Redistx86" DisplayName="Microsoft Visual C++ 2010 SP1 Redistributable (x86)"
+                InstallCondition="NOT Installed AND VersionNT" DetectCondition="VC2010SP1REDISTX86"
+                SourceFile="$(var.PrerequisitesPath)\VC++2010SP1_vcredist_x86.exe"
+                Permanent="yes" PerMachine="yes" Vital="yes" Compressed="yes"
+                InstallCommand="/quiet /norestart /ChainingPackage &quot;[WixBundleName]&quot;">
+            </ExePackage>
+
+            <ExePackage
+                Id="VC2010Sp1Redistx64" DisplayName="Microsoft Visual C++ 2010 SP1 Redistributable (x64)"
+                InstallCondition="NOT Installed AND VersionNT64" DetectCondition="VC2010SP1REDISTX64"
+                SourceFile="$(var.PrerequisitesPath)\VC++2010SP1_vcredist_x64.exe"
+                Permanent="yes" PerMachine="yes" Vital="yes" Compressed="yes"
+                InstallCommand="/quiet /norestart /ChainingPackage &quot;[WixBundleName]&quot;">
+            </ExePackage>
+        </PackageGroup>
+
+        <PackageGroup Id="VC2012UP4_Redistributable">
+            <ExePackage
+                Id="VC2012Up4Redistx86" DisplayName="Microsoft Visual C++ 2012 Up4 Redistributable (x86)"
+                InstallCondition="NOT Installed AND VersionNT" DetectCondition="VC2012UP4REDISTX86"
+                SourceFile="$(var.PrerequisitesPath)\VC++2012U4_vcredist_x86.exe"
+                Permanent="yes" PerMachine="yes" Vital="yes" Compressed="yes"
+                InstallCommand="/quiet /norestart /ChainingPackage &quot;[WixBundleName]&quot;">
+            </ExePackage>
+
+            <ExePackage
+                Id="VC2012Up4Redistx64" DisplayName="Microsoft Visual C++ 2012 Up4 Redistributable (x64)"
+                InstallCondition="NOT Installed AND VersionNT64" DetectCondition="VC2012UP4REDISTX64"
+                SourceFile="$(var.PrerequisitesPath)\VC++2012U4_vcredist_x64.exe"
+                Permanent="yes" PerMachine="yes" Vital="yes" Compressed="yes"
+                InstallCommand="/quiet /norestart /ChainingPackage &quot;[WixBundleName]&quot;">
+            </ExePackage>
+        </PackageGroup>
+
+        <PackageGroup Id="VC2015UP1_Redistributable">
+            <ExePackage
+                Id="VC2015Up1Redistx86" DisplayName="Microsoft Visual C++ 2015 Up1 Redistributable (x86)"
+                InstallCondition="NOT Installed AND VersionNT" DetectCondition="VC2015UP1REDISTX86"
+                SourceFile="$(var.PrerequisitesPath)\VC++2015U1_vcredist_x86.exe"
+                Permanent="yes" PerMachine="yes" Vital="yes" Compressed="yes"
+                InstallCommand="/quiet /norestart /ChainingPackage &quot;[WixBundleName]&quot;">
+            </ExePackage>
+
+            <ExePackage
+                Id="VC2015Up1Redistx64" DisplayName="Microsoft Visual C++ 2015 Up1 Redistributable (x64)"
+                InstallCondition="NOT Installed AND VersionNT64" DetectCondition="VC2015UP1REDISTX64"
+                SourceFile="$(var.PrerequisitesPath)\VC++2015U1_vcredist_x64.exe"
+                Permanent="yes" PerMachine="yes" Vital="yes" Compressed="yes"
+                InstallCommand="/quiet /norestart /ChainingPackage &quot;[WixBundleName]&quot;">
+            </ExePackage>
+        </PackageGroup>
+    </Fragment>
+
+    <Fragment>
+        <?define NetFx452MinRelease = 379893 ?>
+        <?define NetFx452RedistLink = http://go.microsoft.com/fwlink/?LinkId=397708 ?>
+
+        <util:RegistrySearchRef Id="NETFRAMEWORK45"/>
+
+        <PackageGroup Id="NetFX452_Redistributable">
+            <ExePackage
+                Id="NetFx452Redist" DisplayName="Microsoft .NET Framework 4.5.2"
+                InstallCondition="NOT Installed" DetectCondition="NETFRAMEWORK45 &gt;= $(var.NetFx452MinRelease)"
+                SourceFile="$(var.PrerequisitesPath)\NDP452-KB2901907-x86-x64-AllOS-ENU.exe"
+                Permanent="yes" PerMachine="yes" Vital="yes" Compressed="yes" Protocol="netfx4"
+                InstallCommand="/q /norestart /ChainingPackage &quot;[WixBundleName]&quot;"
+                RepairCommand="/q /norestart /repair /ChainingPackage &quot;[WixBundleName]&quot;"
+                UninstallCommand="/uninstall /q /norestart /ChainingPackage &quot;[WixBundleName]&quot; ">
+            </ExePackage>
+        </PackageGroup>
+    </Fragment>
+</Wix>

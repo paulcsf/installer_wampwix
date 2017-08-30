@@ -1,0 +1,68 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "MySQL_MSIPackage", "WiXInstaller\MySQL_MSIPackage.wixproj", "{95863617-9D4E-4E72-8887-46549DC59192}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E82520C2-BD83-42EA-89D1-4922E6ADB029} = {E82520C2-BD83-42EA-89D1-4922E6ADB029}
+	EndProjectSection
+EndProject
+Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "PHP_MSIPackage", "WiXInstaller\PHP_MSIPackage.wixproj", "{4D6C7E74-A9AE-42AE-8D0C-1A7474D8EA42}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E82520C2-BD83-42EA-89D1-4922E6ADB029} = {E82520C2-BD83-42EA-89D1-4922E6ADB029}
+	EndProjectSection
+EndProject
+Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "PHPMyAdmin_MSIPackage", "WiXInstaller\PHPMyAdmin_MSIPackage.wixproj", "{5C15D84E-D6D2-4132-B5BD-BE31EBE08CB8}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E82520C2-BD83-42EA-89D1-4922E6ADB029} = {E82520C2-BD83-42EA-89D1-4922E6ADB029}
+	EndProjectSection
+EndProject
+Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "Apache_MSIPackage", "WiXInstaller\Apache_MSIPackage.wixproj", "{46DC010D-857F-449A-8842-59F439A4E480}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E82520C2-BD83-42EA-89D1-4922E6ADB029} = {E82520C2-BD83-42EA-89D1-4922E6ADB029}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WiXCustomAction", "WiXCustomAction\WiXCustomAction.vcxproj", "{E82520C2-BD83-42EA-89D1-4922E6ADB029}"
+EndProject
+Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "WiXBootstrapper", "WiXInstaller\WiXBootstrapper.wixproj", "{0DD4665C-6709-42F3-A6A4-26E34364D085}"
+	ProjectSection(ProjectDependencies) = postProject
+		{46DC010D-857F-449A-8842-59F439A4E480} = {46DC010D-857F-449A-8842-59F439A4E480}
+		{95863617-9D4E-4E72-8887-46549DC59192} = {95863617-9D4E-4E72-8887-46549DC59192}
+		{5C15D84E-D6D2-4132-B5BD-BE31EBE08CB8} = {5C15D84E-D6D2-4132-B5BD-BE31EBE08CB8}
+		{4D6C7E74-A9AE-42AE-8D0C-1A7474D8EA42} = {4D6C7E74-A9AE-42AE-8D0C-1A7474D8EA42}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Mixed Platforms = Debug|Mixed Platforms
+		Release|Mixed Platforms = Release|Mixed Platforms
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{95863617-9D4E-4E72-8887-46549DC59192}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{95863617-9D4E-4E72-8887-46549DC59192}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{95863617-9D4E-4E72-8887-46549DC59192}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{95863617-9D4E-4E72-8887-46549DC59192}.Release|Mixed Platforms.Build.0 = Release|x86
+		{4D6C7E74-A9AE-42AE-8D0C-1A7474D8EA42}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{4D6C7E74-A9AE-42AE-8D0C-1A7474D8EA42}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{4D6C7E74-A9AE-42AE-8D0C-1A7474D8EA42}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{4D6C7E74-A9AE-42AE-8D0C-1A7474D8EA42}.Release|Mixed Platforms.Build.0 = Release|x86
+		{5C15D84E-D6D2-4132-B5BD-BE31EBE08CB8}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{5C15D84E-D6D2-4132-B5BD-BE31EBE08CB8}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{5C15D84E-D6D2-4132-B5BD-BE31EBE08CB8}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{5C15D84E-D6D2-4132-B5BD-BE31EBE08CB8}.Release|Mixed Platforms.Build.0 = Release|x86
+		{46DC010D-857F-449A-8842-59F439A4E480}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{46DC010D-857F-449A-8842-59F439A4E480}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{46DC010D-857F-449A-8842-59F439A4E480}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{46DC010D-857F-449A-8842-59F439A4E480}.Release|Mixed Platforms.Build.0 = Release|x86
+		{E82520C2-BD83-42EA-89D1-4922E6ADB029}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{E82520C2-BD83-42EA-89D1-4922E6ADB029}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{E82520C2-BD83-42EA-89D1-4922E6ADB029}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{E82520C2-BD83-42EA-89D1-4922E6ADB029}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{0DD4665C-6709-42F3-A6A4-26E34364D085}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{0DD4665C-6709-42F3-A6A4-26E34364D085}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{0DD4665C-6709-42F3-A6A4-26E34364D085}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{0DD4665C-6709-42F3-A6A4-26E34364D085}.Release|Mixed Platforms.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

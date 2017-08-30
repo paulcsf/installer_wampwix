@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Include>
+    <?define Suite_ProductName   = "Suite - Prereqs" ?>
+    <?define Suite_ProdShort     = "Suite" ?>
+    <?define Suite_UpgradeCode   = "C9072391-7861-4E00-ACD5-8A8ABE37D6C9" ?>
+    <?define Suite_Manufacturer  = "SuiteCompany, LLC" ?>
+    <?define Suite_ManufShort    = "SuiteCompany" ?>
+    <?ifdef env.BUILD_NUMBER ?>
+        <?define Suite_Version   = "1.0.0.$(env.BUILD_NUMBER)"?>
+    <?else?>
+        <?define Suite_Version   = "1.0.0.0"?>
+    <?endif?>
+    <?define Suite_InstallDir    = "SuiteDir" ?>
+    <?define Suite_StartMenuDir  = "Suite StartMenu" ?>
+    <?define Suite_ProductUrl    = "http://www.suite.com" ?>
+    <?define PrerequisitesPath   = "..\..\ProductFiles_Prereqs\" ?>
+
+
+    <?define Apache_ProductName      = "Suite Apache" ?>
+    <?define Apache_ProductVersion   = "2.4.18" ?>
+    <?define Apache_ProductCode      = "*" ?>
+    <?define Apache_UpgradeCode      = "0A231618-FF18-4280-A359-0F36B386BC26" ?>
+    <?define Apache_SVC_Name         = "SuiteApache" ?>
+    <?define Apache_SVC_DisplayName  = "Suite Web Service" ?>
+    <?define Apache_SVC_Description  = "Suite Web Service" ?>
+    <?define Apache_ProductFiles_x86 = "..\..\ProductFiles_Prereqs\httpd-2.4.18-win32-VC14\Apache24\" ?>
+    <?define Apache_ProductFiles_x64 = "..\..\ProductFiles_Prereqs\httpd-2.4.18-win64-VC14\Apache24\" ?>
+
+    <?define MySQL_ProductName      = "Suite MySQL" ?>
+    <?define MySQL_ProductVersion   = "5.7.11.0" ?>
+    <?define MySQL_ProductCode      = "*" ?>
+    <?define MySQL_UpgradeCode      = "F1FABF7B-8BB6-47B9-818C-36AF293C274B" ?>
+    <?define MySQL_SVC_Name         = "SuiteMySQL" ?>
+    <?define MySQL_SVC_DisplayName  = "Suite Database Service" ?>
+    <?define MySQL_SVC_Description  = "Suite Database Service" ?>
+    <?define MySQL_ProductFiles_x86 = "..\..\ProductFiles_Prereqs\mysql-5.7.11-win32\" ?>
+    <?define MySQL_ProductFiles_x64 = "..\..\ProductFiles_Prereqs\mysql-5.7.11-win64\" ?>
+
+    <?define PHP_ProductName      = "Suite PHP" ?>
+    <?define PHP_ProductVersion   = "7.0.3" ?>
+    <?define PHP_ProductCode      = "*" ?>
+    <?define PHP_UpgradeCode      = "32506798-0F11-40F3-BF98-5E762449AA70" ?>
+    <?define PHP_ProductFiles_x86 = "..\..\ProductFiles_Prereqs\php-7.0.3-Win32-VC14-x86\" ?>
+    <?define PHP_ProductFiles_x64 = "..\..\ProductFiles_Prereqs\php-7.0.3-Win32-VC14-x64\" ?>
+
+    <?define PHPMyAdmin_ProductName      = "Suite phpMyAdmin" ?>
+    <?define PHPMyAdmin_ProductVersion   = "4.5.5" ?>
+    <?define PHPMyAdmin_ProductCode      = "*" ?>
+    <?define PHPMyAdmin_UpgradeCode      = "8F1DFD69-A3B4-431A-AAD7-909BE3ACFF14" ?>
+    <?define PHPMyAdmin_ProductFiles     = "..\..\ProductFiles_Prereqs\phpMyAdmin-4.5.5-all-languages\" ?>
+
+    <?define Default_MySQL_Root_Pass = "rootpass" ?>
+    <?define Default_MySQL_Port = "3333" ?>
+    <?define Default_Apache_Port = "8888" ?>
+</Include>
