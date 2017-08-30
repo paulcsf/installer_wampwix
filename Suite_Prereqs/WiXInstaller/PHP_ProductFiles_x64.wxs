@@ -1,0 +1,367 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+
+    <?include Configuration.wxi?>
+    <!-- "%WIX%\bin\heat.exe" dir "php-7.0.3-Win32-VC14-x64" -cg CG_PHP_ProductFiles -dr DIR_PHP -gg -ke -scom -sfrag -srd -suid -sreg -var var.PHP_ProductFiles_x64 -o "PHP_ProductFiles_x64.wxs" -->
+
+    <?if $(var.Platform)="x64"?>
+    <Fragment>
+        <DirectoryRef Id="DIR_PHP">
+            <Component Id="deplister.exe" Guid="{287DC680-1B6A-4E59-9381-6843FC5E9EA5}">
+                <File Id="deplister.exe" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\deplister.exe" />
+            </Component>
+            <Component Id="glib_2.dll" Guid="{E081C07D-5214-4C25-A473-F3905BEA7DFD}">
+                <File Id="glib_2.dll" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\glib-2.dll" />
+            </Component>
+            <Component Id="gmodule_2.dll" Guid="{6810B45D-0170-4E03-9A95-B5AD0A98BE22}">
+                <File Id="gmodule_2.dll" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\gmodule-2.dll" />
+            </Component>
+            <Component Id="icudt56.dll" Guid="{ABAE3CEE-1CD4-4999-853C-FD85C0FE7755}">
+                <File Id="icudt56.dll" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\icudt56.dll" />
+            </Component>
+            <Component Id="icuin56.dll" Guid="{EB7037D7-3C45-4629-8D9A-71F6B103F1A2}">
+                <File Id="icuin56.dll" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\icuin56.dll" />
+            </Component>
+            <Component Id="icuio56.dll" Guid="{97E386B2-A0D5-4191-9683-B212997876B8}">
+                <File Id="icuio56.dll" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\icuio56.dll" />
+            </Component>
+            <Component Id="icule56.dll" Guid="{507650CF-2BA9-42F7-871F-6C4944D73A83}">
+                <File Id="icule56.dll" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\icule56.dll" />
+            </Component>
+            <Component Id="icuuc56.dll" Guid="{E0B5AF41-FD8F-4B49-A1A8-F4A9514CFD2A}">
+                <File Id="icuuc56.dll" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\icuuc56.dll" />
+            </Component>
+            <Component Id="install.txt" Guid="{9F2684B1-F15D-4E12-B294-9E8D16145003}">
+                <File Id="install.txt" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\install.txt" />
+            </Component>
+            <Component Id="libeay32.dll" Guid="{1679ED4C-6340-4CAF-91D1-77DE5C94B450}">
+                <File Id="libeay32.dll" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\libeay32.dll" />
+            </Component>
+            <Component Id="libenchant.dll" Guid="{84000058-C1C4-4328-A0BD-7EA42B27020C}">
+                <File Id="libenchant.dll" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\libenchant.dll" />
+            </Component>
+            <Component Id="libpq.dll" Guid="{D243F8B5-0D12-45EB-A1DA-27EAAF7CAB6F}">
+                <File Id="libpq.dll" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\libpq.dll" />
+            </Component>
+            <Component Id="libsasl.dll" Guid="{8C09421E-A2F6-41A0-B0BA-7A7643421018}">
+                <File Id="libsasl.dll" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\libsasl.dll" />
+            </Component>
+            <Component Id="libssh2.dll" Guid="{ACB40770-C906-46B1-B706-E991E1C6E75D}">
+                <File Id="libssh2.dll" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\libssh2.dll" />
+            </Component>
+            <Component Id="license.txt" Guid="{57EA259D-C8C3-4800-BD45-D89ECD90BF51}">
+                <File Id="license.txt" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\license.txt" />
+            </Component>
+            <Component Id="news.txt" Guid="{062F91B1-472F-45BB-8BA0-12F62A3E1EEA}">
+                <File Id="news.txt" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\news.txt" />
+            </Component>
+            <Component Id="phar.phar.bat" Guid="{B9E0D6DB-7557-4BF3-B4E6-154957E39E4B}">
+                <File Id="phar.phar.bat" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\phar.phar.bat" />
+            </Component>
+            <Component Id="pharcommand.phar" Guid="{553ABED6-8C10-4D88-A757-757E98AD5437}">
+                <File Id="pharcommand.phar" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\pharcommand.phar" />
+            </Component>
+            <Component Id="php_cgi.exe" Guid="{1C2B238B-E25A-4279-A1A5-20500E3274F1}">
+                <File Id="php_cgi.exe" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\php-cgi.exe" />
+            </Component>
+            <Component Id="php_win.exe" Guid="{B8E7C1D8-17DF-4B88-891D-0E3480C6606B}">
+                <File Id="php_win.exe" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\php-win.exe" />
+            </Component>
+            <Component Id="php.exe" Guid="{B4FDD073-F234-4B17-8C36-05C2B447294E}">
+                <File Id="php.exe" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\php.exe" />
+            </Component>
+            <Component Id="php.gif" Guid="{FE5E28FF-79CE-4535-A6B1-EAAF3806FF73}">
+                <File Id="php.gif" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\php.gif" />
+            </Component>
+            <Component Id="php.ini" Guid="{E84B0517-24B2-485D-B5A1-7A896DDBC759}">
+                <File Id="php.ini" KeyPath="yes" Source="$(var.PHP_ProductFiles_x86)\php.ini" />
+            </Component>
+            <Component Id="php.ini_development" Guid="{B97B3B37-1D37-4580-91DD-274231A60990}">
+                <File Id="php.ini_development" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\php.ini-development" />
+            </Component>
+            <Component Id="php.ini_production" Guid="{F6BF27BA-AAE3-45D5-AB66-BCFCE8168AE7}">
+                <File Id="php.ini_production" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\php.ini-production" />
+            </Component>
+            <Component Id="php7apache2_4.dll" Guid="{FC31614B-889F-4031-AF08-E7A8A6100993}">
+                <File Id="php7apache2_4.dll" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\php7apache2_4.dll" />
+            </Component>
+            <Component Id="php7embed.lib" Guid="{71752BB2-ADB2-45E4-B5DA-EC555E6A7F28}">
+                <File Id="php7embed.lib" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\php7embed.lib" />
+            </Component>
+            <Component Id="php7phpdbg.dll" Guid="{39BCE15F-1EB5-42A5-96B8-E26FC7831948}">
+                <File Id="php7phpdbg.dll" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\php7phpdbg.dll" />
+            </Component>
+            <Component Id="php7ts.dll" Guid="{BC269FCF-3B4B-4E4E-9CF2-281F69DD9BB0}">
+                <File Id="php7ts.dll" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\php7ts.dll" />
+            </Component>
+            <Component Id="phpdbg.exe" Guid="{E840EB89-6873-4757-BBA4-BCE850E5E2A6}">
+                <File Id="phpdbg.exe" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\phpdbg.exe" />
+            </Component>
+            <Component Id="readme_redist_bins.txt" Guid="{DE3CE815-BA83-4619-8CBC-B3E6FD84A235}">
+                <File Id="readme_redist_bins.txt" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\readme-redist-bins.txt" />
+            </Component>
+            <Component Id="snapshot.txt" Guid="{C0ABABE7-5022-479B-93A6-2CD4114D53AA}">
+                <File Id="snapshot.txt" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\snapshot.txt" />
+            </Component>
+            <Component Id="ssleay32.dll" Guid="{46D2B0F4-1C8D-4AF5-8E67-B91BDC47169D}">
+                <File Id="ssleay32.dll" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\ssleay32.dll" />
+            </Component>
+            <Directory Id="dev" Name="dev">
+                <Component Id="php7ts.lib" Guid="{737A91F3-DA1A-40DC-A1AE-04CBA47D1269}">
+                    <File Id="php7ts.lib" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\dev\php7ts.lib" />
+                </Component>
+            </Directory>
+            <Directory Id="ext" Name="ext">
+                <Component Id="php_bz2.dll" Guid="{E90C5286-74F3-46DA-893E-375196F2E614}">
+                    <File Id="php_bz2.dll" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\ext\php_bz2.dll" />
+                </Component>
+                <Component Id="php_com_dotnet.dll" Guid="{55C65FE7-6D60-4F50-A0C1-5DF9D4498779}">
+                    <File Id="php_com_dotnet.dll" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\ext\php_com_dotnet.dll" />
+                </Component>
+                <Component Id="php_curl.dll" Guid="{F3B58774-F682-4794-889C-435DBAB93DF1}">
+                    <File Id="php_curl.dll" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\ext\php_curl.dll" />
+                </Component>
+                <Component Id="php_enchant.dll" Guid="{973B22F9-ACC9-40F4-8E05-90F4EB584335}">
+                    <File Id="php_enchant.dll" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\ext\php_enchant.dll" />
+                </Component>
+                <Component Id="php_exif.dll" Guid="{D0EE144A-D291-41EC-8FD5-397C1F08940E}">
+                    <File Id="php_exif.dll" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\ext\php_exif.dll" />
+                </Component>
+                <Component Id="php_fileinfo.dll" Guid="{37D67D15-D45A-4424-89B6-02F37E9586DB}">
+                    <File Id="php_fileinfo.dll" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\ext\php_fileinfo.dll" />
+                </Component>
+                <Component Id="php_ftp.dll" Guid="{50D52CE0-75EF-4F85-AD9E-795F2F0D93CB}">
+                    <File Id="php_ftp.dll" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\ext\php_ftp.dll" />
+                </Component>
+                <Component Id="php_gd2.dll" Guid="{7FD28D34-93AD-4ABF-8EB8-F2FE19DE56FE}">
+                    <File Id="php_gd2.dll" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\ext\php_gd2.dll" />
+                </Component>
+                <Component Id="php_gettext.dll" Guid="{74FBC553-B900-46EF-B9E2-C3D711EB1393}">
+                    <File Id="php_gettext.dll" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\ext\php_gettext.dll" />
+                </Component>
+                <Component Id="php_gmp.dll" Guid="{144819CB-C6B2-46F6-88D9-FB42DFAF15E4}">
+                    <File Id="php_gmp.dll" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\ext\php_gmp.dll" />
+                </Component>
+                <Component Id="php_imap.dll" Guid="{53B99769-7A33-408B-B7D3-A247B32D1C6C}">
+                    <File Id="php_imap.dll" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\ext\php_imap.dll" />
+                </Component>
+                <Component Id="php_interbase.dll" Guid="{273E5437-6147-45AC-BF4D-D6894BF53605}">
+                    <File Id="php_interbase.dll" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\ext\php_interbase.dll" />
+                </Component>
+                <Component Id="php_intl.dll" Guid="{E963E091-F430-4EFA-AA60-3A7E6070333B}">
+                    <File Id="php_intl.dll" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\ext\php_intl.dll" />
+                </Component>
+                <Component Id="php_ldap.dll" Guid="{27051702-529E-444B-9FAA-64189A0CA80D}">
+                    <File Id="php_ldap.dll" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\ext\php_ldap.dll" />
+                </Component>
+                <Component Id="php_mbstring.dll" Guid="{F4DAE104-2CB2-4144-8DBD-2795CA19935B}">
+                    <File Id="php_mbstring.dll" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\ext\php_mbstring.dll" />
+                </Component>
+                <Component Id="php_mysqli.dll" Guid="{C2B0F259-2E79-4B3E-BF81-97C284BB1FE2}">
+                    <File Id="php_mysqli.dll" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\ext\php_mysqli.dll" />
+                </Component>
+                <Component Id="php_oci8_12c.dll" Guid="{6A02DC42-7638-4E77-94D2-FF2D40FFD332}">
+                    <File Id="php_oci8_12c.dll" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\ext\php_oci8_12c.dll" />
+                </Component>
+                <Component Id="php_odbc.dll" Guid="{BB73FB40-94D9-4201-8D8C-3430A06F02AC}">
+                    <File Id="php_odbc.dll" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\ext\php_odbc.dll" />
+                </Component>
+                <Component Id="php_opcache.dll" Guid="{B3E8B148-F27A-45C6-B337-E9DC41AF8C7D}">
+                    <File Id="php_opcache.dll" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\ext\php_opcache.dll" />
+                </Component>
+                <Component Id="php_openssl.dll" Guid="{3F859CA5-A1A6-4CE3-AD97-871C7D2D6B26}">
+                    <File Id="php_openssl.dll" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\ext\php_openssl.dll" />
+                </Component>
+                <Component Id="php_pdo_firebird.dll" Guid="{FB569554-68E8-411F-BAA9-F6FBA98AE766}">
+                    <File Id="php_pdo_firebird.dll" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\ext\php_pdo_firebird.dll" />
+                </Component>
+                <Component Id="php_pdo_mysql.dll" Guid="{6BA91FA8-19FF-4703-B039-EEAA896ADB75}">
+                    <File Id="php_pdo_mysql.dll" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\ext\php_pdo_mysql.dll" />
+                </Component>
+                <Component Id="php_pdo_oci.dll" Guid="{95345C97-CEF7-44AA-AF2F-228764D68F99}">
+                    <File Id="php_pdo_oci.dll" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\ext\php_pdo_oci.dll" />
+                </Component>
+                <Component Id="php_pdo_odbc.dll" Guid="{927A01A1-C232-415E-83A1-817D40CD5793}">
+                    <File Id="php_pdo_odbc.dll" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\ext\php_pdo_odbc.dll" />
+                </Component>
+                <Component Id="php_pdo_pgsql.dll" Guid="{31DB96B6-217A-46BB-B382-99B96534502D}">
+                    <File Id="php_pdo_pgsql.dll" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\ext\php_pdo_pgsql.dll" />
+                </Component>
+                <Component Id="php_pdo_sqlite.dll" Guid="{34F57F22-0831-4424-A919-86ADA7E11315}">
+                    <File Id="php_pdo_sqlite.dll" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\ext\php_pdo_sqlite.dll" />
+                </Component>
+                <Component Id="php_pgsql.dll" Guid="{77C7F64F-8643-4E3C-863D-DBEFD45A6106}">
+                    <File Id="php_pgsql.dll" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\ext\php_pgsql.dll" />
+                </Component>
+                <Component Id="php_phpdbg_webhelper.dll" Guid="{0889C192-3DC4-4FF4-88DE-E1F986A6974B}">
+                    <File Id="php_phpdbg_webhelper.dll" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\ext\php_phpdbg_webhelper.dll" />
+                </Component>
+                <Component Id="php_shmop.dll" Guid="{3BAEB4AB-028C-446C-BB11-9453833387EC}">
+                    <File Id="php_shmop.dll" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\ext\php_shmop.dll" />
+                </Component>
+                <Component Id="php_snmp.dll" Guid="{8A664E24-2421-450B-9B81-EB68B5E72908}">
+                    <File Id="php_snmp.dll" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\ext\php_snmp.dll" />
+                </Component>
+                <Component Id="php_soap.dll" Guid="{15A299DC-FB28-4E1E-AA37-C768BEE359C9}">
+                    <File Id="php_soap.dll" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\ext\php_soap.dll" />
+                </Component>
+                <Component Id="php_sockets.dll" Guid="{231329E6-541F-41F3-BD6B-5B8D05293834}">
+                    <File Id="php_sockets.dll" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\ext\php_sockets.dll" />
+                </Component>
+                <Component Id="php_sqlite3.dll" Guid="{5A400EF6-39F1-41A7-89A4-0829906E5A49}">
+                    <File Id="php_sqlite3.dll" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\ext\php_sqlite3.dll" />
+                </Component>
+                <Component Id="php_sysvshm.dll" Guid="{3C33BD13-D2E3-4743-BA74-11BBE6BCD15F}">
+                    <File Id="php_sysvshm.dll" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\ext\php_sysvshm.dll" />
+                </Component>
+                <Component Id="php_tidy.dll" Guid="{60839220-9999-4E2F-B16D-5D6838F45786}">
+                    <File Id="php_tidy.dll" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\ext\php_tidy.dll" />
+                </Component>
+                <Component Id="php_xmlrpc.dll" Guid="{F671970C-D283-4FAA-B950-CB7EA5246CF1}">
+                    <File Id="php_xmlrpc.dll" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\ext\php_xmlrpc.dll" />
+                </Component>
+                <Component Id="php_xsl.dll" Guid="{C4209F05-5E81-4E16-B989-48465A2FF9DA}">
+                    <File Id="php_xsl.dll" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\ext\php_xsl.dll" />
+                </Component>
+            </Directory>
+            <Directory Id="extras" Name="extras">
+                <Directory Id="ssl" Name="ssl">
+                    <Component Id="openssl.cnf" Guid="{59173954-6AFB-4DBF-BCC3-614935B5A0B8}">
+                        <File Id="openssl.cnf" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\extras\ssl\openssl.cnf" />
+                    </Component>
+                </Directory>
+            </Directory>
+            <Directory Id="lib" Name="lib">
+                <Directory Id="enchant" Name="enchant">
+                    <Component Id="libenchant_ispell.dll" Guid="{5B62575E-C7EA-45C5-A1D0-895DCD789667}">
+                        <File Id="libenchant_ispell.dll" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\lib\enchant\libenchant_ispell.dll" />
+                    </Component>
+                    <Component Id="libenchant_myspell.dll" Guid="{7767D505-065F-4A06-8278-37AE5C6F138F}">
+                        <File Id="libenchant_myspell.dll" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\lib\enchant\libenchant_myspell.dll" />
+                    </Component>
+                </Directory>
+            </Directory>
+            <Directory Id="sasl2" Name="sasl2">
+                <Component Id="saslANONYMOUS.dll" Guid="{4AF4C984-BA39-4AE4-AB68-631158BA081B}">
+                    <File Id="saslANONYMOUS.dll" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\sasl2\saslANONYMOUS.dll" />
+                </Component>
+                <Component Id="saslCRAMMD5.dll" Guid="{01EEB196-AB0D-4122-801F-570F13A26A1A}">
+                    <File Id="saslCRAMMD5.dll" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\sasl2\saslCRAMMD5.dll" />
+                </Component>
+                <Component Id="saslDIGESTMD5.dll" Guid="{F069CB32-7249-4850-9C82-36D5E464684A}">
+                    <File Id="saslDIGESTMD5.dll" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\sasl2\saslDIGESTMD5.dll" />
+                </Component>
+                <Component Id="saslLOGIN.dll" Guid="{BDEDDEAB-C210-47B7-82CD-3F72F2920F20}">
+                    <File Id="saslLOGIN.dll" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\sasl2\saslLOGIN.dll" />
+                </Component>
+                <Component Id="saslNTLM.dll" Guid="{E28739D6-443F-4625-B197-71A691DD8124}">
+                    <File Id="saslNTLM.dll" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\sasl2\saslNTLM.dll" />
+                </Component>
+                <Component Id="saslOTP.dll" Guid="{CA3DF886-7130-4B96-B41E-B312D5E5930D}">
+                    <File Id="saslOTP.dll" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\sasl2\saslOTP.dll" />
+                </Component>
+                <Component Id="saslPLAIN.dll" Guid="{D65FB85D-DCE0-4B5B-943A-400C63FFC6F3}">
+                    <File Id="saslPLAIN.dll" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\sasl2\saslPLAIN.dll" />
+                </Component>
+                <Component Id="saslSCRAM.dll" Guid="{A96EC183-9705-491C-991E-9CFFB34526B3}">
+                    <File Id="saslSCRAM.dll" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\sasl2\saslSCRAM.dll" />
+                </Component>
+                <Component Id="saslSQLITE.dll" Guid="{A4CB696C-7F1F-4A66-BF17-008354847045}">
+                    <File Id="saslSQLITE.dll" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\sasl2\saslSQLITE.dll" />
+                </Component>
+                <Component Id="saslSRP.dll" Guid="{23CE35B6-BB64-43B9-A82B-CE7317E6A14F}">
+                    <File Id="saslSRP.dll" KeyPath="yes" Source="$(var.PHP_ProductFiles_x64)\sasl2\saslSRP.dll" />
+                </Component>
+            </Directory>
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <ComponentGroup Id="CG_PHP_ProductFiles">
+            <ComponentRef Id="deplister.exe" />
+            <ComponentRef Id="glib_2.dll" />
+            <ComponentRef Id="gmodule_2.dll" />
+            <ComponentRef Id="icudt56.dll" />
+            <ComponentRef Id="icuin56.dll" />
+            <ComponentRef Id="icuio56.dll" />
+            <ComponentRef Id="icule56.dll" />
+            <ComponentRef Id="icuuc56.dll" />
+            <ComponentRef Id="install.txt" />
+            <ComponentRef Id="libeay32.dll" />
+            <ComponentRef Id="libenchant.dll" />
+            <ComponentRef Id="libpq.dll" />
+            <ComponentRef Id="libsasl.dll" />
+            <ComponentRef Id="libssh2.dll" />
+            <ComponentRef Id="license.txt" />
+            <ComponentRef Id="news.txt" />
+            <ComponentRef Id="phar.phar.bat" />
+            <ComponentRef Id="pharcommand.phar" />
+            <ComponentRef Id="php_cgi.exe" />
+            <ComponentRef Id="php_win.exe" />
+            <ComponentRef Id="php.exe" />
+            <ComponentRef Id="php.gif" />
+            <ComponentRef Id="php.ini" />
+            <ComponentRef Id="php.ini_development" />
+            <ComponentRef Id="php.ini_production" />
+            <ComponentRef Id="php7apache2_4.dll" />
+            <ComponentRef Id="php7embed.lib" />
+            <ComponentRef Id="php7phpdbg.dll" />
+            <ComponentRef Id="php7ts.dll" />
+            <ComponentRef Id="phpdbg.exe" />
+            <ComponentRef Id="readme_redist_bins.txt" />
+            <ComponentRef Id="snapshot.txt" />
+            <ComponentRef Id="ssleay32.dll" />
+            <ComponentRef Id="php7ts.lib" />
+            <ComponentRef Id="php_bz2.dll" />
+            <ComponentRef Id="php_com_dotnet.dll" />
+            <ComponentRef Id="php_curl.dll" />
+            <ComponentRef Id="php_enchant.dll" />
+            <ComponentRef Id="php_exif.dll" />
+            <ComponentRef Id="php_fileinfo.dll" />
+            <ComponentRef Id="php_ftp.dll" />
+            <ComponentRef Id="php_gd2.dll" />
+            <ComponentRef Id="php_gettext.dll" />
+            <ComponentRef Id="php_gmp.dll" />
+            <ComponentRef Id="php_imap.dll" />
+            <ComponentRef Id="php_interbase.dll" />
+            <ComponentRef Id="php_intl.dll" />
+            <ComponentRef Id="php_ldap.dll" />
+            <ComponentRef Id="php_mbstring.dll" />
+            <ComponentRef Id="php_mysqli.dll" />
+            <ComponentRef Id="php_oci8_12c.dll" />
+            <ComponentRef Id="php_odbc.dll" />
+            <ComponentRef Id="php_opcache.dll" />
+            <ComponentRef Id="php_openssl.dll" />
+            <ComponentRef Id="php_pdo_firebird.dll" />
+            <ComponentRef Id="php_pdo_mysql.dll" />
+            <ComponentRef Id="php_pdo_oci.dll" />
+            <ComponentRef Id="php_pdo_odbc.dll" />
+            <ComponentRef Id="php_pdo_pgsql.dll" />
+            <ComponentRef Id="php_pdo_sqlite.dll" />
+            <ComponentRef Id="php_pgsql.dll" />
+            <ComponentRef Id="php_phpdbg_webhelper.dll" />
+            <ComponentRef Id="php_shmop.dll" />
+            <ComponentRef Id="php_snmp.dll" />
+            <ComponentRef Id="php_soap.dll" />
+            <ComponentRef Id="php_sockets.dll" />
+            <ComponentRef Id="php_sqlite3.dll" />
+            <ComponentRef Id="php_sysvshm.dll" />
+            <ComponentRef Id="php_tidy.dll" />
+            <ComponentRef Id="php_xmlrpc.dll" />
+            <ComponentRef Id="php_xsl.dll" />
+            <ComponentRef Id="openssl.cnf" />
+            <ComponentRef Id="libenchant_ispell.dll" />
+            <ComponentRef Id="libenchant_myspell.dll" />
+            <ComponentRef Id="saslANONYMOUS.dll" />
+            <ComponentRef Id="saslCRAMMD5.dll" />
+            <ComponentRef Id="saslDIGESTMD5.dll" />
+            <ComponentRef Id="saslLOGIN.dll" />
+            <ComponentRef Id="saslNTLM.dll" />
+            <ComponentRef Id="saslOTP.dll" />
+            <ComponentRef Id="saslPLAIN.dll" />
+            <ComponentRef Id="saslSCRAM.dll" />
+            <ComponentRef Id="saslSQLITE.dll" />
+            <ComponentRef Id="saslSRP.dll" />
+        </ComponentGroup>
+    </Fragment>
+    <?endif?>
+</Wix>

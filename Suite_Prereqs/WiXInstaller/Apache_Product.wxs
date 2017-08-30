@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix
+    xmlns="http://schemas.microsoft.com/wix/2006/wi"
+    xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+
+    <?include Configuration.wxi?>
+
+    <Product Id="$(var.Apache_ProductCode)" Name="$(var.Apache_ProductName)" Language="1033" Version="$(var.Apache_ProductVersion)" Manufacturer="$(var.Suite_Manufacturer)" UpgradeCode="$(var.Apache_UpgradeCode)">
+        <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" InstallPrivileges="elevated" />
+
+        <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+        <MediaTemplate EmbedCab="yes" />
+
+        <!-- These propertiese will be provided by bootstrapper and will be overrided -->
+        <Property Id="INSTALL_REG_PATH" Value="SOFTWARE\$(var.Suite_ManufShort)\$(var.Suite_ProdShort)" />
+
+
+        <?if $(var.Platform)="x86"?>
+        <Binary Id="WiXCustomAction" SourceFile="..\WiXCustomAction\bin\$(var.Configuration)\Win32\WiXCustomAction.dll"/>
+        <?else?>
+        <Binary Id="WiXCustomAction" SourceFile="..\WiXCustomAction\bin\$(var.Configuration)\Win64\WiXCustomAction.dll"/>
+        <?endif?>
+
+        <SetProperty Id="UpdateApacheConfig" Sequence="execute" Value="[SUITE_INSTALLDIR]|[APACHE_PORT]|[#httpd.conf]" Before="UpdateApacheConfig" />
+        <CustomAction Id="UpdateApacheConfig" BinaryKey="WiXCustomAction" DllEntry="UpdateApacheConfig" Execute="deferred" Return="check" />
+
+        <InstallExecuteSequence>
+            <Custom Action="UpdateApacheConfig" After="InstallFiles">NOT Installed</Custom>
+        </InstallExecuteSequence>
+
+        <Feature Id="ProductFeature" Title="MySQL_MSIPackage" Level="1">
+            <ComponentGroupRef Id="CG_Apache_ProductFiles" />
+            <ComponentGroupRef Id="CG_Apache_ProductConfiguration" />
+        </Feature>
+    </Product>
+
+    <Fragment>
+        <Directory Id="TARGETDIR" Name="SourceDir">
+            <Directory Id="SUITE_INSTALLDIR" Name="$(var.Suite_InstallDir)">
+                <Directory Id="DIR_APACHE" Name="Apache" />
+                <Directory Id="DIR_SUITEWEB" Name="SuiteWeb" />
+            </Directory>
+        </Directory>
+    </Fragment>
+
+    <Fragment>
+        <Property Id="DIR_APACHE">
+            <RegistrySearch Id="RegSearch_DIR_APACHE" Root="HKLM" Key="[INSTALL_REG_PATH]" Name="DIR_APACHE" Type="raw" />
+        </Property>
+
+        <ComponentGroup Id="CG_Apache_ProductConfiguration">
+            <Component Id="CMP_Setup_ApacheService"  Guid="{5566AC22-9451-4FE7-9003-1AC33F4B79F9}" Directory="bin" >
+                <?if $(var.Platform)="x86"?>
+                <File Id="httpd.exe" KeyPath="yes" Source="$(var.Apache_ProductFiles_x86)\bin\httpd.exe" />
+                <?else?>
+                <File Id="httpd.exe" KeyPath="yes" Source="$(var.Apache_ProductFiles_x64)\bin\httpd.exe" />
+                <?endif?>
+                <ServiceInstall Id="ApacheService_SvcInstall" Name="$(var.Apache_SVC_Name)" DisplayName="$(var.Apache_SVC_DisplayName)" Description="$(var.Apache_SVC_Description)" Arguments="-k runservice" Type="ownProcess" Start="auto" ErrorControl="normal" Interactive="no" />
+                <ServiceControl Id="ApacheService_SvcControl" Name="$(var.Apache_SVC_Name)" Start="install" Stop="uninstall" Remove="uninstall" Wait="yes"/>
+            </Component>
+
+            <Component Id="suiteweb.index.html" Guid="{C7312F5D-07E2-49D2-B0C5-B4D3D923C4D8}" Directory="DIR_SUITEWEB">
+                <File Id="suiteweb.index.html" Source="$(var.Apache_ProductFiles_x86)\htdocs\index.html" KeyPath="yes" />
+            </Component>
+
+            <Component Id="CMP_RegistryEntries" Guid="{06AA9055-D6DD-40CC-B409-0E2EC76A1A80}" Directory="logs">
+                <RegistryValue Root="HKLM" Key="[INSTALL_REG_PATH]" Name="DIR_APACHE" Type="string" Value="[DIR_APACHE]" KeyPath="yes" />
+                <RegistryValue Root="HKLM" Key="[INSTALL_REG_PATH]" Name="DIR_SUITEWEB" Type="string" Value="[DIR_SUITEWEB]" />
+                <RegistryValue Root="HKLM" Key="[INSTALL_REG_PATH]" Name="APACHE_PORT" Type="string" Value="[APACHE_PORT]" />
+                <RemoveFile Id="RemoveFile_TextLogFiles" Name="*.log" On="uninstall"/>
+            </Component>
+
+            <Component Id="CMP_RemoveSuiteFolder" Guid="{13057E46-5C10-4081-9D0E-EA1B6487A809}" Directory="SUITE_INSTALLDIR" KeyPath="yes" >
+                <RemoveFolder Id="RemoveSuiteFolder" On="uninstall"/>
+            </Component>
+        </ComponentGroup>
+	</Fragment>
+</Wix>

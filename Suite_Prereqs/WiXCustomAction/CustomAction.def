@@ -1,0 +1,9 @@
+LIBRARY "WiXCustomAction"
+
+EXPORTS
+
+UpdateApacheConfig
+UpdatePHPMyAdminConfig
+UpdateDiagWebConfig
+EncodePassword
+DecodePassword

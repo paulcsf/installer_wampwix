@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Include>
+    <?define Suite_ProductName   = "Suite - Apps" ?>
+    <?define Suite_ProdShort     = "Suite" ?>
+    <?define Suite_UpgradeCode   = "C9072391-7861-4E00-ACD5-8A8ABE37D6CA" ?>
+    <?define Suite_Manufacturer  = "SuiteCompany, LLC" ?>
+    <?define Suite_ManufShort    = "SuiteCompany" ?>
+    <?ifdef env.BUILD_NUMBER ?>
+        <?define Suite_Version   = "1.1.4.$(env.BUILD_NUMBER)"?>
+    <?else?>
+        <?define Suite_Version   = "1.1.4.9"?>
+    <?endif?>
+    <?define Suite_InstallDir    = "SuiteDir" ?>
+    <?define Suite_StartMenuDir  = "Suite StartMenu" ?>
+    <?define Suite_ProductUrl    = "http://www.suite.com" ?>
+    <?define Suite_PrereqsName   = "Suite - Prereqs" ?>
+
+
+    <?define SuiteWeb_ProductName      = "Suite Web Content" ?>
+    <?define SuiteWeb_ProductVersion   = "$(var.Suite_Version)" ?>
+    <?define SuiteWeb_ProductCode      = "*" ?>
+    <?define SuiteWeb_UpgradeCode      = "9229C764-5BD1-4605-B14C-E976267DD509" ?>
+    <?define SuiteWeb_ProductFiles     = "..\SuiteWeb\" ?>
+
+    <?define SuiteEng_ProductName      = "Suite Engine" ?>
+    <?define SuiteEng_ProductVersion   = "$(var.Suite_Version)" ?>
+    <?define SuiteEng_ProductCode      = "*" ?>
+    <?define SuiteEng_UpgradeCode      = "9229C764-5BD1-4605-B14C-E976267DD50A" ?>
+
+    <?define SuiteEng_SVC_Name         = "SuiteEng" ?>
+    <?define SuiteEng_SVC_DisplayName  = "Suite Engine" ?>
+    <?define SuiteEng_SVC_Description  = "A C# Windows service example" ?>
+
+
+    <?define WiXCAProjectPath        = "..\..\Suite_Prereqs\WiXCustomAction\" ?>
+    <?define MySQL_SVC_Name          = "SuiteMySQL" ?>
+    <?define Default_MySQL_Root_Pass = "rootpass" ?>
+    <?define Default_MySQL_Port      = "3333" ?>
+    <?define Default_Apache_Port     = "8888" ?>
+</Include>
