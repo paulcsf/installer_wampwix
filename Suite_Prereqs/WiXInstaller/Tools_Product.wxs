@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix
+    xmlns="http://schemas.microsoft.com/wix/2006/wi"
+    xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+
+  <?include Configuration.wxi?>
+
+  <Product Id="$(var.Tools_ProductCode)" Name="$(var.Tools_ProductName)" Language="1033" Version="$(var.Tools_ProductVersion)" Manufacturer="$(var.Suite_Manufacturer)" UpgradeCode="$(var.Tools_UpgradeCode)">
+    <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" InstallPrivileges="elevated" />
+
+    <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+    <!-- To generate the embedded cabinet file, ie just the MSI -->
+    <MediaTemplate EmbedCab="yes" />
+    <!-- To generate a separate MSI and Cab file 
+        <Media Id="1" Cabinet="Tools.cab" EmbedCab="no"/> -->
+
+    <!-- These propertiese will be provided by bootstrapper and will be overridden -->
+    <Property Id="INSTALL_REG_PATH" Value="SOFTWARE\$(var.Suite_ManufShort)\$(var.Suite_ProdShort)" />
+
+    <?if $(var.Platform)="x86"?>
+    <Binary Id="WiXCustomAction" SourceFile="..\WiXCustomAction\bin\$(var.Configuration)\Win32\WiXCustomAction.dll"/>
+    <?else?>
+    <Binary Id="WiXCustomAction" SourceFile="..\WiXCustomAction\bin\$(var.Configuration)\Win64\WiXCustomAction.dll"/>
+    <?endif?>
+
+    <SetProperty Id="UpdateRedisServiceConfig" Sequence="execute" Value="[REDIS_PORT]|[#redis.windows_service.conf]" Before="UpdateRedisServiceConfig" />
+    <CustomAction Id="UpdateRedisServiceConfig" BinaryKey="WiXCustomAction" DllEntry="UpdateRedisConfig" Execute="deferred" Return="check" />
+
+    <InstallExecuteSequence>
+      <Custom Action="UpdateRedisServiceConfig" After="InstallFiles">NOT Installed</Custom>
+    </InstallExecuteSequence>
+
+    <SetProperty Id="UpdateRedisConfig" Sequence="execute" Value="[REDIS_PORT]|[#redis.windows.conf]" Before="UpdateRedisConfig" />
+    <CustomAction Id="UpdateRedisConfig" BinaryKey="WiXCustomAction" DllEntry="UpdateRedisConfig" Execute="deferred" Return="check" />
+
+    <InstallExecuteSequence>
+      <Custom Action="UpdateRedisConfig" After="InstallFiles">NOT Installed</Custom>
+    </InstallExecuteSequence>
+
+    <Feature Id="ProductFeature" Title="Tools_MSIPackage" Level="1">
+      <ComponentGroupRef Id="CG_Tools_ProductFiles" />
+      <ComponentGroupRef Id="CG_Redis_ProductConfiguration" />
+    </Feature>
+
+  </Product>
+
+  <Fragment>
+    <ComponentGroup Id="CG_Redis_ProductConfiguration">
+      <Component Id="CMP_Setup_RedisService"  Guid="{967140A2-D88E-4112-99A5-0654D1F8D11F}" Directory="Tools_dir_redis" >
+        <?if $(var.Platform)="x86"?>
+        <File Id="redis_server.exe" KeyPath="yes" Source="$(var.Tools_ProductFiles_x86)\redis\redis-server.exe" />
+        <?else?>
+        <File Id="redis_server.exe" KeyPath="yes" Source="$(var.Tools_ProductFiles_x64)\redis\redis-server.exe" />
+        <?endif?>
+        <!-- C:\SuiteDir\tools\redis\redis-server.exe - -service-run - -service-name SuiteRedis "C:\SuiteRedis\tools\redis\redis.windows-service.conf" -->
+        <ServiceInstall Id="RedisService_SvcInstall" Name="$(var.Tools_Redis_SVC_Name)" DisplayName="$(var.Tools_Redis_SVC_DisplayName)" Description="$(var.Tools_Redis_SVC_Description)" Arguments="--service-run --service-name $(var.Tools_Redis_SVC_Name) &quot;[DIR_TOOLS]redis\redis.windows-service.conf&quot;" Type="ownProcess" Start="auto" ErrorControl="normal" Interactive="no">
+          <util:ServiceConfig ServiceName="$(var.Tools_Redis_SVC_Name)" FirstFailureActionType="restart" SecondFailureActionType="restart" ThirdFailureActionType="restart" RestartServiceDelayInSeconds="15" ResetPeriodInDays="1"/>
+        </ServiceInstall>
+        <ServiceControl Id="RedisService_SvcControl" Name="$(var.Tools_Redis_SVC_Name)" Start="install" Stop="uninstall" Remove="uninstall" Wait="yes"/>
+      </Component>
+
+      <!-- If you are writing registry variables, it requires the x86/x64 dual version game to get the values together. As opposed to under Wow6432Node...-->
+      <Component Id="CMP_RegistryEntries" Guid="{8ECDC80C-6190-4607-8AAE-A9943AAD1FA0}" Directory="TARGETDIR" Win64="no">
+        <RegistryValue Root="HKLM" Key="[INSTALL_REG_PATH]" Name="DIR_TOOLS" Type="string" Value="[DIR_TOOLS]" KeyPath="yes" />
+        <RegistryValue Root="HKLM" Key="[INSTALL_REG_PATH]" Name="REDIS_PORT" Type="string" Value="[REDIS_PORT]" />
+        <!-- Doesn't really belong here, but can't put it in the bootstrapper...-->
+        <RegistryValue Root="HKLM" Key="[INSTALL_REG_PATH]" Name="WEBSOCKET_PORT" Type="string" Value="[WEBSOCKET_PORT]" />
+      </Component>
+
+    </ComponentGroup>
+  </Fragment>
+
+  <Fragment>
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="SUITE_INSTALLDIR" Name="$(var.Suite_InstallDir)">
+        <Directory Id="DIR_TOOLS" Name="tools" />
+        <!-- Doesn't really belong here, but can't put it in the bootstrapper...-->
+        <Directory Id="DIR_SSL" Name="SSL" />
+      </Directory>
+    </Directory>
+  </Fragment>
+</Wix>

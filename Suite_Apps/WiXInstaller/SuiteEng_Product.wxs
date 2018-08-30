@@ -24,6 +24,10 @@
             <RegistrySearch Id="RegSearch_APACHE_PORT" Root="HKLM" Key="[INSTALL_REG_PATH]" Name="APACHE_PORT" Type="raw" />
         </Property>
 
+        <Property Id="REDIS_PORT">
+          <RegistrySearch Id="RegSearch_REDIS_PORT" Root="HKLM" Key="[INSTALL_REG_PATH]" Name="REDIS_PORT" Type="raw" />
+        </Property>
+
         <Property Id="MYSQL_ROOT_ENCPASS" Hidden="yes">
             <RegistrySearch Id="RegSearch_MYSQL_ROOT_ENCPASS" Root="HKLM" Key="[INSTALL_REG_PATH]" Name="MYSQL_ROOT_ENCPASS" Type="raw" />
         </Property>
@@ -37,16 +41,16 @@
         <CustomAction Id="DecodePassword" BinaryKey="WiXCustomAction" DllEntry="DecodePassword" Return="check" />
 
         <?if $(var.Platform)="x86"?>
-        <SetProperty Id="QTExec_CreateDiagsDatabase" Sequence="execute" Value="&quot;[SystemFolder]cmd.exe&quot; /C &quot;&quot;[DIR_MYSQL]bin\mysql.exe&quot; --port=[MYSQL_PORT] --user=root --password=&quot;[MYSQL_ROOT_PASS]&quot; &lt; &quot;[#diags.sql]&quot;&quot;" Before="QTExec_CreateDiagsDatabase" />
-        <CustomAction Id="QTExec_CreateDiagsDatabase" BinaryKey="WixCA" DllEntry="WixQuietExec" Execute="deferred" Return="ignore" Impersonate="no"/>
+        <SetProperty Id="QTExec_CreateSuiteDatabase" Sequence="execute" Value="&quot;[SystemFolder]cmd.exe&quot; /C &quot;&quot;[DIR_MYSQL]bin\mysql.exe&quot; --port=[MYSQL_PORT] --user=root --password=&quot;[MYSQL_ROOT_PASS]&quot; &lt; &quot;[#SuiteCreateDatabase.sql]&quot;&quot;" Before="QTExec_CreateSuiteDatabase" />
+        <CustomAction Id="QTExec_CreateSuiteDatabase" BinaryKey="WixCA" DllEntry="WixQuietExec" Execute="deferred" Return="ignore" Impersonate="no"/>
         <?else?>
-        <SetProperty Id="QTExec_CreateDiagsDatabase" Sequence="execute" Value="&quot;[System64Folder]cmd.exe&quot; /C &quot;&quot;[DIR_MYSQL]bin\mysql.exe&quot; --port=[MYSQL_PORT] --user=root --password=&quot;[MYSQL_ROOT_PASS]&quot; &lt; &quot;[#diags.sql]&quot;&quot;" Before="QTExec_CreateDiagsDatabase" />
-        <CustomAction Id="QTExec_CreateDiagsDatabase" BinaryKey="WixCA" DllEntry="WixQuietExec64" Execute="deferred" Return="ignore" Impersonate="no"/>
+        <SetProperty Id="QTExec_CreateSuiteDatabase" Sequence="execute" Value="&quot;[System64Folder]cmd.exe&quot; /C &quot;&quot;[DIR_MYSQL]bin\mysql.exe&quot; --port=[MYSQL_PORT] --user=root --password=&quot;[MYSQL_ROOT_PASS]&quot; &lt; &quot;[#SuiteCreateDatabase.sql]&quot;&quot;" Before="QTExec_CreateSuiteDatabase" />
+        <CustomAction Id="QTExec_CreateSuiteDatabase" BinaryKey="WixCA" DllEntry="WixQuietExec64" Execute="deferred" Return="ignore" Impersonate="no"/>
         <?endif?>
 
         <InstallExecuteSequence>
             <Custom Action="DecodePassword" After="ValidateProductID"></Custom>
-            <Custom Action="QTExec_CreateDiagsDatabase" After="InstallFiles">NOT Installed AND NOT(REMOVE="ALL") AND NOT WIX_UPGRADE_DETECTED</Custom>
+            <Custom Action="QTExec_CreateSuiteDatabase" After="InstallFiles">NOT Installed AND NOT(REMOVE="ALL") AND NOT WIX_UPGRADE_DETECTED</Custom>
         </InstallExecuteSequence>
 
         <Feature Id="ProductFeature" Title="SuiteEng_MSIPackage" Level="1">
@@ -88,14 +92,21 @@
                 </ServiceInstall>
                 <ServiceControl Id="SuiteEng_SvcControl" Name="$(var.SuiteEng_SVC_Name)" Start="install" Stop="uninstall" Remove="uninstall" Wait="yes"/>
             </Component>
+            <Component Id="StackExchange.Redis.dll" Guid="{9B2D3618-E103-4826-B8D1-F073BE553E07}">
+              <File Id="StackExchange.Redis.dll" KeyPath="yes" Name="StackExchange.Redis.dll" Source="$(var.SuiteEng.ProjectDir)bin\$(var.Configuration)\StackExchange.Redis.dll"/>
+            </Component>
+          <Component Id="Newtonsoft.Json.dll" Guid="{8C9B16CF-85B2-4096-AB6C-5BF0FF711888}">
+            <File Id="Newtonsoft.Json.dll" KeyPath="yes" Name="Newtonsoft.Json.dll" Source="$(var.SuiteEng.ProjectDir)bin\$(var.Configuration)\Newtonsoft.Json.dll"/>
+          </Component>
         </ComponentGroup>
 
         <ComponentGroup Id="CG_SuiteEng_ProductConfiguration">
             <Component Id="CMP_AppConfiguration" Guid="{7D7BD2F8-122D-4B33-A3D9-02825341616B}" Directory="TARGETDIR">
                 <util:XmlFile Id="XMLConfig_01" Action="setValue" File="[DIR_SUITEENG]SuiteEng.exe.config" ElementPath="/configuration/connectionStrings/add[\[]@name='Name'[\]]" Name="connectionString" Value="Provider=MSDASQL;DRIVER={MySQL ODBC 5.2 Unicode Driver};SERVER=localhost;PORT=[MYSQL_PORT];DATABASE=diags;UID=diaguser;PASSWORD=diaguser01;OPTION=3;"/>
+                <util:XmlFile Id="XMLConfig_02" Action="setValue" File="[DIR_SBIMCIENG]SBIMCIEng.exe.config" ElementPath="/configuration/connectionStrings/add[\[]@name='Redis'[\]]" Name="connectionString" Value="localhost:[REDIS_PORT],defaultDatabase=2"/>
             </Component>
             <Component Id="CMP_StartMenuShortcuts" Guid="{B3504167-C7D4-4ADF-A14A-B5CB019E5A19}" Directory="StartMenuAppFolder" >
-                <Shortcut Id="ProductShortcut" Name=" Diagnostics Configuration" Target="[DIR_SUITEENG]SuiteEngConf.exe" WorkingDirectory="DIR_SUITEENG"/>
+                <Shortcut Id="ProductShortcut" Name="Suite Configuration" Target="[DIR_SUITEENG]SuiteEngConf.exe" WorkingDirectory="DIR_SUITEENG"/>
                 <RegistryValue Root="HKCU" Key="[INSTALL_REG_PATH]" Name="SuiteEng_StartMenuShortcut" Type="integer" Value="1" KeyPath="yes" />
                 <RemoveFolder Id="StartMenuAppFolder" On="uninstall"/>
             </Component>

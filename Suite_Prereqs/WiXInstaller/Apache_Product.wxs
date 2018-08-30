@@ -23,12 +23,29 @@
 
         <SetProperty Id="UpdateApacheConfig" Sequence="execute" Value="[SUITE_INSTALLDIR]|[APACHE_PORT]|[#httpd.conf]" Before="UpdateApacheConfig" />
         <CustomAction Id="UpdateApacheConfig" BinaryKey="WiXCustomAction" DllEntry="UpdateApacheConfig" Execute="deferred" Return="check" />
+      <InstallExecuteSequence>
+        <Custom Action="UpdateApacheConfig" After="InstallFiles">NOT Installed</Custom>
+      </InstallExecuteSequence>
 
-        <InstallExecuteSequence>
-            <Custom Action="UpdateApacheConfig" After="InstallFiles">NOT Installed</Custom>
-        </InstallExecuteSequence>
+      <SetProperty Id="UpdateApacheConfig1" Sequence="execute" Value="[SUITE_INSTALLDIR]|[APACHE_PORT]|[#local.conf]" Before="UpdateApacheConfig1" />
+      <CustomAction Id="UpdateApacheConfig1" BinaryKey="WiXCustomAction" DllEntry="UpdateApacheConfig" Execute="deferred" Return="check" />
+      <InstallExecuteSequence>
+        <Custom Action="UpdateApacheConfig1" After="InstallFiles">NOT Installed</Custom>
+      </InstallExecuteSequence>
 
-        <Feature Id="ProductFeature" Title="MySQL_MSIPackage" Level="1">
+      <SetProperty Id="UpdateApacheConfig2" Sequence="execute" Value="[SUITE_INSTALLDIR]|[APACHE_PORT]|[#hosted.com.conf]" Before="UpdateApacheConfig2" />
+      <CustomAction Id="UpdateApacheConfig2" BinaryKey="WiXCustomAction" DllEntry="UpdateApacheConfig" Execute="deferred" Return="check" />
+      <InstallExecuteSequence>
+        <Custom Action="UpdateApacheConfig2" After="InstallFiles">NOT Installed</Custom>
+      </InstallExecuteSequence>
+
+      <SetProperty Id="UpdateApacheConfig3" Sequence="execute" Value="[SUITE_INSTALLDIR]|[APACHE_PORT]|[#beta.hosted.com.conf]" Before="UpdateApacheConfig3" />
+      <CustomAction Id="UpdateApacheConfig3" BinaryKey="WiXCustomAction" DllEntry="UpdateApacheConfig" Execute="deferred" Return="check" />
+      <InstallExecuteSequence>
+        <Custom Action="UpdateApacheConfig3" After="InstallFiles">NOT Installed</Custom>
+      </InstallExecuteSequence>
+
+      <Feature Id="ProductFeature" Title="Apache_MSIPackage" Level="1">
             <ComponentGroupRef Id="CG_Apache_ProductFiles" />
             <ComponentGroupRef Id="CG_Apache_ProductConfiguration" />
         </Feature>
@@ -55,7 +72,9 @@
                 <?else?>
                 <File Id="httpd.exe" KeyPath="yes" Source="$(var.Apache_ProductFiles_x64)\bin\httpd.exe" />
                 <?endif?>
-                <ServiceInstall Id="ApacheService_SvcInstall" Name="$(var.Apache_SVC_Name)" DisplayName="$(var.Apache_SVC_DisplayName)" Description="$(var.Apache_SVC_Description)" Arguments="-k runservice" Type="ownProcess" Start="auto" ErrorControl="normal" Interactive="no" />
+                <ServiceInstall Id="ApacheService_SvcInstall" Name="$(var.Apache_SVC_Name)" DisplayName="$(var.Apache_SVC_DisplayName)" Description="$(var.Apache_SVC_Description)" Arguments="-k runservice" Type="ownProcess" Start="auto" ErrorControl="normal" Interactive="no">
+                  <util:ServiceConfig ServiceName="$(var.Apache_SVC_Name)" FirstFailureActionType="restart" SecondFailureActionType="restart" ThirdFailureActionType="restart" RestartServiceDelayInSeconds="15" ResetPeriodInDays="1"/>
+                </ServiceInstall>
                 <ServiceControl Id="ApacheService_SvcControl" Name="$(var.Apache_SVC_Name)" Start="install" Stop="uninstall" Remove="uninstall" Wait="yes"/>
             </Component>
 

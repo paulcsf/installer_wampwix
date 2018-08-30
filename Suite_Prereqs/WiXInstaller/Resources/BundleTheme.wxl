@@ -28,9 +28,11 @@
     <String Id="OptionsHeader">Setup Options</String>
     <String Id="OptionsLabel">Adjust setup parameters in order to your needs.</String>
     <String Id="OptionsLocationLabel">Install location:</String>
-    <String Id="OptionsMySQLRootPassLabel">Database root password:</String>
-    <String Id="OptionsMySQLPortLabel">Database service port:</String>
-    <String Id="OptionsApachePortLabel">Web service port:</String>	
+    <String Id="OptionsMySQLRootPassLabel">Database root password (std rootpass):</String>
+    <String Id="OptionsMySQLPortLabel">Database service port (std 3306):</String>
+    <String Id="OptionsApachePortLabel">Web service port (std 80):</String>	
+    <String Id="OptionsRedisPortLabel">Redis service port (std 6379):</String>	
+    <String Id="OptionsWebsocketPortLabel">Websocket service port (std 3000):</String>	
     <String Id="OptionsBrowseButton">&amp;Browse...</String>
     <String Id="OptionsOkButton">&amp;OK</String>
     <String Id="OptionsCancelButton">&amp;Cancel</String>

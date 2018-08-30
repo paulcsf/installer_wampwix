@@ -235,10 +235,10 @@ UINT __stdcall UpdatePHPMyAdminConfig(MSIHANDLE hInstall)
 	pwz = pwzData;
 
 	hr = ReadStringFromCAData(&pwz, &pwzMySQLPort);
-	ExitOnFailure(hr, "failed to read pwzApachePort from custom action data: %ls", pwz);
+	ExitOnFailure(hr, "failed to read pwzMySQLPort from custom action data: %ls", pwz);
 
 	hr = ReadStringFromCAData(&pwz, &pwzPhpMyAdminConfFile);
-	ExitOnFailure(hr, "failed to read SQL User from custom action data: %ls", pwz);
+	ExitOnFailure(hr, "failed to read pwzPhpMyAdminConfFile from custom action data: %ls", pwz);
 
 	FileToString(pwzPhpMyAdminConfFile, &pwzPhpMyAdminConfContent, &pfeEncoding);
 	StrReplaceStringAll(&pwzPhpMyAdminConfContent, L"3333", pwzMySQLPort);
@@ -253,15 +253,15 @@ LExit:
 
 
 
-UINT __stdcall UpdateDiagWebConfig(MSIHANDLE hInstall)
+UINT __stdcall UpdateWebConfig(MSIHANDLE hInstall)
 {
 	HRESULT hr = S_OK;
 	UINT er = ERROR_SUCCESS;
 
-	hr = WcaInitialize(hInstall, "UpdateSuiteWebConfig");
+	hr = WcaInitialize(hInstall, "UpdateWebConfig");
 	ExitOnFailure(hr, "Failed to initialize");
 
-	WcaLog(LOGMSG_STANDARD, "UpdateSuiteWebConfig initialized.");
+	WcaLog(LOGMSG_STANDARD, "UpdateWebConfig initialized.");
 
 	LPWSTR pwzData = NULL;
 	LPWSTR pwz = NULL;
@@ -283,7 +283,7 @@ UINT __stdcall UpdateDiagWebConfig(MSIHANDLE hInstall)
 	ExitOnFailure(hr, "failed to read pwzMySQLPass from custom action data: %ls", pwz);
 
 	hr = ReadStringFromCAData(&pwz, &pwzCfgFile);
-	ExitOnFailure(hr, "failed to read SQL User from custom action data: %ls", pwz);
+	ExitOnFailure(hr, "failed to read pwzCfgFile from custom action data: %ls", pwz);
 
 	FileToString(pwzCfgFile, &pwzCfgContent, &pfeEncoding);
 	StrReplaceStringAll(&pwzCfgContent, L"3333", pwzMySQLPort);
@@ -291,12 +291,90 @@ UINT __stdcall UpdateDiagWebConfig(MSIHANDLE hInstall)
 
 	FileFromString(pwzCfgFile, 0, pwzCfgContent, pfeEncoding);
 
-	WcaLog(LOGMSG_STANDARD, "UpdateSuiteWebConfig completed.");
+	WcaLog(LOGMSG_STANDARD, "UpdateWebConfig completed.");
 LExit:
 	er = SUCCEEDED(hr) ? ERROR_SUCCESS : ERROR_INSTALL_FAILURE;
 	return WcaFinalize(er);
 }
 
+
+UINT __stdcall UpdateRedisConfig(MSIHANDLE hInstall)
+{
+	HRESULT hr = S_OK;
+	UINT er = ERROR_SUCCESS;
+
+	hr = WcaInitialize(hInstall, "UpdateRedisConfig");
+	ExitOnFailure(hr, "Failed to initialize");
+
+	WcaLog(LOGMSG_STANDARD, "UpdateRedisConfig initialized.");
+
+	LPWSTR pwzData = NULL;
+	LPWSTR pwz = NULL;
+	LPWSTR pwzRedisPort = NULL;
+	LPWSTR pwzCfgFile = NULL;
+	LPWSTR pwzCfgContent = NULL;
+	FILE_ENCODING pfeEncoding;
+
+	hr = WcaGetProperty( L"CustomActionData", &pwzData);
+	ExitOnFailure(hr, "failed to get CustomActionData");
+
+	pwz = pwzData;
+
+	hr = ReadStringFromCAData(&pwz, &pwzRedisPort);
+	ExitOnFailure(hr, "failed to read pwzRedisPort from custom action data: %ls", pwz);
+
+	hr = ReadStringFromCAData(&pwz, &pwzCfgFile);
+	ExitOnFailure(hr, "failed to read pwzCfgFile from custom action data: %ls", pwz);
+
+	FileToString(pwzCfgFile, &pwzCfgContent, &pfeEncoding);
+	StrReplaceStringAll(&pwzCfgContent, L"6880", pwzRedisPort);
+
+	FileFromString(pwzCfgFile, 0, pwzCfgContent, pfeEncoding);
+
+	WcaLog(LOGMSG_STANDARD, "UpdateRedisConfig completed.");
+LExit:
+	er = SUCCEEDED(hr) ? ERROR_SUCCESS : ERROR_INSTALL_FAILURE;
+	return WcaFinalize(er);
+}
+
+UINT __stdcall UpdateWebsocketConfig(MSIHANDLE hInstall)
+{
+	HRESULT hr = S_OK;
+	UINT er = ERROR_SUCCESS;
+
+	hr = WcaInitialize(hInstall, "UpdateWebsocketConfig");
+	ExitOnFailure(hr, "Failed to initialize");
+
+	WcaLog(LOGMSG_STANDARD, "UpdateWebsocketConfig initialized.");
+
+	LPWSTR pwzData = NULL;
+	LPWSTR pwz = NULL;
+	LPWSTR pwzWebsocketPort = NULL;
+	LPWSTR pwzCfgFile = NULL;
+	LPWSTR pwzCfgContent = NULL;
+	FILE_ENCODING pfeEncoding;
+
+	hr = WcaGetProperty( L"CustomActionData", &pwzData);
+	ExitOnFailure(hr, "failed to get CustomActionData");
+
+	pwz = pwzData;
+
+	hr = ReadStringFromCAData(&pwz, &pwzWebsocketPort);
+	ExitOnFailure(hr, "failed to read pwzWebsocketPort from custom action data: %ls", pwz);
+
+	hr = ReadStringFromCAData(&pwz, &pwzCfgFile);
+	ExitOnFailure(hr, "failed to read pwzCfgFile from custom action data: %ls", pwz);
+
+	FileToString(pwzCfgFile, &pwzCfgContent, &pfeEncoding);
+	StrReplaceStringAll(&pwzCfgContent, L"3080", pwzWebsocketPort);
+
+	FileFromString(pwzCfgFile, 0, pwzCfgContent, pfeEncoding);
+
+	WcaLog(LOGMSG_STANDARD, "UpdateWebsocketConfig completed.");
+LExit:
+	er = SUCCEEDED(hr) ? ERROR_SUCCESS : ERROR_INSTALL_FAILURE;
+	return WcaFinalize(er);
+}
 
 UINT __stdcall EncodePassword(MSIHANDLE hInstall)				
 {

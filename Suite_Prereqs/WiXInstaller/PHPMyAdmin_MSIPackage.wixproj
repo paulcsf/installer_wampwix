@@ -10,31 +10,13 @@
     <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' AND '$(MSBuildExtensionsPath32)' != '' ">$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
     <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(MSBuildExtensionsPath)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <OutputPath>bin\$(Configuration)\</OutputPath>
-    <IntermediateOutputPath>obj\$(Configuration)\$(Platform)\</IntermediateOutputPath>
-    <DefineConstants>Debug</DefineConstants>
-    <OutputName>Suite_PHPMyAdmin_x86</OutputName>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+  <PropertyGroup>
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <IntermediateOutputPath>obj\$(Configuration)\$(Platform)\</IntermediateOutputPath>
     <SuppressPdbOutput>True</SuppressPdbOutput>
-    <OutputName>Suite_PHPMyAdmin_x86</OutputName>
+    <OutputName>Suite_PHPMyAdmin</OutputName>
     <SuppressAllWarnings>False</SuppressAllWarnings>
     <Pedantic>True</Pedantic>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
-    <DefineConstants>Debug</DefineConstants>
-    <OutputPath>bin\$(Configuration)\</OutputPath>
-    <IntermediateOutputPath>obj\$(Configuration)\$(Platform)\</IntermediateOutputPath>
-    <OutputName>Suite_PHPMyAdmin_x64</OutputName>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
-    <SuppressPdbOutput>True</SuppressPdbOutput>
-    <OutputPath>bin\$(Configuration)\</OutputPath>
-    <IntermediateOutputPath>obj\$(Configuration)\$(Platform)\</IntermediateOutputPath>
-    <OutputName>Suite_PHPMyAdmin_x64</OutputName>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="PHPMyAdmin_Product.wxs" />
@@ -44,6 +26,7 @@
     <Content Include="Configuration.wxi">
       <Link>Configuration.wxi</Link>
     </Content>
+    <Content Include="PHPMyAdmin_Translate.xsl" />
   </ItemGroup>
   <ItemGroup>
     <WixExtension Include="WixUtilExtension">
@@ -60,7 +43,7 @@
 	<Target Name="AfterBuild">
 	</Target>
 	-->
-  <Target Name="AfterBuild" Label="Building 64bit MSI package">
-    <MSBuild Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' " Projects="$(MSBuildProjectFile)" Properties="Configuration=Release;Platform=x64;PlatFormTarget=x64;OutputPath=$(ProjectDir)$(OutDir)" RunEachTargetSeparately="true" />
-  </Target>
+  <PropertyGroup>
+    <PreBuildEvent>"%25WIX%25\bin\heat.exe" dir "$(SolutionDir)..\ProductFiles_Prereqs\phpMyAdmin-4.7.3-all-languages" -t "$(SolutionDir)WiXInstaller\PHPMyAdmin_Translate.xsl" -cg CG_PHPMyAdmin_ProductFiles -dr DIR_PHPMYADMIN -gg -ke -scom -sfrag -srd -suid -sreg -var var.PHPMyAdmin_ProductFiles -o "$(SolutionDir)WiXInstaller\PHPMyAdmin_ProductFiles.wxs"</PreBuildEvent>
+  </PropertyGroup>
 </Project>

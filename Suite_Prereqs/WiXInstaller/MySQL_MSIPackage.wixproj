@@ -37,15 +37,19 @@
     <IntermediateOutputPath>obj\$(Configuration)\$(Platform)\</IntermediateOutputPath>
     <OutputName>Suite_MySQL_x64</OutputName>
   </PropertyGroup>
-  <ItemGroup>
-    <Compile Include="MySQL_Product.wxs" />
-    <Compile Include="MySQL_ProductFiles_x64.wxs" />
+  <ItemGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <Compile Include="MySQL_ProductFiles_x86.wxs" />
+  </ItemGroup>
+  <ItemGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
+    <Compile Include="MySQL_ProductFiles_x64.wxs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Configuration.wxi">
       <Link>Configuration.wxi</Link>
     </Content>
+    <Content Include="MySQL_Translate_x64.xsl" />
+    <Content Include="MySQL_Translate_x86.xsl" />
+    <Compile Include="MySQL_Product.wxs" />
   </ItemGroup>
   <ItemGroup>
     <WixExtension Include="WixUtilExtension">
@@ -65,4 +69,12 @@
   <Target Name="AfterBuild" Label="Building 64bit MSI package">
     <MSBuild Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' " Projects="$(MSBuildProjectFile)" Properties="Configuration=Release;Platform=x64;PlatFormTarget=x64;OutputPath=$(ProjectDir)$(OutDir)" RunEachTargetSeparately="true" />
   </Target>
+  <PropertyGroup>
+    <PreBuildEvent>if  $(PlatformName) == x86 (
+"%25WIX%25\bin\heat.exe" dir "$(SolutionDir)..\ProductFiles_Prereqs\mysql-5.7.19-win32" -t "$(SolutionDir)WiXInstaller\MySQL_Translate_x86.xsl" -cg CG_MySQL_ProductFiles -dr DIR_MYSQL -gg -ke -scom -sfrag -srd -suid -sreg -var var.MySQL_ProductFiles_x86 -o "$(SolutionDir)WiXInstaller\MySQL_ProductFiles_x86.wxs"
+)
+if  $(PlatformName) == x64 (
+"%25WIX%25\bin\heat.exe" dir "$(SolutionDir)..\ProductFiles_Prereqs\mysql-5.7.19-win64" -t "$(SolutionDir)WiXInstaller\MySQL_Translate_x64.xsl" -cg CG_MySQL_ProductFiles -dr DIR_MYSQL -gg -ke -scom -sfrag -srd -suid -sreg -var var.MySQL_ProductFiles_x64 -o "$(SolutionDir)WiXInstaller\MySQL_ProductFiles_x64.wxs"
+)</PreBuildEvent>
+  </PropertyGroup>
 </Project>

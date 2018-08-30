@@ -9,19 +9,25 @@ Custom installer for WAMP (Windows, Apache, MySQL, PHP) designed to be extended 
 
 ### What's Installed ###
 
-* Apache 2.4.18, 32 or 64bit as appropriate
-* MySQL 5.7.11, 32 or 64bit as appropriate
-* MySQL ODBC Connector 5.3.4, 32 or 64bit as appropriate
-* PHP 7.0.3, 32 or 64bit as appropriate
-* VC Redistributable 2010SP1, 2012U4, 2015U1, 32 or 64bit as appropriate
-* phpMyAdmin 4.5.5
+* Apache 2.4.27, 32 or 64bit as appropriate
+* MySQL 5.7.19, 32 or 64bit as appropriate
+* MySQL ODBC Connector 5.3.9, 32 or 64bit as appropriate
+* PHP 7.1.7, 32 or 64bit as appropriate
+* VC Redistributable 2010SP1, 2012U4, 2015U1, 2017, 32 or 64bit as appropriate
+* phpMyAdmin 4.7.3
 * PHP example web content
+* Redis 3.2.100
+* Let's Encrypt Win Simple 1.9.3
+* NodeJS 8.2.1, 32 or 64bit as appropriate
+* NodeJS Websocket server
 
 ### Defaults ###
 
 * MySQL root password: rootpass, port: 3333
 * http://127.0.0.1:8888
 * C:\SuiteDir\...
+* Redis port 6880
+* Websockets port 3080
 
 ### How do I get set up? ###
 

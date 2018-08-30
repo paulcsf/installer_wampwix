@@ -28,7 +28,8 @@
     <Fragment>
         <ComponentGroup Id="CG_PHP_ProductConfiguration">
             <Component Id="Cmp_Update_PHPIniFile" Guid="{99FFE4E6-D708-452A-8FB7-5683737F59A3}" Directory="DIR_PHP">
-                <IniFile Id="Set_extension_dir" Directory="DIR_PHP" Name="php.ini" Action="addLine" Section="PHP" Key="extension_dir" Value="[DIR_PHP]ext" />
+                <IniFile Id="Set_extension_dir" Directory="DIR_PHP" Name="php.ini" Action="addLine" Section="PHP" Key="extension_dir" Value="&quot;[DIR_PHP]ext&quot;" />
+                <IniFile Id="Set_openssl_cacert_file" Directory="DIR_PHP" Name="php.ini" Action="addLine" Section="openssl" Key="openssl.cafile" Value="&quot;[DIR_PHP]cacert.pem&quot;" />
                 <CreateFolder />
             </Component>
 

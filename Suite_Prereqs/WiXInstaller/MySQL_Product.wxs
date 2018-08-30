@@ -11,7 +11,7 @@
         <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
         <MediaTemplate EmbedCab="yes" />
 
-        <!-- These propertiese will be provided by bootstrapper and will be overrided -->
+        <!-- These properties will be provided by bootstrapper and will be overridden -->
         <Property Id="MYSQL_ROOT_PASS" Value="rootpass" Hidden="yes" />
         <Property Id="MYSQL_ROOT_ENCPASS" Hidden="yes" />
         <Property Id="INSTALL_REG_PATH" Value="SOFTWARE\$(var.Suite_ManufShort)\$(var.Suite_ProdShort)" />
@@ -100,7 +100,9 @@
                 <?else?>
                 <File Id="mysqld.exe" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x64)\bin\mysqld.exe" />
                 <?endif?>
-                <ServiceInstall Id="MySQLService_SvcInstall" Name="$(var.MySQL_SVC_Name)" DisplayName="$(var.MySQL_SVC_DisplayName)" Description="$(var.MySQL_SVC_Description)" Arguments="--defaults-file=&quot;[DIR_MYSQL]my.ini&quot; $(var.MySQL_SVC_Name)" Type="ownProcess" Start="auto" ErrorControl="normal" Interactive="no" />
+                <ServiceInstall Id="MySQLService_SvcInstall" Name="$(var.MySQL_SVC_Name)" DisplayName="$(var.MySQL_SVC_DisplayName)" Description="$(var.MySQL_SVC_Description)" Arguments="--defaults-file=&quot;[DIR_MYSQL]my.ini&quot; $(var.MySQL_SVC_Name)" Type="ownProcess" Start="auto" ErrorControl="normal" Interactive="no">
+                  <util:ServiceConfig ServiceName="$(var.MySQL_SVC_Name)" FirstFailureActionType="restart" SecondFailureActionType="restart" ThirdFailureActionType="restart" RestartServiceDelayInSeconds="15" ResetPeriodInDays="1"/>
+                </ServiceInstall>
                 <ServiceControl Id="MySQLService_SvcControl" Name="$(var.MySQL_SVC_Name)" Start="install" Stop="uninstall" Remove="uninstall" Wait="yes"/>
             </Component>
             

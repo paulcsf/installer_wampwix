@@ -1,0 +1,3 @@
+en en+m1 en+m2 en+m3 en+m4 en+m5 en+m6 en+m7 en+f1 en+f2 en+f3 en+f4 en+croak en+whisper
+en-us en-us+m1 en-us+m2 en-us+m3 en-us+m4 en-us+m5 en-us+m6 en-us+m7 en-us+f1 en-us+f2 en-us+f3 en-us+f4 en-us+croak en-us+whisper
+en-sc en-sc+m1 en-sc+m2 en-sc+m3 en-sc+m4 en-sc+m5 en-sc+m6 en-sc+m7 en-sc+f1 en-sc+f2 en-sc+f3 en-sc+f4 en-sc+croak en-us+whisper

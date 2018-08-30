@@ -38,10 +38,11 @@
     <IntermediateOutputPath>obj\$(Configuration)\$(Platform)\</IntermediateOutputPath>
     <OutputName>Suite_Apache_x64</OutputName>
   </PropertyGroup>
-  <ItemGroup>
-    <Compile Include="Apache_Product.wxs" />
-    <Compile Include="Apache_ProductFiles_x64.wxs" />
+  <ItemGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <Compile Include="Apache_ProductFiles_x86.wxs" />
+  </ItemGroup>
+  <ItemGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
+    <Compile Include="Apache_ProductFiles_x64.wxs" />
   </ItemGroup>
   <ItemGroup>
     <WixExtension Include="WixUtilExtension">
@@ -50,6 +51,9 @@
     </WixExtension>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Apache_Translate_x64.xsl" />
+    <Content Include="Apache_Translate_x86.xsl" />
+    <Compile Include="Apache_Product.wxs" />
     <Content Include="Configuration.wxi">
       <Link>Configuration.wxi</Link>
     </Content>
@@ -63,7 +67,15 @@
 	<Target Name="AfterBuild">
 	</Target>
 	-->
-  	<Target Name="AfterBuild" Label="Building 64bit MSI package">
-		<MSBuild Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' " Projects="$(MSBuildProjectFile)" Properties="Configuration=Release;Platform=x64;PlatFormTarget=x64;OutputPath=$(ProjectDir)$(OutDir)" RunEachTargetSeparately="true" />
-	</Target>
+  <Target Name="AfterBuild" Label="Building 64bit MSI package">
+    <MSBuild Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' " Projects="$(MSBuildProjectFile)" Properties="Configuration=Release;Platform=x64;PlatFormTarget=x64;OutputPath=$(ProjectDir)$(OutDir)" RunEachTargetSeparately="true" />
+  </Target>
+  <PropertyGroup>
+    <PreBuildEvent>if  $(PlatformName) == x86 (
+"%25WIX%25\bin\heat.exe" dir "$(SolutionDir)..\ProductFiles_Prereqs\httpd-2.4.27-Win32-VC15\Apache24" -t "$(SolutionDir)WiXInstaller\Apache_Translate_x86.xsl" -cg CG_Apache_ProductFiles -dr DIR_APACHE -gg -ke -scom -sfrag -srd -suid -sreg -var var.Apache_ProductFiles_x86 -o "$(SolutionDir)WiXInstaller\Apache_ProductFiles_x86.wxs"
+)
+if  $(PlatformName) == x64 (
+"%25WIX%25\bin\heat.exe" dir "$(SolutionDir)..\ProductFiles_Prereqs\httpd-2.4.27-Win64-VC15\Apache24" -t "$(SolutionDir)WiXInstaller\Apache_Translate_x64.xsl" -cg CG_Apache_ProductFiles -dr DIR_APACHE -gg -ke -scom -sfrag -srd -suid -sreg -var var.Apache_ProductFiles_x64 -o "$(SolutionDir)WiXInstaller\Apache_ProductFiles_x64.wxs"
+)</PreBuildEvent>
+  </PropertyGroup>
 </Project>

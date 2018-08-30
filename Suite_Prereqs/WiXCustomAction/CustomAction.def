@@ -4,6 +4,8 @@ EXPORTS
 
 UpdateApacheConfig
 UpdatePHPMyAdminConfig
-UpdateDiagWebConfig
+UpdateWebConfig
+UpdateRedisConfig
+UpdateWebsocketConfig
 EncodePassword
 DecodePassword
