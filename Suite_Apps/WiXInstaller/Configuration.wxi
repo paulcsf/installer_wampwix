@@ -34,7 +34,4 @@
 
     <?define WiXCAProjectPath        = "..\..\Suite_Prereqs\WiXCustomAction\" ?>
     <?define MySQL_SVC_Name          = "SuiteMySQL" ?>
-    <?define Default_MySQL_Root_Pass = "rootpass" ?>
-    <?define Default_MySQL_Port      = "3333" ?>
-    <?define Default_Apache_Port     = "8888" ?>
 </Include>

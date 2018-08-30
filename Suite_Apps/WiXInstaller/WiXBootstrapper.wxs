@@ -10,7 +10,7 @@
 		UpgradeCode="$(var.Suite_UpgradeCode)" AboutUrl="$(var.Suite_ProductUrl)"
 		IconSourceFile="Resources\Product.ico" Condition="(VersionNT &gt;= v6.0)" >
 
-        <bal:Condition Message ="Setup has detected that $(var.Suite_PrereqsName) it wasn't installed.&#13;&#10;In order to install $(var.Suite_ProductName) you need to install $(var.Suite_PrereqsName) first.">InstallFolder</bal:Condition>
+        <bal:Condition Message ="Setup has detected that '$(var.Suite_PrereqsName)' wasn't installed.&#13;&#10;In order to install '$(var.Suite_ProductName)' you need to install '$(var.Suite_PrereqsName)' first.">InstallFolder</bal:Condition>
 
         <BootstrapperApplicationRef Id="WixExtendedBootstrapperApplication.RtfLicense"  >
             <Payload SourceFile="Resources\Header.png" />

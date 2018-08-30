@@ -34,10 +34,11 @@
     <IntermediateOutputPath>obj\$(Configuration)\$(Platform)\</IntermediateOutputPath>
     <OutputName>Suite_PHP_x64</OutputName>
   </PropertyGroup>
-  <ItemGroup>
-    <Compile Include="PHP_Product.wxs" />
-    <Compile Include="PHP_ProductFiles_x64.wxs" />
+  <ItemGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <Compile Include="PHP_ProductFiles_x86.wxs" />
+  </ItemGroup>
+  <ItemGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
+    <Compile Include="PHP_ProductFiles_x64.wxs" />
   </ItemGroup>
   <ItemGroup>
     <WixExtension Include="WixUtilExtension">
@@ -49,6 +50,9 @@
     <Content Include="Configuration.wxi">
       <Link>Configuration.wxi</Link>
     </Content>
+    <Content Include="PHP_Translate_x64.xsl" />
+    <Content Include="PHP_Translate_x86.xsl" />
+    <Compile Include="PHP_Product.wxs" />
   </ItemGroup>
   <Import Project="$(WixTargetsPath)" />
   <!--
@@ -59,7 +63,15 @@
 	<Target Name="AfterBuild">
 	</Target>
 	-->
-  	<Target Name="AfterBuild" Label="Building 64bit MSI package">
-		<MSBuild Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' " Projects="$(MSBuildProjectFile)" Properties="Configuration=Release;Platform=x64;PlatFormTarget=x64;OutputPath=$(ProjectDir)$(OutDir)" RunEachTargetSeparately="true" />
-	</Target>
+  <Target Name="AfterBuild" Label="Building 64bit MSI package">
+    <MSBuild Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' " Projects="$(MSBuildProjectFile)" Properties="Configuration=Release;Platform=x64;PlatFormTarget=x64;OutputPath=$(ProjectDir)$(OutDir)" RunEachTargetSeparately="true" />
+  </Target>
+  <PropertyGroup>
+    <PreBuildEvent>if  $(PlatformName) == x86 (
+"%25WIX%25\bin\heat.exe" dir "$(SolutionDir)..\ProductFiles_Prereqs\php-7.1.7-Win32-VC14-x86" -t "$(SolutionDir)WiXInstaller\PHP_Translate_x86.xsl" -cg CG_PHP_ProductFiles -dr DIR_PHP -gg -ke -scom -sfrag -srd -suid -sreg -var var.PHP_ProductFiles_x86 -o "$(SolutionDir)WiXInstaller\PHP_ProductFiles_x86.wxs"
+)
+if  $(PlatformName) == x64 (
+"%25WIX%25\bin\heat.exe" dir "$(SolutionDir)..\ProductFiles_Prereqs\php-7.1.7-Win32-VC14-x64" -t "$(SolutionDir)WiXInstaller\PHP_Translate_x64.xsl" -cg CG_PHP_ProductFiles -dr DIR_PHP -gg -ke -scom -sfrag -srd -suid -sreg -var var.PHP_ProductFiles_x64 -o "$(SolutionDir)WiXInstaller\PHP_ProductFiles_x64.wxs"
+)</PreBuildEvent>
+  </PropertyGroup>
 </Project>

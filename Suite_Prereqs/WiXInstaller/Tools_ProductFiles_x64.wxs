@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <?include Configuration.wxi?>
+    <Fragment><DirectoryRef Id="DIR_TOOLS"><Component Id="espeak_voice_install.txt" Guid="{AB24F1E5-9274-40BD-98BF-52054A66D92A}"><File Id="espeak_voice_install.txt" KeyPath="yes" Source="$(var.Tools_ProductFiles_x64)\espeak voice install.txt" /></Component><Component Id="espeak.exe" Guid="{C0D3CCBD-B030-4176-96AA-8CF39871BDD2}"><File Id="espeak.exe" KeyPath="yes" Source="$(var.Tools_ProductFiles_x64)\espeak.exe" /></Component><Component Id="ffmpeg.exe" Guid="{56B94961-F568-4CEC-8C9A-602082E58130}"><File Id="ffmpeg.exe" KeyPath="yes" Source="$(var.Tools_ProductFiles_x64)\ffmpeg.exe" /></Component><Directory Name="letsencrypt-win-simple.V1.9.3" Id="Tools_dir_letsencrypt_win_simple.V1.9.3">
+                <Component Id="letsencrypt.exe" Guid="{BB361978-A43B-439E-86FA-78D408A848BC}"><File Id="letsencrypt.exe" KeyPath="yes" Source="$(var.Tools_ProductFiles_x64)\letsencrypt-win-simple.V1.9.3\letsencrypt.exe" /></Component>
+                <Component Id="letsencrypt.exe.config" Guid="{9FFDE4D6-ACFD-4FA9-A3FF-17E1B24313A6}"><File Id="letsencrypt.exe.config" KeyPath="yes" Source="$(var.Tools_ProductFiles_x64)\letsencrypt-win-simple.V1.9.3\letsencrypt.exe.config" /></Component>
+                <Component Id="Web_Config.xml" Guid="{CCC8389A-CA0B-44EB-BB4D-D3B7EB1383D9}"><File Id="Web_Config.xml" KeyPath="yes" Source="$(var.Tools_ProductFiles_x64)\letsencrypt-win-simple.V1.9.3\Web_Config.xml" /></Component>
+                <Directory Name="x64" Id="Tools_dir_x64">
+                    <Component Id="libeay32.dll" Guid="{0F142055-79B7-49EF-BB62-4CE2D2DB2909}"><File Id="libeay32.dll" KeyPath="yes" Source="$(var.Tools_ProductFiles_x64)\letsencrypt-win-simple.V1.9.3\x64\libeay32.dll" /></Component>
+                    <Component Id="ssleay32.dll" Guid="{2E8EF4FA-AB96-42B3-83B0-0676BFF6F813}"><File Id="ssleay32.dll" KeyPath="yes" Source="$(var.Tools_ProductFiles_x64)\letsencrypt-win-simple.V1.9.3\x64\ssleay32.dll" /></Component>
+                </Directory>
+                <Directory Name="x86" Id="Tools_dir_x86">
+                    <Component Id="libeay32.dll_1" Guid="{A135BAF8-36E7-4EFE-85C4-39EC52610D04}"><File Id="libeay32.dll_1" KeyPath="yes" Source="$(var.Tools_ProductFiles_x64)\letsencrypt-win-simple.V1.9.3\x86\libeay32.dll" /></Component>
+                    <Component Id="ssleay32.dll_1" Guid="{47B87841-7DED-4CD5-B32C-D896F3484812}"><File Id="ssleay32.dll_1" KeyPath="yes" Source="$(var.Tools_ProductFiles_x64)\letsencrypt-win-simple.V1.9.3\x86\ssleay32.dll" /></Component>
+                </Directory>
+            </Directory><Directory Name="redis" Id="Tools_dir_redis">
+                <Component Id="EventLog.dll" Guid="{312F37BF-5E21-4825-9D20-C8B8A937EBA4}"><File Id="EventLog.dll" KeyPath="yes" Source="$(var.Tools_ProductFiles_x64)\redis\EventLog.dll" /></Component>
+                <Component Id="Redis_on_Windows_Release_Notes.docx" Guid="{DF093776-BED1-4345-B4B5-4FFB0F73EC08}"><File Id="Redis_on_Windows_Release_Notes.docx" KeyPath="yes" Source="$(var.Tools_ProductFiles_x64)\redis\Redis on Windows Release Notes.docx" /></Component>
+                <Component Id="Redis_on_Windows.docx" Guid="{523548D4-0A9C-49BC-9635-BDBC788FE764}"><File Id="Redis_on_Windows.docx" KeyPath="yes" Source="$(var.Tools_ProductFiles_x64)\redis\Redis on Windows.docx" /></Component>
+                <Component Id="redis_benchmark.exe" Guid="{3346EF32-DD4C-4692-9B2F-719C26D9CAD2}"><File Id="redis_benchmark.exe" KeyPath="yes" Source="$(var.Tools_ProductFiles_x64)\redis\redis-benchmark.exe" /></Component>
+                <Component Id="redis_check_aof.exe" Guid="{0D57C79C-F2F2-4DEB-B63B-3290DA3A4B63}"><File Id="redis_check_aof.exe" KeyPath="yes" Source="$(var.Tools_ProductFiles_x64)\redis\redis-check-aof.exe" /></Component>
+                <Component Id="redis_cli.exe" Guid="{307EF4C9-0667-42CE-A8D9-16CEFC7CC2D8}"><File Id="redis_cli.exe" KeyPath="yes" Source="$(var.Tools_ProductFiles_x64)\redis\redis-cli.exe" /></Component>
+                
+                <Component Id="redis.windows_service.conf" Guid="{39710A8F-19A2-4838-977C-6ED6E2878DE4}"><File Id="redis.windows_service.conf" KeyPath="yes" Source="$(var.Tools_ProductFiles_x64)\redis\redis.windows-service.conf" /></Component>
+                <Component Id="redis.windows.conf" Guid="{1A8BF829-FDF5-4B62-8382-113C87487EF6}"><File Id="redis.windows.conf" KeyPath="yes" Source="$(var.Tools_ProductFiles_x64)\redis\redis.windows.conf" /></Component>
+                <Component Id="Windows_Service_Documentation.docx" Guid="{9DFF48CC-C4E6-4706-96E8-306C8884520C}"><File Id="Windows_Service_Documentation.docx" KeyPath="yes" Source="$(var.Tools_ProductFiles_x64)\redis\Windows Service Documentation.docx" /></Component>
+            </Directory></DirectoryRef></Fragment>
+    <Fragment><ComponentGroup Id="CG_Tools_ProductFiles"><ComponentRef Id="espeak_voice_install.txt" /><ComponentRef Id="espeak.exe" /><ComponentRef Id="ffmpeg.exe" /><ComponentRef Id="letsencrypt.exe" /><ComponentRef Id="letsencrypt.exe.config" /><ComponentRef Id="Web_Config.xml" /><ComponentRef Id="libeay32.dll" /><ComponentRef Id="ssleay32.dll" /><ComponentRef Id="libeay32.dll_1" /><ComponentRef Id="ssleay32.dll_1" /><ComponentRef Id="EventLog.dll" /><ComponentRef Id="Redis_on_Windows_Release_Notes.docx" /><ComponentRef Id="Redis_on_Windows.docx" /><ComponentRef Id="redis_benchmark.exe" /><ComponentRef Id="redis_check_aof.exe" /><ComponentRef Id="redis_cli.exe" /><ComponentRef Id="redis.windows_service.conf" /><ComponentRef Id="redis.windows.conf" /><ComponentRef Id="Windows_Service_Documentation.docx" /></ComponentGroup></Fragment>
+</Wix>
