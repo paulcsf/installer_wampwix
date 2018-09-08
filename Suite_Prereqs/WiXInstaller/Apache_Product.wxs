@@ -21,8 +21,8 @@
         <Binary Id="WiXCustomAction" SourceFile="..\WiXCustomAction\bin\$(var.Configuration)\Win64\WiXCustomAction.dll"/>
         <?endif?>
 
-        <SetProperty Id="UpdateApacheConfig" Sequence="execute" Value="[SUITE_INSTALLDIR]|[APACHE_PORT]|[#httpd.conf]" Before="UpdateApacheConfig" />
-        <CustomAction Id="UpdateApacheConfig" BinaryKey="WiXCustomAction" DllEntry="UpdateApacheConfig" Execute="deferred" Return="check" />
+      <SetProperty Id="UpdateApacheConfig" Sequence="execute" Value="[SUITE_INSTALLDIR]|[APACHE_PORT]|[#httpd.conf]" Before="UpdateApacheConfig" />
+      <CustomAction Id="UpdateApacheConfig" BinaryKey="WiXCustomAction" DllEntry="UpdateApacheConfig" Execute="deferred" Return="check" />
       <InstallExecuteSequence>
         <Custom Action="UpdateApacheConfig" After="InstallFiles">NOT Installed</Custom>
       </InstallExecuteSequence>

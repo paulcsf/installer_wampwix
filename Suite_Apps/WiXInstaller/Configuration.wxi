@@ -22,6 +22,12 @@
     <?define SuiteWeb_UpgradeCode      = "9229C764-5BD1-4605-B14C-E976267DD509" ?>
     <?define SuiteWeb_ProductFiles     = "..\SuiteWeb\" ?>
 
+  <?define SuiteWebsocket_ProductName      = "Suite Websocket" ?>
+  <?define SuiteWebsocket_ProductVersion   = "$(var.Suite_Version)" ?>
+  <?define SuiteWebsocket_ProductCode      = "*" ?>
+  <?define SuiteWebsocket_UpgradeCode      = "D673DB00-3328-4047-82A9-E791C7925678" ?>
+  <?define SuiteWebsocket_ProductFiles     = "..\Websocket\" ?>
+
     <?define SuiteEng_ProductName      = "Suite Engine" ?>
     <?define SuiteEng_ProductVersion   = "$(var.Suite_Version)" ?>
     <?define SuiteEng_ProductCode      = "*" ?>

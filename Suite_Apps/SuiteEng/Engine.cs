@@ -19,13 +19,26 @@ using System.Net.Sockets;
 using System.Net.NetworkInformation;
 using System.Runtime.InteropServices;       //for struct/union layout
 using StackExchange.Redis;
+using Newtonsoft.Json;
+using TimeZoneConverter;        //https://github.com/mj1856/TimeZoneConverter   v1.1.1 will install with VS2012. PM> Install-Package TimeZoneConverter -Version 1.1.1
 
 // http://www.codeproject.com/KB/cs/csharpwindowsserviceinst.aspx
 
 
 namespace SuiteEngNS
 {
-    public partial class SuiteEng : ServiceBase
+
+
+    static class Constants
+    {
+        public const int ExceptionMax = 25;
+        public const int UserSystemWeb = -1;
+        public const int UserSystemEngine = -2;
+    }
+
+
+
+    public partial class Engine : ServiceBase
     {
         //private Timer mTimer;
         Thread monitorThread = null;
@@ -44,19 +57,23 @@ namespace SuiteEngNS
         //
         private string DBConStr = "";
         static private OdbcConnection dbMainCon = null; // create a static connection to db for main thread execution use
-        static private OdbcConnection dbLogCon = null;  // create a static connection to db for main thread logging events
+        //static private OdbcConnection dbLogCon = null;  // create a static connection to db for main thread logging events
                                                         // more efficent and if db max's out connection, this will still be able to log to the db
-        static private Int32 ServerExCount = 0;         // count of exceptions, restart after too many
+        private Int32 ExCount = 0;                      // count of exceptions, restart after too many
         static private Mutex dbMainMutex = new Mutex();
-        static private Mutex dbLogMutex = new Mutex();
+        //static private Mutex dbLogMutex = new Mutex();
 
         private string RedisConStr = "";
         public ConnectionMultiplexer Redis;
+        public IDatabase RDB = null;
 
-        private string LogPrefix = "SBIMCIEng: Main: ";
+        private string LogPrefix = "SuiteEng: Main: ";
+        private LimitedQueue<LogJSON> Log = new LimitedQueue<LogJSON>(100);
+        protected SWTimer REDW = new SWTimer("RedisWrite");
+        protected SWTimer REDR = new SWTimer("RedisRead");
 
 
-        public SuiteEng()
+        public Engine()
         {
             try
             {
@@ -70,7 +87,7 @@ namespace SuiteEngNS
             }
             catch (Exception e)
             {
-                ServerExCount++;
+                ExCount++;
                 LogEventLocal(LogPrefix + "Exception in InitializeComponent: " + e.ToString());
             }
             LogEventLocal(LogPrefix + "InitializeComponent completed");
@@ -82,9 +99,23 @@ namespace SuiteEngNS
             {
                 LogEventLocal(LogPrefix + "Unable to name Main Engine Thread");
             }
+            try
+            {
+                var RQueue = RedisStringGet("Engine_Log");
+                if (!RQueue.IsNull)
+                {
+
+                    Log = new LimitedQueue<LogJSON>(100, JsonConvert.DeserializeObject<List<LogJSON>>(RedisStringGet("Engine_Log")));
+                }
+            }
+            catch (Exception e)
+            {
+                ExCount++;
+                LogEventLocal(LogPrefix + "Exception in Redis Log fetch: " + e.ToString());
+            }
         }
 
-        ~SuiteEng()
+        ~Engine()
         {
             try
             {
@@ -95,7 +126,7 @@ namespace SuiteEngNS
             {
                 LogEventLocal(LogPrefix + "Destructor: Exception(Closing dbMainCon database): " + e.ToString());
             }
-            try
+            /*try
             {
                 dbLogCon.Close();
                 dbLogCon = null;
@@ -103,11 +134,12 @@ namespace SuiteEngNS
             catch (Exception e)
             {
                 LogEventLocal(LogPrefix + "Destructor: Exception(Closing dbLogCon database): " + e.ToString());
-            }
+            }*/
 
             dbMainMutex.Dispose();
-            dbLogMutex.Dispose();
+            //dbLogMutex.Dispose();
         }
+
 
         protected override void OnStart(string[] args)
         {
@@ -120,7 +152,7 @@ namespace SuiteEngNS
             }
             catch (Exception e)
             {
-                ServerExCount++;
+                ExCount++;
                 LogEventLocal(LogPrefix + "Exception in OnStart: " + e.ToString());
             }
 
@@ -132,7 +164,7 @@ namespace SuiteEngNS
         }
         public void OnStartThreadCode()
         {
-            ServerExCount = 0;        //Only place this can be set, all others increment
+            ExCount = 0;        //Only place this can be set, all others increment
 
             //Get/Start our com channels
             StartNetworks(false, 0, 0);
@@ -173,9 +205,29 @@ namespace SuiteEngNS
                 {
                     RetVal = true;
                 }
+
+                try
+                {
+                    OdbcCommand TCmd = new OdbcCommand();
+                    TCmd.Connection = dbMainCon;
+                    TCmd.CommandText = "DO 0;";
+                    TCmd.ExecuteNonQuery();
+                }
+                catch { }
+
+                if (dbMainCon.State == ConnectionState.Broken)
+                {
+                    dbMainCon.Close();
+                }
+
+                if (dbMainCon.State == ConnectionState.Closed)
+                {
+                    dbMainCon.Open();
+                }
             }
             catch (OdbcException e)
             {
+                ExCount++;
                 LogEventLocal(LogPrefix + "OpenCheckDB: OdbcException: " + e.ToString());
                 if (dbMainCon != null)
                 {
@@ -189,11 +241,12 @@ namespace SuiteEngNS
             }
             catch (Exception e)
             {
+                ExCount++;
                 LogEventLocal(LogPrefix + "OpenCheckDB: Exception: " + e.ToString());
             }
             return RetVal;
         }
-        public bool OpenCheckDBLog()
+        /*public bool OpenCheckDBLog()
         {
             bool RetVal = false;
             try
@@ -215,9 +268,29 @@ namespace SuiteEngNS
                 {
                     RetVal = true;
                 }
+
+                try
+                {
+                    OdbcCommand TCmd = new OdbcCommand();
+                    TCmd.Connection = dbLogCon;
+                    TCmd.CommandText = "DO 0;";
+                    TCmd.ExecuteNonQuery();
+                }
+                catch { }
+
+                if (dbLogCon.State == ConnectionState.Broken)
+                {
+                    dbLogCon.Close();
+                }
+
+                if (dbLogCon.State == ConnectionState.Closed)
+                {
+                    dbLogCon.Open();
+                }
             }
             catch (OdbcException e)
             {
+                ExCount++;
                 LogEventLocal(LogPrefix + "OpenCheckDBLog: OdbcException: " + e.ToString());
                 if (dbLogCon != null)
                 {
@@ -231,10 +304,11 @@ namespace SuiteEngNS
             }
             catch (Exception e)
             {
+                ExCount++;
                 LogEventLocal(LogPrefix + "OpenCheckDBLog: Exception: " + e.ToString());
             }
             return RetVal;
-        }
+        }*/
         public bool OpenCheckRedis()
         {
             bool RetVal = false;
@@ -242,11 +316,11 @@ namespace SuiteEngNS
             {
                 Redis = ConnectionMultiplexer.Connect(RedisConStr);
 
-                IDatabase RDB = Redis.GetDatabase();
+                RDB = Redis.GetDatabase();
                 String TV = DateTime.UtcNow.ToString("s");
-                RDB.StringSet("EngineStart", TV);
+                RedisStringSet("EngineStart", TV);
 
-                string Val = RDB.StringGet("EngineStart");
+                string Val = RedisStringGet("EngineStart");
                 if (TV != Val)
                 {
                     LogEventLocal(LogPrefix + "OpenCheckRedis: EngineStart value check failed.");
@@ -276,13 +350,13 @@ namespace SuiteEngNS
             }
             catch (ConfigurationErrorsException e)
             {
-                ServerExCount++;
+                ExCount++;
                 LogEventLocal(LogPrefix + "GetAppSettings: ConfigurationErrorsException: " + e.ToString());
                 LogEventLocal(exePath);
             }
             catch (Exception e)
             {
-                ServerExCount++;
+                ExCount++;
                 LogEventLocal(LogPrefix + "GetAppSettings: Exception: " + e.ToString());
                 LogEventLocal(exePath);
             }
@@ -355,12 +429,12 @@ namespace SuiteEngNS
             }
             catch (ConfigurationErrorsException e)
             {
-                ServerExCount++;
+                ExCount++;
                 LogEventLocal(LogPrefix + "GetAppSettings: ConfigurationErrorsException exception: " + e.ToString());
             }
 
             //Now test/open the database
-            return OpenCheckDB() && OpenCheckDBLog() && OpenCheckRedis();
+            return OpenCheckDB() && OpenCheckRedis();      //OpenCheckDBLog() &&
         }
         protected override void OnStop()
         {
@@ -371,7 +445,7 @@ namespace SuiteEngNS
             }
             catch (Exception e)
             {
-                ServerExCount++;
+                ExCount++;
                 LogEvent(LogPrefix + "OnStop: StopMonitorThread: Exception: " + e.ToString());
             }
 
@@ -388,6 +462,7 @@ namespace SuiteEngNS
             catch (Exception e)
             {
                 LogEvent(LogPrefix + "OnStopNetworkThreads: Network thread check: Exception: " + e.ToString());
+                ExCount++;
             }
         }
 
@@ -405,15 +480,15 @@ namespace SuiteEngNS
         }
 
 
-        public void LogEvent(string message)
+        /*public void LogEvent(string message)
         {
             OpenCheckDBLog();
             try
             {
                 if (!dbLogMutex.WaitOne(2000))
                 {
-                    ServerExCount++;
-                    LogEventLocal(LogPrefix + "LogEvent: Mutex not acquired.");
+                    ExCount++;
+                    LogEventLocal(LogPrefix + "LogEvent: Mutex not acquired.\r\n\r\nmessage: " + message.ToString());
                     return;
                 }
             }
@@ -427,20 +502,48 @@ namespace SuiteEngNS
             }
             catch (OdbcException e)
             {
-                ServerExCount++;
-                LogEventLocal(LogPrefix + "LogEvent: OdbcException: " + e.ToString() + "\r\nmessage: " + message.ToString());
+                ExCount++;
+                LogEventLocal(LogPrefix + "LogEvent: OdbcException: " + e.ToString() + "\r\n\r\nmessage: " + message.ToString());
             }
             catch (Exception e)
             {
-                ServerExCount++;
-                LogEventLocal(LogPrefix + "LogEvent: Exception: " + e.ToString() + "\r\nmessage: " + message.ToString());
+                ExCount++;
+                LogEventLocal(LogPrefix + "LogEvent: Exception: " + e.ToString() + "\r\n\r\nmessage: " + message.ToString());
             }
             try
             {
                 dbLogMutex.ReleaseMutex();
             }
             catch { }
+        }*/
+        public void LogEvent(string message)
+        {
+            try
+            {
+                /*String sLog = "";
+                foreach (string s in Log.Reverse())
+                {
+                    sLog += s + "\r\n\r\n\r\n\r\n";
+                }
+                RedisStringSet("Engine_Log", sLog, TimeSpan.FromDays(10));*/
+
+                Monitor.Enter(Log);
+                try
+                {
+                    Log.Enqueue(new LogJSON(message));
+                    RedisStringSet("Engine_Log", JsonConvert.SerializeObject(Log.ToList()), TimeSpan.FromDays(10));
+                }
+                finally
+                {
+                    Monitor.Exit(Log);
+                }
+            }
+            catch (Exception e)
+            {
+                LogEventLocal(LogPrefix + "LogEvent: Exception: " + e.ToString() + "\r\n\r\nmessage: " + message.ToString());
+            }
         }
+
         private void LogEventLocal(string message)
         {
             /* If you get an error similar to:
@@ -500,7 +603,7 @@ namespace SuiteEngNS
             {
                 if (!dbMainMutex.WaitOne(2000))
                 {
-                    ServerExCount++;
+                    ExCount++;
                     LogEvent(LogPrefix + "StartTenants: Mutex not acquired.");
                     return;
                 }
@@ -511,12 +614,12 @@ namespace SuiteEngNS
             }
             catch (OdbcException e)
             {
-                ServerExCount++;
+                ExCount++;
                 LogEvent(LogPrefix + "StartTenants: OdbcException: " + e.ToString());
             }
             catch (Exception e)
             {
-                ServerExCount++;
+                ExCount++;
                 LogEvent(LogPrefix + "StartTenants: Exception: " + e.ToString());
             }
             try
@@ -580,7 +683,6 @@ namespace SuiteEngNS
                  */
                 // the timer is scheduled to only fire once [See StartMonitor()] so it does fire a second time while we are 
                 // still inside executing the code in this method, don't forget to reschedule this Proc at the end of itself
-                IDatabase RDB = Redis.GetDatabase();
                 while (!monitorThreadStopping)
                 {
                     // check if comchannel table has changed.
@@ -597,7 +699,8 @@ namespace SuiteEngNS
                     if (monitorThreadStopping) return;
 
                     String TV = DateTime.UtcNow.ToString("s");
-                    RDB.StringSet("EngineMonitorLoop", TV);
+                    RedisStringSet("EngineMonitorLoop", TV);
+                    TimingUpdate();
                     try
                     {
 
@@ -625,8 +728,7 @@ namespace SuiteEngNS
                         LogEventLocal("SuiteEng: MonitorThread: Getting Network Signature: Exception: " + e.ToString());
                     }
 
-
-                    if (!monitorThreadStopping && ServerExCount > 25)
+                    if (!monitorThreadStopping && ExCount > Constants.ExceptionMax)
                     {
                         // too many SERVER exceptions, reload.
                         //try logging to database first.
@@ -655,6 +757,7 @@ namespace SuiteEngNS
                     catch (Exception e)
                     {
                         LogEvent(LogPrefix + "MonitorThread: Tenant thread check: Exception: " + e.ToString());
+                        ExCount++;
                     }
 
 
@@ -663,8 +766,8 @@ namespace SuiteEngNS
             catch (Exception e)
             {
                 LogEvent(LogPrefix + "MonitorThread: Stopping Engine. Exception(Global catch): " + e.ToString());
+                //incrementing the exception count doesn't do any good here.
                 Environment.Exit(1);
-                //ServerExCount++;
             }
         }
 
@@ -680,7 +783,7 @@ namespace SuiteEngNS
             {
                 if (!dbMainMutex.WaitOne(2000))
                 {
-                    ServerExCount++;
+                    ExCount++;
                     LogEvent(LogPrefix + "GetDBSettings: Mutex not acquired.");
                     return true;    //Just go ahead and force a restart
                 }
@@ -734,12 +837,12 @@ namespace SuiteEngNS
             }
             catch (OdbcException e)
             {
-                ServerExCount++;
+                ExCount++;
                 LogEvent(LogPrefix + "GetDBSettings: OdbcException: " + e.ToString());
             }
             catch (Exception e)
             {
-                ServerExCount++;
+                ExCount++;
                 LogEvent(LogPrefix + "GetDBSettings: Exception: " + e.ToString());
             }
             try
@@ -937,21 +1040,147 @@ namespace SuiteEngNS
 
 
 
-        public void RedisReadData()  
+        /*public void RedisReadData()  
         {
-            IDatabase RDB = Redis.GetDatabase();
             string Val = RDB.StringGet("EngineTest");
             LogEventLocal(String.Format("RedisReadData: Value={0}",Val));
             return;
         }  
-  
         public void RedisSaveData()  
         {
-            IDatabase RDB = Redis.GetDatabase();
             RDB.StringSet("EngineTest", "We are working.", TimeSpan.FromSeconds(25));
             return;
-        }  
+        }*/
+
+        public void RedisStringSet(string key, string val)
+        {
+            try
+            {
+                REDW.Start();
+                RDB.StringSet(key, val, TimeSpan.FromDays(10));
+                REDW.Stop();
+            }
+            catch (Exception e)
+            {
+                LogEvent(LogPrefix + "RedisStringSet(key,val): Exception: " + e.ToString());
+                ExCount++;
+                REDW.StopCancel();
+            }
+        }
+        public void RedisStringSet(string key, string val, TimeSpan t)
+        {
+            try
+            {
+                REDW.Start();
+                RDB.StringSet(key, val, t);
+                REDW.Stop();
+            }
+            catch (Exception e)
+            {
+                LogEvent(LogPrefix + "RedisStringSet(key,val,t): Exception: " + e.ToString());
+                ExCount++;
+                REDW.StopCancel();
+            }
+        }
+        public RedisValue RedisStringGet(string key)
+        {
+            try
+            {
+                RedisValue Ret;
+                REDR.Start();
+                Ret = RDB.StringGet(key);
+                REDR.Stop();
+                return Ret;
+            }
+            catch (Exception e)
+            {
+                LogEvent(LogPrefix + "RedisStringGet: Exception: " + e.ToString());
+                ExCount++;
+                REDR.StopCancel();
+                return RedisValue.Null;
+            }
+        }
+        public void TimingUpdate()
+        {
+            RedisStringSet("Engine_TimingStats",
+                REDW.Stats() + "\r\n" +
+                REDR.Stats());
+        }
 
 
     }
+
+    public class LimitedQueue<T> : Queue<T>
+    {
+        public int Limit { get; set; }
+
+        public LimitedQueue(int limit)
+            : base(limit)
+        {
+            Limit = limit;
+        }
+        public LimitedQueue(int limit, IEnumerable<T> items = null) 
+            : base(items)
+        {
+            Limit = limit;
+        }
+
+        public new void Enqueue(T item)
+        {
+            while (Count >= Limit)
+            {
+                Dequeue();
+            }
+            base.Enqueue(item);
+        }
+    }
+
+    public class LimitedStack<T>
+    {
+        public readonly int Limit;
+        private readonly List<T> _stack;
+
+        public LimitedStack(int limit = 32)
+        {
+            Limit = limit;
+            _stack = new List<T>(limit);
+        }
+
+        public void Push(T item)
+        {
+            if (_stack.Count == Limit) _stack.RemoveAt(0);
+            _stack.Add(item);
+        }
+
+        public T Peek()
+        {
+            return _stack[_stack.Count - 1];
+        }
+
+        public void Pop()
+        {
+            _stack.RemoveAt(_stack.Count - 1);
+        }
+
+        public int Count
+        {
+            get { return _stack.Count; }
+        }
+    }
+
+    public class LogJSON
+    {
+        public string Msg;
+        public string DT;
+        public LogJSON(string nMsg)
+        {
+            Msg = nMsg;
+            DT = DateTime.UtcNow.ToString("s");     //u=yyyy-mm-dd hh::mm::ssZ, s=yyyy-mm-ddThh:mm:ss
+        }
+    }
+
+
+
+
+
 }

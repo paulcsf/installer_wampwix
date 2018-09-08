@@ -71,10 +71,10 @@
   </Target>
   <PropertyGroup>
     <PreBuildEvent>if  $(PlatformName) == x86 (
-"%25WIX%25\bin\heat.exe" dir "$(SolutionDir)..\ProductFiles_Prereqs\mysql-5.7.19-win32" -t "$(SolutionDir)WiXInstaller\MySQL_Translate_x86.xsl" -cg CG_MySQL_ProductFiles -dr DIR_MYSQL -gg -ke -scom -sfrag -srd -suid -sreg -var var.MySQL_ProductFiles_x86 -o "$(SolutionDir)WiXInstaller\MySQL_ProductFiles_x86.wxs"
+"%25WIX%25\bin\heat.exe" dir "$(SolutionDir)..\ProductFiles_Prereqs\mysql-5.7.22-win32" -t "$(SolutionDir)WiXInstaller\MySQL_Translate_x86.xsl" -cg CG_MySQL_ProductFiles -dr DIR_MYSQL -gg -ke -scom -sfrag -srd -suid -sreg -var var.MySQL_ProductFiles_x86 -o "$(SolutionDir)WiXInstaller\MySQL_ProductFiles_x86.wxs"
 )
 if  $(PlatformName) == x64 (
-"%25WIX%25\bin\heat.exe" dir "$(SolutionDir)..\ProductFiles_Prereqs\mysql-5.7.19-win64" -t "$(SolutionDir)WiXInstaller\MySQL_Translate_x64.xsl" -cg CG_MySQL_ProductFiles -dr DIR_MYSQL -gg -ke -scom -sfrag -srd -suid -sreg -var var.MySQL_ProductFiles_x64 -o "$(SolutionDir)WiXInstaller\MySQL_ProductFiles_x64.wxs"
+"%25WIX%25\bin\heat.exe" dir "$(SolutionDir)..\ProductFiles_Prereqs\mysql-5.7.22-win64" -t "$(SolutionDir)WiXInstaller\MySQL_Translate_x64.xsl" -cg CG_MySQL_ProductFiles -dr DIR_MYSQL -gg -ke -scom -sfrag -srd -suid -sreg -var var.MySQL_ProductFiles_x64 -o "$(SolutionDir)WiXInstaller\MySQL_ProductFiles_x64.wxs"
 )</PreBuildEvent>
   </PropertyGroup>
 </Project>
