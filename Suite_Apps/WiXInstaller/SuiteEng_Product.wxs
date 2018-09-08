@@ -102,8 +102,8 @@
 
         <ComponentGroup Id="CG_SuiteEng_ProductConfiguration">
             <Component Id="CMP_AppConfiguration" Guid="{7D7BD2F8-122D-4B33-A3D9-02825341616B}" Directory="TARGETDIR">
-                <util:XmlFile Id="XMLConfig_01" Action="setValue" File="[DIR_SUITEENG]SuiteEng.exe.config" ElementPath="/configuration/connectionStrings/add[\[]@name='Name'[\]]" Name="connectionString" Value="Provider=MSDASQL;DRIVER={MySQL ODBC 5.2 Unicode Driver};SERVER=localhost;PORT=[MYSQL_PORT];DATABASE=diags;UID=diaguser;PASSWORD=diaguser01;OPTION=3;"/>
-                <util:XmlFile Id="XMLConfig_02" Action="setValue" File="[DIR_SBIMCIENG]SBIMCIEng.exe.config" ElementPath="/configuration/connectionStrings/add[\[]@name='Redis'[\]]" Name="connectionString" Value="localhost:[REDIS_PORT],defaultDatabase=2"/>
+                <util:XmlFile Id="XMLConfig_01" Action="setValue" File="[DIR_SUITEENG]SuiteEng.exe.config" ElementPath="/configuration/connectionStrings/add[\[]@name='Name'[\]]" Name="connectionString" Value="Provider=MSDASQL;DRIVER={MySQL ODBC 5.2 Unicode Driver};SERVER=localhost;PORT=[MYSQL_PORT];DATABASE=suitedatabase;UID=suiteuser;PASSWORD=suitedbpass;OPTION=3;"/>
+                <util:XmlFile Id="XMLConfig_02" Action="setValue" File="[DIR_SUITEENG]SuiteEng.exe.config" ElementPath="/configuration/connectionStrings/add[\[]@name='Redis'[\]]" Name="connectionString" Value="localhost:[REDIS_PORT],defaultDatabase=2"/>
             </Component>
             <Component Id="CMP_StartMenuShortcuts" Guid="{B3504167-C7D4-4ADF-A14A-B5CB019E5A19}" Directory="StartMenuAppFolder" >
                 <Shortcut Id="ProductShortcut" Name="Suite Configuration" Target="[DIR_SUITEENG]SuiteEngConf.exe" WorkingDirectory="DIR_SUITEENG"/>

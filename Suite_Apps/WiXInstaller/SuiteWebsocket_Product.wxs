@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix
+    xmlns="http://schemas.microsoft.com/wix/2006/wi"
+    xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+
+  <?include Configuration.wxi?>
+
+  <Product Id="$(var.SuiteWebsocket_ProductCode)" Name="$(var.SuiteWebsocket_ProductName)" Language="1033" Version="$(var.SuiteWebsocket_ProductVersion)" Manufacturer="$(var.Suite_Manufacturer)" UpgradeCode="$(var.SuiteWebsocket_UpgradeCode)">
+    <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" InstallPrivileges="elevated" />
+
+    <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+
+    <!-- To generate the embedded cabinet file, ie just the MSI -->
+    <MediaTemplate EmbedCab="yes" />
+    <!-- To generate a separate MSI and Cab file 
+        <Media Id="1" Cabinet="SuiteWS.cab" EmbedCab="no"/> -->
+
+    <Property Id="APACHE_PORT">
+      <RegistrySearch Id="RegSearch_APACHE_PORT" Root="HKLM" Key="[INSTALL_REG_PATH]" Name="APACHE_PORT" Type="raw" />
+    </Property>
+    <Property Id="MYSQL_PORT">
+      <RegistrySearch Id="RegSearch_MYSQL_PORT" Root="HKLM" Key="[INSTALL_REG_PATH]" Name="MYSQL_PORT" Type="raw" />
+    </Property>
+    <Property Id="REDIS_PORT">
+      <RegistrySearch Id="RegSearch_REDIS_PORT" Root="HKLM" Key="[INSTALL_REG_PATH]" Name="REDIS_PORT" Type="raw" />
+    </Property>
+    <Property Id="WEBSOCKET_PORT">
+      <RegistrySearch Id="RegSearch_WEBSOCKET_PORT" Root="HKLM" Key="[INSTALL_REG_PATH]" Name="WEBSOCKET_PORT" Type="raw" />
+    </Property>
+    <Property Id="MYSQL_ROOT_ENCPASS" Hidden="yes">
+      <RegistrySearch Id="RegSearch_MYSQL_ROOT_ENCPASS" Root="HKLM" Key="[INSTALL_REG_PATH]" Name="MYSQL_ROOT_ENCPASS" Type="raw" />
+    </Property>
+
+    <!-- Why do we need two different builds of WixCustomAction? 32bit should run on both. 
+    <?if $(var.Platform)="x86"?>
+    <Binary Id="WiXCustomAction" SourceFile="$(var.WiXCAProjectPath)\bin\$(var.Configuration)\Win32\WiXCustomAction.dll"/>
+    <?else?>-->
+    <Binary Id="WiXCustomAction" SourceFile="$(var.WiXCAProjectPath)\bin\$(var.Configuration)\Win64\WiXCustomAction.dll"/>
+    <!--<?endif?>-->
+
+    <SetProperty Id="UpdateRedisConfig" Sequence="execute" Value="[REDIS_PORT]|[#socket.js]" Before="UpdateRedisConfig" />
+    <CustomAction Id="UpdateRedisConfig" BinaryKey="WiXCustomAction" DllEntry="UpdateRedisConfig" Execute="deferred" Return="check" />
+    <SetProperty Id="UpdateWebsocketConfig" Sequence="execute" Value="[WEBSOCKET_PORT]|[#socket.js]" Before="UpdateWebsocketConfig" />
+    <CustomAction Id="UpdateWebsocketConfig" BinaryKey="WiXCustomAction" DllEntry="UpdateWebsocketConfig" Execute="deferred" Return="check" />
+
+    <!-- http://wixtoolset.org/documentation/manual/v3/xsd/wix/customaction.html -->
+    <!-- TODO: figure out this: http://wixtoolset.org/documentation/manual/v3/customactions/qtexec.html -->
+    <!-- Doesn't seem to work. Add " &amp;&amp; pause" to the ExeCommand's to test, remove before release. -->
+    <!-- To log an install: msiexec /i MyApplication.msi /l*v MyLogFile.txt -->
+    <!-- Default log file location is %TEMP%, which equates to C:\Users\user\AppData\Local\Temp -->
+    <!-- NPM/Node version: ^x.x.x => compatible with, ~x.x.x => approximately version, -->
+
+    <!-- 20180530 Update to Node 8.11.2 / npm 5.6.0
+          Delete any node_modules and node_cache directories in the websocket directory.
+          (Take underscores out of double dashes, XML comment issue)
+          Install any modules (should only need specific dependencies in package.json):
+            npm -_-cache node_cache install
+            npm shrinkwrap
+            npm -_-cache node_cache install -g node-windows@^0.1.14
+          Take the node_cache directory in the installer, plus package.json, npm-shrinkwrap.json, socket.js, ServiceInstall.js, ServiceUninstall.js  
+          Then in the installer:
+            npm -_-cache node_cache -_-offline install
+            npm -_-cache node_cache -_-offline install -g node-windows@^0.1.14
+            npm -_-cache node_cache -_-offline link node-windows
+            node ServiceUninstall.js
+    -->
+
+    <!-- <CustomAction Id='ExecNPMInstall' Directory='DIR_WEBSOCKET' Execute='commit' ExeCommand='&quot;[SystemFolder]cmd.exe&quot; /C npm install - -save socket.io@^2.0.4 express@^4.16.2 ioredis@^3.2.2  >> log.txt 2>&amp;1' Return='ignore'/>-->
+    <CustomAction Id='ExecNPMInstall' Directory='DIR_WEBSOCKET' Execute='commit' ExeCommand='&quot;[SystemFolder]cmd.exe&quot; /C npm --cache node_cache --offline install >> log.txt 2>&amp;1' Return='ignore'/>
+    <CustomAction Id='ExecNPMGInstall' Directory='DIR_WEBSOCKET' Execute='commit' ExeCommand='&quot;[SystemFolder]cmd.exe&quot; /C npm --cache node_cache --offline install -g node-windows@^0.1.14  >> log.txt 2>&amp;1' Return='ignore'/>
+    <CustomAction Id='ExecNPMLink' Directory='DIR_WEBSOCKET' Execute='commit' ExeCommand='&quot;[SystemFolder]cmd.exe&quot; /C npm link node-windows  >> log.txt 2>&amp;1' Return='ignore'/>
+    <CustomAction Id='ExecNodeSVCInstall' Directory='DIR_WEBSOCKET' Execute='commit' ExeCommand='&quot;[SystemFolder]cmd.exe&quot; /C node ServiceInstall.js  >> log.txt 2>&amp;1' Return='ignore'/>
+    <CustomAction Id='ExecNodeSVCUninstall' Directory='DIR_WEBSOCKET' Execute='commit' ExeCommand='&quot;[SystemFolder]cmd.exe&quot; /C node ServiceUninstall.js  >> log.txt 2>&amp;1' Return='ignore'/>
+
+    <!--<Fragment>
+      <!- - 
+    <CustomAction Id="Node_node-windows" ExeCommand="&quot;[SystemFolder]cmd.exe&quot; /C &quot;npm install -g node-windows&quot;" Directory="INSTALLDIR" Execute="deferred" Return="asyncWait"/>
+    <InstallExecuteSequence>
+      <Custom Action="Node_node-windows" After="InstallFiles" >NOT Installed</Custom>
+    </InstallExecuteSequence> - ->
+
+      <SetProperty Id="QtExecDeferred_node_windows" Sequence="execute" Value="&quot;[SystemFolder]cmd.exe&quot; /C &quot;npm install -g node-windows&quot;" Before="QtExecDeferred_node_windows" />
+      <CustomAction Id="QtExecDeferred_node_windows" BinaryKey="WixCA" DllEntry="WixQuietExec" Execute="deferred" Return="check" Impersonate="no"/>
+      <InstallExecuteSequence>
+        <Custom Action="QtExecDeferred_node_windows" After="InstallFiles">NOT Installed</Custom>
+      </InstallExecuteSequence>
+    </Fragment>-->
+
+
+
+
+    <InstallExecuteSequence>
+      <Custom Action="UpdateRedisConfig" After="InstallFiles">NOT Installed</Custom>
+      <Custom Action="UpdateWebsocketConfig" After="UpdateRedisConfig">NOT Installed</Custom>
+            
+      <Custom Action="ExecNPMInstall" After="UpdateWebsocketConfig">NOT Installed</Custom>
+      <Custom Action="ExecNPMGInstall" After="ExecNPMInstall">NOT Installed</Custom>
+      <Custom Action="ExecNPMLink" After="ExecNPMGInstall">NOT Installed</Custom>
+      <Custom Action="ExecNodeSVCInstall" After="ExecNPMLink">NOT Installed</Custom>
+      
+      <Custom Action="ExecNodeSVCUninstall" After="InstallInitialize">Installed AND NOT UPGRADINGPRODUCTCODE</Custom>
+    </InstallExecuteSequence>
+
+    <Feature Id="ProductFeature" Title="SuiteWebsocket_MSIPackage" Level="1">
+      <ComponentGroupRef Id="CG_SuiteWebsocket_ProductFiles" />
+    </Feature>
+  </Product>
+
+  <Fragment>
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="SUITE_INSTALLDIR" Name="$(var.Suite_InstallDir)">
+        <Directory Id="DIR_WEBSOCKET" Name="Websocket" />
+      </Directory>
+    </Directory>
+  </Fragment>
+</Wix>

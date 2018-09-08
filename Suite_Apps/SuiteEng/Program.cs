@@ -17,11 +17,11 @@ namespace SuiteEngNS
             ServiceBase[] ServicesToRun;
             ServicesToRun = new ServiceBase[] 
 			{ 
-				new SuiteEng() 
+				new Engine() 
 			};
             ServiceBase.Run(ServicesToRun);
 #else
-            SuiteEng service = new SuiteEng();
+            Engine service = new Engine();
             service.OnStartThreadCode();
             // Put a breakpoint on the following line to always catch
             // your service when it has finished its work

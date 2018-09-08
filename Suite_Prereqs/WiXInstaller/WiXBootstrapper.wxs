@@ -63,10 +63,10 @@
       <!-- Required by Apps -->
 
       <MsiPackage Id="MySQL_ODBCConn_x86" Compressed="yes" Visible="yes" Permanent="yes" InstallCondition="NOT VersionNT64"
-  SourceFile="$(var.PrerequisitesPath)\mysql-connector-odbc-5.3.9-win32.msi" Vital="yes" ForcePerMachine="yes" >
+  SourceFile="$(var.PrerequisitesPath)\mysql-connector-odbc-5.3.10-win32.msi" Vital="yes" ForcePerMachine="yes" >
       </MsiPackage>
       <MsiPackage Id="MySQL_ODBCConn_x64" Compressed="yes" Visible="yes" Permanent="yes" InstallCondition="VersionNT64"
-  SourceFile="$(var.PrerequisitesPath)\mysql-connector-odbc-5.3.9-winx64.msi" Vital="yes" ForcePerMachine="yes" >
+  SourceFile="$(var.PrerequisitesPath)\mysql-connector-odbc-5.3.10-winx64.msi" Vital="yes" ForcePerMachine="yes" >
       </MsiPackage>
 
             <MsiPackage Id="Suite_MySQL_x86" Compressed="yes" InstallCondition="NOT VersionNT64"
@@ -127,10 +127,10 @@
       </ExePackage>
 
       <MsiPackage Id="Node_x86" Compressed="yes" Visible="yes" Permanent="yes" InstallCondition="NOT VersionNT64"
-        SourceFile="$(var.PrerequisitesPath)\node-v8.2.1-x86.msi" Vital="yes" ForcePerMachine="yes" >
+        SourceFile="$(var.PrerequisitesPath)\node-v8.11.2-x86.msi" Vital="yes" ForcePerMachine="yes" >
       </MsiPackage>
       <MsiPackage Id="Node_x64" Compressed="yes" Visible="yes" Permanent="yes" InstallCondition="VersionNT64"
-        SourceFile="$(var.PrerequisitesPath)\node-v8.2.1-x64.msi" Vital="yes" ForcePerMachine="yes" >
+        SourceFile="$(var.PrerequisitesPath)\node-v8.11.2-x64.msi" Vital="yes" ForcePerMachine="yes" >
       </MsiPackage>
 
             <MsiPackage Id="Suite_Apache_x86" Compressed="yes" InstallCondition="NOT VersionNT64"

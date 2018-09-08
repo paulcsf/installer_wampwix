@@ -60,13 +60,19 @@
       </Component>
 
       <!-- If you are writing registry variables, it requires the x86/x64 dual version game to get the values together. As opposed to under Wow6432Node...-->
-      <Component Id="CMP_RegistryEntries" Guid="{8ECDC80C-6190-4607-8AAE-A9943AAD1FA0}" Directory="TARGETDIR" Win64="no">
+      <!-- Even with the dual x86/x64, having Win64="no" in the Component causes the entries to end up under Wow6432 -->
+      <Component Id="CMP_RegistryEntries" Guid="{8ECDC80C-6190-4607-8AAE-A9943AAD1FA0}" Directory="TARGETDIR">
         <RegistryValue Root="HKLM" Key="[INSTALL_REG_PATH]" Name="DIR_TOOLS" Type="string" Value="[DIR_TOOLS]" KeyPath="yes" />
         <RegistryValue Root="HKLM" Key="[INSTALL_REG_PATH]" Name="REDIS_PORT" Type="string" Value="[REDIS_PORT]" />
         <!-- Doesn't really belong here, but can't put it in the bootstrapper...-->
         <RegistryValue Root="HKLM" Key="[INSTALL_REG_PATH]" Name="WEBSOCKET_PORT" Type="string" Value="[WEBSOCKET_PORT]" />
       </Component>
 
+      <!-- If files are installed in a directory, it will be implicitly created. 
+        If no files are installed, then to force the directory to be created, it must be referenced as a component with a new/random GUID. -->
+      <Component Id="CreateDirectorySSL" Directory="DIR_SSL" Guid="{5679DF48-9F2B-4372-B013-56468F7B5700}">
+        <CreateFolder />
+      </Component>
     </ComponentGroup>
   </Fragment>
 

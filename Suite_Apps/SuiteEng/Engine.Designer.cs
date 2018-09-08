@@ -1,6 +1,6 @@
 ﻿namespace SuiteEngNS
 {
-    partial class SuiteEng
+    partial class Engine
     {
         /// <summary> 
         /// Required designer variable.

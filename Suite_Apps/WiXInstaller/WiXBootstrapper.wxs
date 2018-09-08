@@ -42,6 +42,12 @@
                 <MsiProperty Name="INSTALL_REG_PATH" Value="[InstallRegPath]"/>
             </MsiPackage>
 
+
+      <MsiPackage Id="SuiteWebsocket" Compressed="yes" SourceFile="bin\$(var.Configuration)\SuiteWebsocket.msi" Vital="yes" ForcePerMachine="yes" >
+        <MsiProperty Name="SUITE_INSTALLDIR" Value="[InstallFolder]" />
+        <MsiProperty Name="INSTALL_REG_PATH" Value="[InstallRegPath]"/>
+      </MsiPackage>
+
             <MsiPackage Id="SuiteEng_x86" Compressed="yes" InstallCondition="NOT VersionNT64"
                 SourceFile="bin\$(var.Configuration)\SuiteEng_x86.msi" Vital="yes" ForcePerMachine="yes" >
                 <MsiProperty Name="SUITE_INSTALLDIR" Value="[InstallFolder]" />

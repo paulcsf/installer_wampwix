@@ -72,10 +72,14 @@
   </Target>
   <PropertyGroup>
     <PreBuildEvent>if  $(PlatformName) == x86 (
-"%25WIX%25\bin\heat.exe" dir "$(SolutionDir)..\ProductFiles_Prereqs\httpd-2.4.27-Win32-VC15\Apache24" -t "$(SolutionDir)WiXInstaller\Apache_Translate_x86.xsl" -cg CG_Apache_ProductFiles -dr DIR_APACHE -gg -ke -scom -sfrag -srd -suid -sreg -var var.Apache_ProductFiles_x86 -o "$(SolutionDir)WiXInstaller\Apache_ProductFiles_x86.wxs"
+copy "$(SolutionDir)..\ProductFiles_Prereqs\php-7.2.5-Win32-VC15-x86\libeay32.dll" "$(SolutionDir)..\ProductFiles_Prereqs\httpd-2.4.33-Win32-VC15\Apache24\bin" /Y
+copy "$(SolutionDir)..\ProductFiles_Prereqs\php-7.2.5-Win32-VC15-x86\ssleay32.dll" "$(SolutionDir)..\ProductFiles_Prereqs\httpd-2.4.33-Win32-VC15\Apache24\bin" /Y
+"%25WIX%25\bin\heat.exe" dir "$(SolutionDir)..\ProductFiles_Prereqs\httpd-2.4.33-Win32-VC15\Apache24" -t "$(SolutionDir)WiXInstaller\Apache_Translate_x86.xsl" -cg CG_Apache_ProductFiles -dr DIR_APACHE -gg -ke -scom -sfrag -srd -suid -sreg -var var.Apache_ProductFiles_x86 -o "$(SolutionDir)WiXInstaller\Apache_ProductFiles_x86.wxs"
 )
 if  $(PlatformName) == x64 (
-"%25WIX%25\bin\heat.exe" dir "$(SolutionDir)..\ProductFiles_Prereqs\httpd-2.4.27-Win64-VC15\Apache24" -t "$(SolutionDir)WiXInstaller\Apache_Translate_x64.xsl" -cg CG_Apache_ProductFiles -dr DIR_APACHE -gg -ke -scom -sfrag -srd -suid -sreg -var var.Apache_ProductFiles_x64 -o "$(SolutionDir)WiXInstaller\Apache_ProductFiles_x64.wxs"
+copy "$(SolutionDir)..\ProductFiles_Prereqs\php-7.2.5-Win32-VC15-x64\libeay32.dll" "$(SolutionDir)..\ProductFiles_Prereqs\httpd-2.4.33-Win64-VC15\Apache24\bin" /Y
+copy "$(SolutionDir)..\ProductFiles_Prereqs\php-7.2.5-Win32-VC15-x64\ssleay32.dll" "$(SolutionDir)..\ProductFiles_Prereqs\httpd-2.4.33-Win64-VC15\Apache24\bin" /Y
+"%25WIX%25\bin\heat.exe" dir "$(SolutionDir)..\ProductFiles_Prereqs\httpd-2.4.33-Win64-VC15\Apache24" -t "$(SolutionDir)WiXInstaller\Apache_Translate_x64.xsl" -cg CG_Apache_ProductFiles -dr DIR_APACHE -gg -ke -scom -sfrag -srd -suid -sreg -var var.Apache_ProductFiles_x64 -o "$(SolutionDir)WiXInstaller\Apache_ProductFiles_x64.wxs"
 )</PreBuildEvent>
   </PropertyGroup>
 </Project>
