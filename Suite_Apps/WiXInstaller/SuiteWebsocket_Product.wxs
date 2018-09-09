@@ -31,12 +31,7 @@
       <RegistrySearch Id="RegSearch_MYSQL_ROOT_ENCPASS" Root="HKLM" Key="[INSTALL_REG_PATH]" Name="MYSQL_ROOT_ENCPASS" Type="raw" />
     </Property>
 
-    <!-- Why do we need two different builds of WixCustomAction? 32bit should run on both. 
-    <?if $(var.Platform)="x86"?>
-    <Binary Id="WiXCustomAction" SourceFile="$(var.WiXCAProjectPath)\bin\$(var.Configuration)\Win32\WiXCustomAction.dll"/>
-    <?else?>-->
     <Binary Id="WiXCustomAction" SourceFile="$(var.WiXCAProjectPath)\bin\$(var.Configuration)\Win64\WiXCustomAction.dll"/>
-    <!--<?endif?>-->
 
     <SetProperty Id="UpdateRedisConfig" Sequence="execute" Value="[REDIS_PORT]|[#socket.js]" Before="UpdateRedisConfig" />
     <CustomAction Id="UpdateRedisConfig" BinaryKey="WiXCustomAction" DllEntry="UpdateRedisConfig" Execute="deferred" Return="check" />
@@ -92,12 +87,12 @@
     <InstallExecuteSequence>
       <Custom Action="UpdateRedisConfig" After="InstallFiles">NOT Installed</Custom>
       <Custom Action="UpdateWebsocketConfig" After="UpdateRedisConfig">NOT Installed</Custom>
-            
+
       <Custom Action="ExecNPMInstall" After="UpdateWebsocketConfig">NOT Installed</Custom>
       <Custom Action="ExecNPMGInstall" After="ExecNPMInstall">NOT Installed</Custom>
       <Custom Action="ExecNPMLink" After="ExecNPMGInstall">NOT Installed</Custom>
       <Custom Action="ExecNodeSVCInstall" After="ExecNPMLink">NOT Installed</Custom>
-      
+
       <Custom Action="ExecNodeSVCUninstall" After="InstallInitialize">Installed AND NOT UPGRADINGPRODUCTCODE</Custom>
     </InstallExecuteSequence>
 

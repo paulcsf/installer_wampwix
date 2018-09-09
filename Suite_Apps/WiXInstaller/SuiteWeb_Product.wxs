@@ -3,73 +3,69 @@
     xmlns="http://schemas.microsoft.com/wix/2006/wi"
     xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
 
-    <?include Configuration.wxi?>
+  <?include Configuration.wxi?>
 
-    <Product Id="$(var.SuiteWeb_ProductCode)" Name="$(var.SuiteWeb_ProductName)" Language="1033" Version="$(var.SuiteWeb_ProductVersion)" Manufacturer="$(var.Suite_Manufacturer)" UpgradeCode="$(var.SuiteWeb_UpgradeCode)">
-        <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" InstallPrivileges="elevated" />
+  <Product Id="$(var.SuiteWeb_ProductCode)" Name="$(var.SuiteWeb_ProductName)" Language="1033" Version="$(var.SuiteWeb_ProductVersion)" Manufacturer="$(var.Suite_Manufacturer)" UpgradeCode="$(var.SuiteWeb_UpgradeCode)">
+    <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" InstallPrivileges="elevated" />
 
-        <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+    <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
 
-        <Media Id="1" Cabinet="SuiteWeb.cab" EmbedCab="no"/>
+    <Media Id="1" Cabinet="SuiteWeb.cab" EmbedCab="no"/>
 
-        <Icon Id="ProductIcon" SourceFile="Resources\Product.ico" />
+    <Icon Id="ProductIcon" SourceFile="Resources\Product.ico" />
 
-        <Property Id="APACHE_PORT">
-            <RegistrySearch Id="RegSearch_APACHE_PORT" Root="HKLM" Key="[INSTALL_REG_PATH]" Name="APACHE_PORT" Type="raw" />
-        </Property>
+    <Property Id="APACHE_PORT">
+      <RegistrySearch Id="RegSearch_APACHE_PORT" Root="HKLM" Key="[INSTALL_REG_PATH]" Name="APACHE_PORT" Type="raw" />
+    </Property>
 
-        <Property Id="MYSQL_PORT">
-            <RegistrySearch Id="RegSearch_MYSQL_PORT" Root="HKLM" Key="[INSTALL_REG_PATH]" Name="MYSQL_PORT" Type="raw" />
-        </Property>
+    <Property Id="MYSQL_PORT">
+      <RegistrySearch Id="RegSearch_MYSQL_PORT" Root="HKLM" Key="[INSTALL_REG_PATH]" Name="MYSQL_PORT" Type="raw" />
+    </Property>
 
-        <Property Id="MYSQL_ROOT_ENCPASS" Hidden="yes">
-            <RegistrySearch Id="RegSearch_MYSQL_ROOT_ENCPASS" Root="HKLM" Key="[INSTALL_REG_PATH]" Name="MYSQL_ROOT_ENCPASS" Type="raw" />
-        </Property>
+    <Property Id="MYSQL_ROOT_ENCPASS" Hidden="yes">
+      <RegistrySearch Id="RegSearch_MYSQL_ROOT_ENCPASS" Root="HKLM" Key="[INSTALL_REG_PATH]" Name="MYSQL_ROOT_ENCPASS" Type="raw" />
+    </Property>
 
-        <?if $(var.Platform)="x86"?>
-        <Binary Id="WiXCustomAction" SourceFile="$(var.WiXCAProjectPath)\bin\$(var.Configuration)\Win32\WiXCustomAction.dll"/>
-        <?else?>
-        <Binary Id="WiXCustomAction" SourceFile="$(var.WiXCAProjectPath)\bin\$(var.Configuration)\Win64\WiXCustomAction.dll"/>
-        <?endif?>
+    <Binary Id="WiXCustomAction" SourceFile="$(var.WiXCAProjectPath)\bin\$(var.Configuration)\Win64\WiXCustomAction.dll"/>
 
-        <SetProperty Id="SUITEWEB_URL" Value="http://localhost:[APACHE_PORT]" Sequence="execute" Before="CreateShortcuts" />
-        <SetProperty Id="UpdateSuiteWebConfig" Sequence="execute" Value="[MYSQL_PORT]|[MYSQL_ROOT_PASS]|[#database.php]" Before="UpdateSuiteWebConfig" />
-        <CustomAction Id="UpdateSuiteWebConfig" BinaryKey="WiXCustomAction" DllEntry="UpdateSuiteWebConfig" Execute="deferred" Return="check" />
-        <CustomAction Id="DecodePassword" BinaryKey="WiXCustomAction" DllEntry="DecodePassword" Return="check" />
+    <SetProperty Id="SUITEWEB_URL" Value="http://localhost:[APACHE_PORT]" Sequence="execute" Before="CreateShortcuts" />
+    <SetProperty Id="UpdateSuiteWebConfig" Sequence="execute" Value="[MYSQL_PORT]|[MYSQL_ROOT_PASS]|[#database.php]" Before="UpdateSuiteWebConfig" />
+    <CustomAction Id="UpdateSuiteWebConfig" BinaryKey="WiXCustomAction" DllEntry="UpdateSuiteWebConfig" Execute="deferred" Return="check" />
+    <CustomAction Id="DecodePassword" BinaryKey="WiXCustomAction" DllEntry="DecodePassword" Return="check" />
 
-        <InstallExecuteSequence>
-            <Custom Action="DecodePassword" After="ValidateProductID"></Custom>
-            <Custom Action="UpdateSuiteWebConfig" After="InstallFiles">NOT Installed</Custom>
-        </InstallExecuteSequence>
+    <InstallExecuteSequence>
+      <Custom Action="DecodePassword" After="ValidateProductID"></Custom>
+      <Custom Action="UpdateSuiteWebConfig" After="InstallFiles">NOT Installed</Custom>
+    </InstallExecuteSequence>
 
-        <Feature Id="ProductFeature" Title="SuiteWeb_MSIPackage" Level="1">
-			<ComponentGroupRef Id="CG_SuiteWeb_ProductFiles" />
-            <ComponentGroupRef Id="CG_SuiteWeb_ProductConfiguration"/>
-		</Feature>
-	</Product>
+    <Feature Id="ProductFeature" Title="SuiteWeb_MSIPackage" Level="1">
+      <ComponentGroupRef Id="CG_SuiteWeb_ProductFiles" />
+      <ComponentGroupRef Id="CG_SuiteWeb_ProductConfiguration"/>
+    </Feature>
+  </Product>
 
-    <Fragment>
-        <Directory Id="TARGETDIR" Name="SourceDir">
-            <Directory Id="SUITE_INSTALLDIR" Name="$(var.Suite_InstallDir)">
-                <Directory Id="DIR_SUITEWEB" Name="SuiteWeb" />
-            </Directory>
-            <Directory Id="ProgramMenuFolder" Name="ProgramMenuFolder">
-                <Directory Id="StartMenuAppFolder" Name="$(var.Suite_StartMenuDir)"/>
-            </Directory>
-        </Directory>
-    </Fragment>
+  <Fragment>
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="SUITE_INSTALLDIR" Name="$(var.Suite_InstallDir)">
+        <Directory Id="DIR_SUITEWEB" Name="SuiteWeb" />
+      </Directory>
+      <Directory Id="ProgramMenuFolder" Name="ProgramMenuFolder">
+        <Directory Id="StartMenuAppFolder" Name="$(var.Suite_StartMenuDir)"/>
+      </Directory>
+    </Directory>
+  </Fragment>
 
-    <Fragment>
-        <ComponentGroup Id="CG_SuiteWeb_ProductConfiguration">
-            <Component Id="CMP_StartMenuShortcuts" Guid="{C65D7E84-27C2-4BFF-AAEE-A26BE8A17A26}" Directory="StartMenuAppFolder">
-                <Shortcut Id="ProductShortcut" Name="Suite Web Content" Description="Suite Web Content" Target="[SUITEWEB_URL]" Icon="ProductIcon" Directory="StartMenuAppFolder"/>
-                <RegistryValue Root="HKCU" Key="[INSTALL_REG_PATH]" Name="SuiteWeb_StartMenuShortcut" Type="integer" Value="1" KeyPath="yes" />
-                <RemoveFolder Id="StartMenuAppFolder" On="uninstall"/>
-            </Component>
-            
-            <Component Id="CMP_RemoveSuiteFolder" Guid="{D4D5F884-C867-4CA2-B27C-DE05D62B8ED8}" Directory="SUITE_INSTALLDIR" KeyPath="yes">
-                <RemoveFolder Id="RemoveSuiteFolder" On="uninstall"/>
-            </Component>
-         </ComponentGroup>
-    </Fragment>
+  <Fragment>
+    <ComponentGroup Id="CG_SuiteWeb_ProductConfiguration">
+      <Component Id="CMP_StartMenuShortcuts" Guid="{C65D7E84-27C2-4BFF-AAEE-A26BE8A17A26}" Directory="StartMenuAppFolder">
+        <Shortcut Id="ProductShortcut" Name="Suite Web Content" Description="Suite Web Content" Target="[SUITEWEB_URL]" Icon="ProductIcon" Directory="StartMenuAppFolder"/>
+        <RegistryValue Root="HKCU" Key="[INSTALL_REG_PATH]" Name="SuiteWeb_StartMenuShortcut" Type="integer" Value="1" KeyPath="yes" />
+        <RemoveFolder Id="StartMenuAppFolder" On="uninstall"/>
+      </Component>
+
+      <Component Id="CMP_RemoveSuiteFolder" Guid="{D4D5F884-C867-4CA2-B27C-DE05D62B8ED8}" Directory="SUITE_INSTALLDIR" KeyPath="yes">
+        <RemoveFolder Id="RemoveSuiteFolder" On="uninstall"/>
+      </Component>
+    </ComponentGroup>
+  </Fragment>
 </Wix>

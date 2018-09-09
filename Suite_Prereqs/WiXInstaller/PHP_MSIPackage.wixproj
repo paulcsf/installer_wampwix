@@ -2,25 +2,13 @@
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <Platform Condition=" '$(Platform)' == '' ">x64</Platform>
     <ProductVersion>3.10</ProductVersion>
     <ProjectGuid>4d6c7e74-a9ae-42ae-8d0c-1a7474d8ea42</ProjectGuid>
     <SchemaVersion>2.0</SchemaVersion>
     <OutputType>Package</OutputType>
     <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' AND '$(MSBuildExtensionsPath32)' != '' ">$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
     <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(MSBuildExtensionsPath)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <OutputPath>bin\$(Configuration)\</OutputPath>
-    <IntermediateOutputPath>obj\$(Configuration)\$(Platform)\</IntermediateOutputPath>
-    <DefineConstants>Debug</DefineConstants>
-    <OutputName>Suite_PHP_x86</OutputName>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
-    <OutputPath>bin\$(Configuration)\</OutputPath>
-    <IntermediateOutputPath>obj\$(Configuration)\$(Platform)\</IntermediateOutputPath>
-    <SuppressPdbOutput>True</SuppressPdbOutput>
-    <OutputName>Suite_PHP_x86</OutputName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
     <DefineConstants>Debug</DefineConstants>
@@ -34,9 +22,6 @@
     <IntermediateOutputPath>obj\$(Configuration)\$(Platform)\</IntermediateOutputPath>
     <OutputName>Suite_PHP_x64</OutputName>
   </PropertyGroup>
-  <ItemGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
-    <Compile Include="PHP_ProductFiles_x86.wxs" />
-  </ItemGroup>
   <ItemGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
     <Compile Include="PHP_ProductFiles_x64.wxs" />
   </ItemGroup>
@@ -51,7 +36,6 @@
       <Link>Configuration.wxi</Link>
     </Content>
     <Content Include="PHP_Translate_x64.xsl" />
-    <Content Include="PHP_Translate_x86.xsl" />
     <Compile Include="PHP_Product.wxs" />
   </ItemGroup>
   <Import Project="$(WixTargetsPath)" />
@@ -63,14 +47,8 @@
 	<Target Name="AfterBuild">
 	</Target>
 	-->
-  <Target Name="AfterBuild" Label="Building 64bit MSI package">
-    <MSBuild Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' " Projects="$(MSBuildProjectFile)" Properties="Configuration=Release;Platform=x64;PlatFormTarget=x64;OutputPath=$(ProjectDir)$(OutDir)" RunEachTargetSeparately="true" />
-  </Target>
   <PropertyGroup>
-    <PreBuildEvent>if  $(PlatformName) == x86 (
-"%25WIX%25\bin\heat.exe" dir "$(SolutionDir)..\ProductFiles_Prereqs\php-7.2.5-Win32-VC15-x86" -t "$(SolutionDir)WiXInstaller\PHP_Translate_x86.xsl" -cg CG_PHP_ProductFiles -dr DIR_PHP -gg -ke -scom -sfrag -srd -suid -sreg -var var.PHP_ProductFiles_x86 -o "$(SolutionDir)WiXInstaller\PHP_ProductFiles_x86.wxs"
-)
-if  $(PlatformName) == x64 (
+    <PreBuildEvent>if  $(PlatformName) == x64 (
 "%25WIX%25\bin\heat.exe" dir "$(SolutionDir)..\ProductFiles_Prereqs\php-7.2.5-Win32-VC15-x64" -t "$(SolutionDir)WiXInstaller\PHP_Translate_x64.xsl" -cg CG_PHP_ProductFiles -dr DIR_PHP -gg -ke -scom -sfrag -srd -suid -sreg -var var.PHP_ProductFiles_x64 -o "$(SolutionDir)WiXInstaller\PHP_ProductFiles_x64.wxs"
 )</PreBuildEvent>
   </PropertyGroup>

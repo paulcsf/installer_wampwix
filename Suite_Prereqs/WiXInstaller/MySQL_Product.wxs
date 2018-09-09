@@ -3,123 +3,104 @@
     xmlns="http://schemas.microsoft.com/wix/2006/wi"
     xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
 
-    <?include Configuration.wxi?>
+  <?include Configuration.wxi?>
 
-    <Product Id="$(var.MySQL_ProductCode)" Name="$(var.MySQL_ProductName)" Language="1033" Version="$(var.MySQL_ProductVersion)" Manufacturer="$(var.Suite_Manufacturer)" UpgradeCode="$(var.MySQL_UpgradeCode)">
-        <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" InstallPrivileges="elevated" />
+  <Product Id="$(var.MySQL_ProductCode)" Name="$(var.MySQL_ProductName)" Language="1033" Version="$(var.MySQL_ProductVersion)" Manufacturer="$(var.Suite_Manufacturer)" UpgradeCode="$(var.MySQL_UpgradeCode)">
+    <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" InstallPrivileges="elevated" />
 
-        <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
-        <MediaTemplate EmbedCab="yes" />
+    <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+    <MediaTemplate EmbedCab="yes" />
 
-        <!-- These properties will be provided by bootstrapper and will be overridden -->
-        <Property Id="MYSQL_ROOT_PASS" Value="rootpass" Hidden="yes" />
-        <Property Id="MYSQL_ROOT_ENCPASS" Hidden="yes" />
-        <Property Id="INSTALL_REG_PATH" Value="SOFTWARE\$(var.Suite_ManufShort)\$(var.Suite_ProdShort)" />
-        
-        <?if $(var.Platform)="x86"?>
-        <Binary Id="WiXCustomAction" SourceFile="..\WiXCustomAction\bin\$(var.Configuration)\Win32\WiXCustomAction.dll"/>
-        <?else?>
-        <Binary Id="WiXCustomAction" SourceFile="..\WiXCustomAction\bin\$(var.Configuration)\Win64\WiXCustomAction.dll"/>
-        <?endif?>
+    <!-- These properties will be provided by bootstrapper and will be overridden -->
+    <Property Id="MYSQL_ROOT_PASS" Value="rootpass" Hidden="yes" />
+    <Property Id="MYSQL_ROOT_ENCPASS" Hidden="yes" />
+    <Property Id="INSTALL_REG_PATH" Value="SOFTWARE\$(var.Suite_ManufShort)\$(var.Suite_ProdShort)" />
 
-        <CustomAction Id="EncodePassword" BinaryKey="WiXCustomAction" DllEntry="EncodePassword" Return="check" />
+    <Binary Id="WiXCustomAction" SourceFile="..\WiXCustomAction\bin\$(var.Configuration)\Win64\WiXCustomAction.dll"/>
 
-        <!-- I use differnt CustomActions based on MSI platform -->
-        <?if $(var.Platform)="x86"?>
-        <SetProperty Id="QTExec_CleanupDataDir" Sequence="execute" Value="&quot;[SystemFolder]cmd.exe&quot; /C &quot;RD /S /Q &quot;[DIR_MYSQL_DATA]&quot;&quot;" Before="QTExec_CleanupDataDir" />
-        <CustomAction Id="QTExec_CleanupDataDir" BinaryKey="WixCA" DllEntry="WixQuietExec" Execute="deferred" Return="ignore" Impersonate="no"/>
-        <SetProperty Id="QTExec_InitializeDataDir" Sequence="execute" Value="&quot;[#mysqld.exe]&quot; --defaults-file=&quot;[#my.ini]&quot; --initialize-insecure --user=mysql" Before="QTExec_InitializeDataDir" />
-        <CustomAction Id="QTExec_InitializeDataDir" BinaryKey="WixCA" DllEntry="WixQuietExec" Execute="deferred" Return="check" Impersonate="no"/>
-        <SetProperty Id="QTExec_SetRootPassword" Sequence="execute" Value="&quot;[#mysql.exe]&quot; -u root --skip-password -e &quot;ALTER USER `root`@`localhost` IDENTIFIED BY '[MYSQL_ROOT_PASS]';&quot;" Before="QTExec_SetRootPassword" />
-        <CustomAction Id="QTExec_SetRootPassword" BinaryKey="WixCA" DllEntry="WixQuietExec" Execute="deferred" Return="check" Impersonate="no"/>
-        <SetProperty Id="QTExec_DBEngineUpgrade" Sequence="execute" Value="&quot;[#mysql_upgrade.exe]&quot; -u root -p&quot;[MYSQL_ROOT_PASS]&quot; -P [MYSQL_PORT]&quot;" Before="QTExec_DBEngineUpgrade" />
-        <CustomAction Id="QTExec_DBEngineUpgrade" BinaryKey="WixCA" DllEntry="WixQuietExec" Execute="deferred" Return="ignore" Impersonate="no"/>
-        <?else?>
-        <SetProperty Id="QTExec_CleanupDataDir" Sequence="execute" Value="&quot;[System64Folder]cmd.exe&quot; /C &quot;RD /S /Q &quot;[DIR_MYSQL_DATA]&quot;&quot;" Before="QTExec_CleanupDataDir" />
-        <CustomAction Id="QTExec_CleanupDataDir" BinaryKey="WixCA" DllEntry="WixQuietExec64" Execute="deferred" Return="ignore" Impersonate="no"/>
-        <SetProperty Id="QTExec_InitializeDataDir" Sequence="execute" Value="&quot;[#mysqld.exe]&quot; --defaults-file=&quot;[#my.ini]&quot; --initialize-insecure --user=mysql" Before="QTExec_InitializeDataDir" />
-        <CustomAction Id="QTExec_InitializeDataDir" BinaryKey="WixCA" DllEntry="WixQuietExec64" Execute="deferred" Return="check" Impersonate="no"/>
-        <SetProperty Id="QTExec_SetRootPassword" Sequence="execute" Value="&quot;[#mysql.exe]&quot; -u root --skip-password -e &quot;ALTER USER `root`@`localhost` IDENTIFIED BY '[MYSQL_ROOT_PASS]';&quot;" Before="QTExec_SetRootPassword" />
-        <CustomAction Id="QTExec_SetRootPassword" BinaryKey="WixCA" DllEntry="WixQuietExec64" Execute="deferred" Return="check" Impersonate="no"/>
-        <SetProperty Id="QTExec_DBEngineUpgrade" Sequence="execute" Value="&quot;[#mysql_upgrade.exe]&quot; -u root -p&quot;[MYSQL_ROOT_PASS]&quot; -P [MYSQL_PORT]&quot;" Before="QTExec_DBEngineUpgrade" />
-        <CustomAction Id="QTExec_DBEngineUpgrade" BinaryKey="WixCA" DllEntry="WixQuietExec64" Execute="deferred" Return="ignore" Impersonate="no"/>
-        <?endif?>
+    <CustomAction Id="EncodePassword" BinaryKey="WiXCustomAction" DllEntry="EncodePassword" Return="check" />
 
-        <InstallExecuteSequence>
-            <Custom Action="EncodePassword" After="ValidateProductID"></Custom>
-            <Custom Action="QTExec_CleanupDataDir" After="WriteIniValues">NOT Installed AND NOT(REMOVE="ALL") AND NOT WIX_UPGRADE_DETECTED AND NOT NO_CLEANUP_DATADIR</Custom>
-            <Custom Action="QTExec_InitializeDataDir" After="QTExec_CleanupDataDir">NOT Installed AND NOT(REMOVE="ALL") AND NOT WIX_UPGRADE_DETECTED AND NOT NO_CLEANUP_DATADIR</Custom>
-            <Custom Action="QTExec_SetRootPassword" After="StartServices">NOT Installed AND NOT(REMOVE="ALL") AND NOT WIX_UPGRADE_DETECTED AND NOT NO_CLEANUP_DATADIR</Custom>
-            <Custom Action="QTExec_DBEngineUpgrade" After="StartServices">WIX_UPGRADE_DETECTED OR NO_CLEANUP_DATADIR</Custom>
-        </InstallExecuteSequence>
+    <!-- I use differnt CustomActions based on MSI platform -->
+    <SetProperty Id="QTExec_CleanupDataDir" Sequence="execute" Value="&quot;[System64Folder]cmd.exe&quot; /C &quot;RD /S /Q &quot;[DIR_MYSQL_DATA]&quot;&quot;" Before="QTExec_CleanupDataDir" />
+    <CustomAction Id="QTExec_CleanupDataDir" BinaryKey="WixCA" DllEntry="WixQuietExec64" Execute="deferred" Return="ignore" Impersonate="no"/>
+    <SetProperty Id="QTExec_InitializeDataDir" Sequence="execute" Value="&quot;[#mysqld.exe]&quot; --defaults-file=&quot;[#my.ini]&quot; --initialize-insecure --user=mysql" Before="QTExec_InitializeDataDir" />
+    <CustomAction Id="QTExec_InitializeDataDir" BinaryKey="WixCA" DllEntry="WixQuietExec64" Execute="deferred" Return="check" Impersonate="no"/>
+    <SetProperty Id="QTExec_SetRootPassword" Sequence="execute" Value="&quot;[#mysql.exe]&quot; -u root --skip-password -e &quot;ALTER USER `root`@`localhost` IDENTIFIED BY '[MYSQL_ROOT_PASS]';&quot;" Before="QTExec_SetRootPassword" />
+    <CustomAction Id="QTExec_SetRootPassword" BinaryKey="WixCA" DllEntry="WixQuietExec64" Execute="deferred" Return="check" Impersonate="no"/>
+    <SetProperty Id="QTExec_DBEngineUpgrade" Sequence="execute" Value="&quot;[#mysql_upgrade.exe]&quot; -u root -p&quot;[MYSQL_ROOT_PASS]&quot; -P [MYSQL_PORT]&quot;" Before="QTExec_DBEngineUpgrade" />
+    <CustomAction Id="QTExec_DBEngineUpgrade" BinaryKey="WixCA" DllEntry="WixQuietExec64" Execute="deferred" Return="ignore" Impersonate="no"/>
 
-        <UI>
-            <ProgressText Action="QTExec_CleanupDataDir">Removing existing database folder</ProgressText>
-            <ProgressText Action="QTExec_InitializeDataDir">Initializing database folder</ProgressText>
-            <ProgressText Action="QTExec_SetRootPassword">Initializing database root password</ProgressText>
-            <ProgressText Action="QTExec_DBEngineUpgrade">Upgrading database engine</ProgressText>
-        </UI>
+    <InstallExecuteSequence>
+      <Custom Action="EncodePassword" After="ValidateProductID"></Custom>
+      <Custom Action="QTExec_CleanupDataDir" After="WriteIniValues">NOT Installed AND NOT(REMOVE="ALL") AND NOT WIX_UPGRADE_DETECTED AND NOT NO_CLEANUP_DATADIR</Custom>
+      <Custom Action="QTExec_InitializeDataDir" After="QTExec_CleanupDataDir">NOT Installed AND NOT(REMOVE="ALL") AND NOT WIX_UPGRADE_DETECTED AND NOT NO_CLEANUP_DATADIR</Custom>
+      <Custom Action="QTExec_SetRootPassword" After="StartServices">NOT Installed AND NOT(REMOVE="ALL") AND NOT WIX_UPGRADE_DETECTED AND NOT NO_CLEANUP_DATADIR</Custom>
+      <Custom Action="QTExec_DBEngineUpgrade" After="StartServices">WIX_UPGRADE_DETECTED OR NO_CLEANUP_DATADIR</Custom>
+    </InstallExecuteSequence>
 
-        <Feature Id="ProductFeature" Title="MySQL_MSIPackage" Level="1">
-            <ComponentGroupRef Id="CG_MySQL_ProductFiles" />
-            <ComponentGroupRef Id="CG_MySQL_ProductConfiguration" />
-        </Feature>
-    </Product>
+    <UI>
+      <ProgressText Action="QTExec_CleanupDataDir">Removing existing database folder</ProgressText>
+      <ProgressText Action="QTExec_InitializeDataDir">Initializing database folder</ProgressText>
+      <ProgressText Action="QTExec_SetRootPassword">Initializing database root password</ProgressText>
+      <ProgressText Action="QTExec_DBEngineUpgrade">Upgrading database engine</ProgressText>
+    </UI>
 
-    <Fragment>
-        <Directory Id="TARGETDIR" Name="SourceDir">
-            <Directory Id="SUITE_INSTALLDIR" Name="$(var.Suite_InstallDir)">
-                <Directory Id="DIR_MYSQL" Name="MySQL" />
-                <Directory Id="DIR_MYSQL_DATA" Name="MySQLData" />
-            </Directory>
-        </Directory>
-    </Fragment>
+    <Feature Id="ProductFeature" Title="MySQL_MSIPackage" Level="1">
+      <ComponentGroupRef Id="CG_MySQL_ProductFiles" />
+      <ComponentGroupRef Id="CG_MySQL_ProductConfiguration" />
+    </Feature>
+  </Product>
 
-    <Fragment>
-        <Property Id="DIR_MYSQL_DATA">
-            <RegistrySearch Id="RegSearch_DIR_MYSQL_DATA" Root="HKLM" Key="[INSTALL_REG_PATH]" Name="DIR_MYSQL_DATA" Type="raw" />
-        </Property>
+  <Fragment>
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="SUITE_INSTALLDIR" Name="$(var.Suite_InstallDir)">
+        <Directory Id="DIR_MYSQL" Name="MySQL" />
+        <Directory Id="DIR_MYSQL_DATA" Name="MySQLData" />
+      </Directory>
+    </Directory>
+  </Fragment>
 
-        <ComponentGroup Id="CG_MySQL_ProductConfiguration">
-            <Component Id="Cmp_Update_MyIniFile" Guid="{5EBF42D6-59B3-4E2C-A84F-113961917191}" Directory="DIR_MYSQL">
-                <IniFile Id="Set_CliPort" Directory="DIR_MYSQL" Name="my.ini" Action="addLine" Section="client" Key="port" Value="[MYSQL_PORT]" />
-                <IniFile Id="Set_SrvPort" Directory="DIR_MYSQL" Name="my.ini" Action="addLine" Section="mysqld" Key="port" Value="[MYSQL_PORT]" />
-                <IniFile Id="Set_BaseDir" Directory="DIR_MYSQL" Name="my.ini" Action="addLine" Section="mysqld" Key="basedir" Value="[DIR_MYSQL]" />
-                <IniFile Id="Set_DataDir" Directory="DIR_MYSQL" Name="my.ini" Action="addLine" Section="mysqld" Key="datadir" Value="[DIR_MYSQL_DATA]" />
-                <IniFile Id="Set_KeyDir"  Directory="DIR_MYSQL" Name="my.ini" Action="addLine" Section="mysqld" Key="loose_keyring_file_data" Value="[DIR_MYSQL_DATA]keyring" />
-                <CreateFolder />
-            </Component>
-            
-            <Component Id="CMP_Initialize_DataFolder" Guid="{F5CD1D62-B00E-49AD-81FF-EECEF98F4C04}" Directory="DIR_MYSQL_DATA">
-                <CreateFolder />
-            </Component>
-            
-            <Component Id="CMP_Setup_MySQLService"  Guid="{03DB9DDD-516D-4B6D-8FEE-3E504F092FE1}" Directory="bin" >
-                <?if $(var.Platform)="x86"?>
-                <File Id="mysqld.exe" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x86)\bin\mysqld.exe" />
-                <?else?>
-                <File Id="mysqld.exe" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x64)\bin\mysqld.exe" />
-                <?endif?>
-                <ServiceInstall Id="MySQLService_SvcInstall" Name="$(var.MySQL_SVC_Name)" DisplayName="$(var.MySQL_SVC_DisplayName)" Description="$(var.MySQL_SVC_Description)" Arguments="--defaults-file=&quot;[DIR_MYSQL]my.ini&quot; $(var.MySQL_SVC_Name)" Type="ownProcess" Start="auto" ErrorControl="normal" Interactive="no">
-                  <util:ServiceConfig ServiceName="$(var.MySQL_SVC_Name)" FirstFailureActionType="restart" SecondFailureActionType="restart" ThirdFailureActionType="restart" RestartServiceDelayInSeconds="15" ResetPeriodInDays="1"/>
-                </ServiceInstall>
-                <ServiceControl Id="MySQLService_SvcControl" Name="$(var.MySQL_SVC_Name)" Start="install" Stop="uninstall" Remove="uninstall" Wait="yes"/>
-            </Component>
-            
-            <Component Id="CMP_RegistryEntries" Guid="{A19BAA70-FBE5-48C9-94DA-8E10AD446A94}" Directory="TARGETDIR">
-                <RegistryValue Root="HKLM" Key="[INSTALL_REG_PATH]" Name="SUITE_INSTALLDIR" Type="string" Value="[SUITE_INSTALLDIR]" KeyPath="yes" />
-                <RegistryValue Root="HKLM" Key="[INSTALL_REG_PATH]" Name="SUITE_VERSION" Type="string" Value="$(var.Suite_Version)" />
-                <RegistryValue Root="HKLM" Key="[INSTALL_REG_PATH]" Name="DIR_MYSQL" Type="string" Value="[DIR_MYSQL]" />
-                <RegistryValue Root="HKLM" Key="[INSTALL_REG_PATH]" Name="DIR_MYSQL_DATA" Type="string" Value="[DIR_MYSQL_DATA]" />
-                <RegistryValue Root="HKLM" Key="[INSTALL_REG_PATH]" Name="MYSQL_PORT" Type="string" Value="[MYSQL_PORT]" />
-                <RegistryValue Root="HKLM" Key="[INSTALL_REG_PATH]" Name="MYSQL_ROOT_ENCPASS" Type="string" Value="[MYSQL_ROOT_ENCPASS]" />
-                <!-- Do not remove DIR_MYSQL_DATA folder at uninstall anymore -->
-				<!-- <util:RemoveFolderEx On="uninstall" Property="DIR_MYSQL_DATA" /> -->
-            </Component>
+  <Fragment>
+    <Property Id="DIR_MYSQL_DATA">
+      <RegistrySearch Id="RegSearch_DIR_MYSQL_DATA" Root="HKLM" Key="[INSTALL_REG_PATH]" Name="DIR_MYSQL_DATA" Type="raw" />
+    </Property>
 
-            <Component Id="CMP_RemoveSuiteFolder" Guid="{24DE8740-1919-447F-9C58-620F26B3DE80}" Directory="SUITE_INSTALLDIR" KeyPath="yes">
-                <RemoveFolder Id="RemoveSuiteFolder" On="uninstall"/>
-            </Component>
-        </ComponentGroup>
-    </Fragment>
+    <ComponentGroup Id="CG_MySQL_ProductConfiguration">
+      <Component Id="Cmp_Update_MyIniFile" Guid="{5EBF42D6-59B3-4E2C-A84F-113961917191}" Directory="DIR_MYSQL">
+        <IniFile Id="Set_CliPort" Directory="DIR_MYSQL" Name="my.ini" Action="addLine" Section="client" Key="port" Value="[MYSQL_PORT]" />
+        <IniFile Id="Set_SrvPort" Directory="DIR_MYSQL" Name="my.ini" Action="addLine" Section="mysqld" Key="port" Value="[MYSQL_PORT]" />
+        <IniFile Id="Set_BaseDir" Directory="DIR_MYSQL" Name="my.ini" Action="addLine" Section="mysqld" Key="basedir" Value="[DIR_MYSQL]" />
+        <IniFile Id="Set_DataDir" Directory="DIR_MYSQL" Name="my.ini" Action="addLine" Section="mysqld" Key="datadir" Value="[DIR_MYSQL_DATA]" />
+        <IniFile Id="Set_KeyDir"  Directory="DIR_MYSQL" Name="my.ini" Action="addLine" Section="mysqld" Key="loose_keyring_file_data" Value="[DIR_MYSQL_DATA]keyring" />
+        <CreateFolder />
+      </Component>
+
+      <Component Id="CMP_Initialize_DataFolder" Guid="{F5CD1D62-B00E-49AD-81FF-EECEF98F4C04}" Directory="DIR_MYSQL_DATA">
+        <CreateFolder />
+      </Component>
+
+      <Component Id="CMP_Setup_MySQLService"  Guid="{03DB9DDD-516D-4B6D-8FEE-3E504F092FE1}" Directory="bin" >
+        <File Id="mysqld.exe" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x64)\bin\mysqld.exe" />
+        <ServiceInstall Id="MySQLService_SvcInstall" Name="$(var.MySQL_SVC_Name)" DisplayName="$(var.MySQL_SVC_DisplayName)" Description="$(var.MySQL_SVC_Description)" Arguments="--defaults-file=&quot;[DIR_MYSQL]my.ini&quot; $(var.MySQL_SVC_Name)" Type="ownProcess" Start="auto" ErrorControl="normal" Interactive="no">
+          <util:ServiceConfig ServiceName="$(var.MySQL_SVC_Name)" FirstFailureActionType="restart" SecondFailureActionType="restart" ThirdFailureActionType="restart" RestartServiceDelayInSeconds="15" ResetPeriodInDays="1"/>
+        </ServiceInstall>
+        <ServiceControl Id="MySQLService_SvcControl" Name="$(var.MySQL_SVC_Name)" Start="install" Stop="uninstall" Remove="uninstall" Wait="yes"/>
+      </Component>
+
+      <Component Id="CMP_RegistryEntries" Guid="{A19BAA70-FBE5-48C9-94DA-8E10AD446A94}" Directory="TARGETDIR">
+        <RegistryValue Root="HKLM" Key="[INSTALL_REG_PATH]" Name="SUITE_INSTALLDIR" Type="string" Value="[SUITE_INSTALLDIR]" KeyPath="yes" />
+        <RegistryValue Root="HKLM" Key="[INSTALL_REG_PATH]" Name="SUITE_VERSION" Type="string" Value="$(var.Suite_Version)" />
+        <RegistryValue Root="HKLM" Key="[INSTALL_REG_PATH]" Name="DIR_MYSQL" Type="string" Value="[DIR_MYSQL]" />
+        <RegistryValue Root="HKLM" Key="[INSTALL_REG_PATH]" Name="DIR_MYSQL_DATA" Type="string" Value="[DIR_MYSQL_DATA]" />
+        <RegistryValue Root="HKLM" Key="[INSTALL_REG_PATH]" Name="MYSQL_PORT" Type="string" Value="[MYSQL_PORT]" />
+        <RegistryValue Root="HKLM" Key="[INSTALL_REG_PATH]" Name="MYSQL_ROOT_ENCPASS" Type="string" Value="[MYSQL_ROOT_ENCPASS]" />
+        <!-- Do not remove DIR_MYSQL_DATA folder at uninstall anymore -->
+        <!-- <util:RemoveFolderEx On="uninstall" Property="DIR_MYSQL_DATA" /> -->
+      </Component>
+
+      <Component Id="CMP_RemoveSuiteFolder" Guid="{24DE8740-1919-447F-9C58-620F26B3DE80}" Directory="SUITE_INSTALLDIR" KeyPath="yes">
+        <RemoveFolder Id="RemoveSuiteFolder" On="uninstall"/>
+      </Component>
+    </ComponentGroup>
+  </Fragment>
 </Wix>

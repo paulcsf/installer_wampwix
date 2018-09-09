@@ -11,7 +11,7 @@
   </xsl:template>
   <xsl:output method="xml" indent="yes" />
 
-  
+
   <!-- Add <?include Configuration.wxi?> to heat generated .wxs file.-->
   <xsl:template match="wix:Wix">
     <xsl:copy>
