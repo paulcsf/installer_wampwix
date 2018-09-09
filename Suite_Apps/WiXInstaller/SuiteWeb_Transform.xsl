@@ -11,7 +11,7 @@
   </xsl:template>
   <xsl:output method="xml" indent="yes" />
 
-  
+
   <!-- Search directories for the components that will be removed. -->
   <xsl:key name="node_modules-search" match="wix:Directory[@Name = 'node_modules']" use="descendant::wix:Component/@Id" />
   <!-- Remove directories. -->
@@ -58,7 +58,7 @@
   </xsl:template>
 -->
 
- <!-- Transform directory IDs to clear error:
+  <!-- Transform directory IDs to clear error:
  Error	6	ICE99: The directory name: Time is the same as one of the MSI Public Properties and can cause unforeseen side effects.
  -->
   <xsl:template match="wix:Directory">

@@ -17,11 +17,7 @@
     <!-- These propertiese will be provided by bootstrapper and will be overridden -->
     <Property Id="INSTALL_REG_PATH" Value="SOFTWARE\$(var.Suite_ManufShort)\$(var.Suite_ProdShort)" />
 
-    <?if $(var.Platform)="x86"?>
-    <Binary Id="WiXCustomAction" SourceFile="..\WiXCustomAction\bin\$(var.Configuration)\Win32\WiXCustomAction.dll"/>
-    <?else?>
     <Binary Id="WiXCustomAction" SourceFile="..\WiXCustomAction\bin\$(var.Configuration)\Win64\WiXCustomAction.dll"/>
-    <?endif?>
 
     <SetProperty Id="UpdateRedisServiceConfig" Sequence="execute" Value="[REDIS_PORT]|[#redis.windows_service.conf]" Before="UpdateRedisServiceConfig" />
     <CustomAction Id="UpdateRedisServiceConfig" BinaryKey="WiXCustomAction" DllEntry="UpdateRedisConfig" Execute="deferred" Return="check" />
@@ -47,11 +43,7 @@
   <Fragment>
     <ComponentGroup Id="CG_Redis_ProductConfiguration">
       <Component Id="CMP_Setup_RedisService"  Guid="{967140A2-D88E-4112-99A5-0654D1F8D11F}" Directory="Tools_dir_redis" >
-        <?if $(var.Platform)="x86"?>
-        <File Id="redis_server.exe" KeyPath="yes" Source="$(var.Tools_ProductFiles_x86)\redis\redis-server.exe" />
-        <?else?>
         <File Id="redis_server.exe" KeyPath="yes" Source="$(var.Tools_ProductFiles_x64)\redis\redis-server.exe" />
-        <?endif?>
         <!-- C:\SuiteDir\tools\redis\redis-server.exe - -service-run - -service-name SuiteRedis "C:\SuiteRedis\tools\redis\redis.windows-service.conf" -->
         <ServiceInstall Id="RedisService_SvcInstall" Name="$(var.Tools_Redis_SVC_Name)" DisplayName="$(var.Tools_Redis_SVC_DisplayName)" Description="$(var.Tools_Redis_SVC_Description)" Arguments="--service-run --service-name $(var.Tools_Redis_SVC_Name) &quot;[DIR_TOOLS]redis\redis.windows-service.conf&quot;" Type="ownProcess" Start="auto" ErrorControl="normal" Interactive="no">
           <util:ServiceConfig ServiceName="$(var.Tools_Redis_SVC_Name)" FirstFailureActionType="restart" SecondFailureActionType="restart" ThirdFailureActionType="restart" RestartServiceDelayInSeconds="15" ResetPeriodInDays="1"/>

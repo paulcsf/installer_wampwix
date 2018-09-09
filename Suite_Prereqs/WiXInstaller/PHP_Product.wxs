@@ -3,39 +3,41 @@
     xmlns="http://schemas.microsoft.com/wix/2006/wi"
     xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
 
-    <?include Configuration.wxi?>
+  <?include Configuration.wxi?>
 
-    <Product Id="$(var.PHP_ProductCode)" Name="$(var.PHP_ProductName)" Language="1033" Version="$(var.PHP_ProductVersion)" Manufacturer="$(var.Suite_Manufacturer)" UpgradeCode="$(var.PHP_UpgradeCode)">
-        <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" InstallPrivileges="elevated" />
+  <Product Id="$(var.PHP_ProductCode)" Name="$(var.PHP_ProductName)" Language="1033" Version="$(var.PHP_ProductVersion)" Manufacturer="$(var.Suite_Manufacturer)" UpgradeCode="$(var.PHP_UpgradeCode)">
+    <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" InstallPrivileges="elevated" />
 
-        <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
-        <MediaTemplate EmbedCab="yes" />
+    <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+    <MediaTemplate EmbedCab="yes" />
 
-		<Feature Id="ProductFeature" Title="PHP_MSIPackage" Level="1">
-            <ComponentGroupRef Id="CG_PHP_ProductFiles" />
-            <ComponentGroupRef Id="CG_PHP_ProductConfiguration"/>
-		</Feature>
-	</Product>
+    <Feature Id="ProductFeature" Title="PHP_MSIPackage" Level="1">
+      <ComponentGroupRef Id="CG_PHP_ProductFiles" />
+      <ComponentGroupRef Id="CG_PHP_ProductConfiguration"/>
+    </Feature>
+  </Product>
 
-    <Fragment>
-        <Directory Id="TARGETDIR" Name="SourceDir">
-            <Directory Id="SUITE_INSTALLDIR" Name="$(var.Suite_InstallDir)">
-                <Directory Id="DIR_PHP" Name="PHP" />
-            </Directory>
-        </Directory>
-    </Fragment>
+  <Fragment>
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="SUITE_INSTALLDIR" Name="$(var.Suite_InstallDir)">
+        <Directory Id="DIR_PHP" Name="PHP" />
+      </Directory>
+    </Directory>
+  </Fragment>
 
-    <Fragment>
-        <ComponentGroup Id="CG_PHP_ProductConfiguration">
-            <Component Id="Cmp_Update_PHPIniFile" Guid="{99FFE4E6-D708-452A-8FB7-5683737F59A3}" Directory="DIR_PHP">
-                <IniFile Id="Set_extension_dir" Directory="DIR_PHP" Name="php.ini" Action="addLine" Section="PHP" Key="extension_dir" Value="&quot;[DIR_PHP]ext&quot;" />
-                <IniFile Id="Set_openssl_cacert_file" Directory="DIR_PHP" Name="php.ini" Action="addLine" Section="openssl" Key="openssl.cafile" Value="&quot;[DIR_PHP]cacert.pem&quot;" />
-                <CreateFolder />
-            </Component>
+  <Fragment>
+    <ComponentGroup Id="CG_PHP_ProductConfiguration">
+      <Component Id="Cmp_Update_PHPIniFile" Guid="{99FFE4E6-D708-452A-8FB7-5683737F59A3}" Directory="DIR_PHP">
+        <IniFile Id="Set_extension_dir" Directory="DIR_PHP" Name="php.ini" Action="addLine" Section="PHP" Key="extension_dir" Value="&quot;[DIR_PHP]ext&quot;" />
+        <IniFile Id="Set_openssl_cacert_file" Directory="DIR_PHP" Name="php.ini" Action="addLine" Section="openssl" Key="openssl.cafile" Value="&quot;[DIR_PHP]cacert.pem&quot;" />
+        <IniFile Id="Set_errorlog_file" Directory="DIR_PHP" Name="php.ini" Action="addLine" Section="PHP" Key="error_log" Value="&quot;[DIR_PHP]php-errors.log&quot;" />
+        <IniFile Id="Set_ioncube_ext" Directory="DIR_PHP" Name="php.ini" Action="addLine" Section="PHP" Key="zend_extension" Value="&quot;[DIR_PHP]ioncube\ioncube_loader_win_7.2.dll&quot;" />
+        <CreateFolder />
+      </Component>
 
-            <Component Id="CMP_RemoveSuiteFolder" Guid="{B8BDC4D5-F9AC-4907-A698-9CDB1603DD95}" Directory="SUITE_INSTALLDIR" KeyPath="yes">
-                <RemoveFolder Id="RemoveSuiteFolder" On="uninstall"/>
-            </Component>
-        </ComponentGroup>
-    </Fragment>
+      <Component Id="CMP_RemoveSuiteFolder" Guid="{B8BDC4D5-F9AC-4907-A698-9CDB1603DD95}" Directory="SUITE_INSTALLDIR" KeyPath="yes">
+        <RemoveFolder Id="RemoveSuiteFolder" On="uninstall"/>
+      </Component>
+    </ComponentGroup>
+  </Fragment>
 </Wix>

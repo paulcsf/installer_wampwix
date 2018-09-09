@@ -2,27 +2,13 @@
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <Platform Condition=" '$(Platform)' == '' ">x64</Platform>
     <ProductVersion>3.10</ProductVersion>
     <ProjectGuid>46dc010d-857f-449a-8842-59f439a4e480</ProjectGuid>
     <SchemaVersion>2.0</SchemaVersion>
     <OutputType>Package</OutputType>
     <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' AND '$(MSBuildExtensionsPath32)' != '' ">$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
     <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(MSBuildExtensionsPath)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <OutputPath>bin\$(Configuration)\</OutputPath>
-    <IntermediateOutputPath>obj\$(Configuration)\$(Platform)\</IntermediateOutputPath>
-    <DefineConstants>Debug</DefineConstants>
-    <OutputName>Suite_Apache_x86</OutputName>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
-    <OutputPath>bin\$(Configuration)\</OutputPath>
-    <IntermediateOutputPath>obj\$(Configuration)\$(Platform)\</IntermediateOutputPath>
-    <SuppressAllWarnings>False</SuppressAllWarnings>
-    <Pedantic>True</Pedantic>
-    <SuppressPdbOutput>True</SuppressPdbOutput>
-    <OutputName>Suite_Apache_x86</OutputName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
     <DefineConstants>Debug</DefineConstants>
@@ -38,9 +24,6 @@
     <IntermediateOutputPath>obj\$(Configuration)\$(Platform)\</IntermediateOutputPath>
     <OutputName>Suite_Apache_x64</OutputName>
   </PropertyGroup>
-  <ItemGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
-    <Compile Include="Apache_ProductFiles_x86.wxs" />
-  </ItemGroup>
   <ItemGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
     <Compile Include="Apache_ProductFiles_x64.wxs" />
   </ItemGroup>
@@ -52,7 +35,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Apache_Translate_x64.xsl" />
-    <Content Include="Apache_Translate_x86.xsl" />
     <Compile Include="Apache_Product.wxs" />
     <Content Include="Configuration.wxi">
       <Link>Configuration.wxi</Link>
@@ -67,16 +49,8 @@
 	<Target Name="AfterBuild">
 	</Target>
 	-->
-  <Target Name="AfterBuild" Label="Building 64bit MSI package">
-    <MSBuild Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' " Projects="$(MSBuildProjectFile)" Properties="Configuration=Release;Platform=x64;PlatFormTarget=x64;OutputPath=$(ProjectDir)$(OutDir)" RunEachTargetSeparately="true" />
-  </Target>
   <PropertyGroup>
-    <PreBuildEvent>if  $(PlatformName) == x86 (
-copy "$(SolutionDir)..\ProductFiles_Prereqs\php-7.2.5-Win32-VC15-x86\libeay32.dll" "$(SolutionDir)..\ProductFiles_Prereqs\httpd-2.4.33-Win32-VC15\Apache24\bin" /Y
-copy "$(SolutionDir)..\ProductFiles_Prereqs\php-7.2.5-Win32-VC15-x86\ssleay32.dll" "$(SolutionDir)..\ProductFiles_Prereqs\httpd-2.4.33-Win32-VC15\Apache24\bin" /Y
-"%25WIX%25\bin\heat.exe" dir "$(SolutionDir)..\ProductFiles_Prereqs\httpd-2.4.33-Win32-VC15\Apache24" -t "$(SolutionDir)WiXInstaller\Apache_Translate_x86.xsl" -cg CG_Apache_ProductFiles -dr DIR_APACHE -gg -ke -scom -sfrag -srd -suid -sreg -var var.Apache_ProductFiles_x86 -o "$(SolutionDir)WiXInstaller\Apache_ProductFiles_x86.wxs"
-)
-if  $(PlatformName) == x64 (
+    <PreBuildEvent>if  $(PlatformName) == x64 (
 copy "$(SolutionDir)..\ProductFiles_Prereqs\php-7.2.5-Win32-VC15-x64\libeay32.dll" "$(SolutionDir)..\ProductFiles_Prereqs\httpd-2.4.33-Win64-VC15\Apache24\bin" /Y
 copy "$(SolutionDir)..\ProductFiles_Prereqs\php-7.2.5-Win32-VC15-x64\ssleay32.dll" "$(SolutionDir)..\ProductFiles_Prereqs\httpd-2.4.33-Win64-VC15\Apache24\bin" /Y
 "%25WIX%25\bin\heat.exe" dir "$(SolutionDir)..\ProductFiles_Prereqs\httpd-2.4.33-Win64-VC15\Apache24" -t "$(SolutionDir)WiXInstaller\Apache_Translate_x64.xsl" -cg CG_Apache_ProductFiles -dr DIR_APACHE -gg -ke -scom -sfrag -srd -suid -sreg -var var.Apache_ProductFiles_x64 -o "$(SolutionDir)WiXInstaller\Apache_ProductFiles_x64.wxs"

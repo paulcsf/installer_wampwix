@@ -7,19 +7,20 @@ Custom installer for WAMP (Windows, Apache, MySQL, PHP) designed to be extended 
 * Release\SuiteSetup-Prereqs.exe is built from the sources included and will install all of the prerequisites.
 * Release\SuiteSetup-Apps.exe is built from the sources included and will install the web content and engine/service.
 
-### What's Installed ###
+### What's Installed (Now only 64bit)###
 
-* Apache 2.4.33, 32 or 64bit as appropriate
-* MySQL 5.7.22, 32 or 64bit as appropriate
-* MySQL ODBC Connector 5.3.10, 32 or 64bit as appropriate
-* PHP 7.2.5, 32 or 64bit as appropriate
-* VC Redistributable 2010SP1, 2012U4, 2015U1, 2017, 32 or 64bit as appropriate
+* Apache 2.4.33
+* MySQL 5.7.22
+* MySQL ODBC Connector 5.3.10
+* PHP 7.2.5
+* VC Redistributable 2010SP1, 2012U4, 2015U1, 2017
 * phpMyAdmin 4.8.0.1
 * PHP example web content
 * Redis 4.0.2.2
 * Let's Encrypt Win Simple 1.9.3
-* NodeJS 8.11.2, 32 or 64bit as appropriate
+* NodeJS 8.11.2
 * NodeJS Websocket server
+* (See older commits if you need 32/64 bit capable)
 
 ### Defaults ###
 
