@@ -9,12 +9,12 @@ Custom installer for WAMP (Windows, Apache, MySQL, PHP) designed to be extended 
 
 ### What's Installed (Now only 64bit)###
 
-* Apache 2.4.33
-* MySQL 5.7.22
+* Apache 2.4.34
+* MySQL 5.7.22 - going to 8.0.12
 * MySQL ODBC Connector 5.3.10
-* PHP 7.2.5
+* PHP 7.2.8
 * VC Redistributable 2010SP1, 2012U4, 2015U1, 2017
-* phpMyAdmin 4.8.0.1
+* phpMyAdmin 4.8.2
 * PHP example web content
 * Redis 4.0.2.2
 * Let's Encrypt Win Simple 1.9.3

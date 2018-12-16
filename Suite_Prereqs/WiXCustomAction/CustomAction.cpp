@@ -327,7 +327,7 @@ UINT __stdcall UpdateRedisConfig(MSIHANDLE hInstall)
 	ExitOnFailure(hr, "failed to read pwzCfgFile from custom action data: %ls", pwz);
 
 	FileToString(pwzCfgFile, &pwzCfgContent, &pfeEncoding);
-	StrReplaceStringAll(&pwzCfgContent, L"6880", pwzRedisPort);
+	StrReplaceStringAll(&pwzCfgContent, L"6888", pwzRedisPort);
 
 	FileFromString(pwzCfgFile, 0, pwzCfgContent, pfeEncoding);
 
@@ -366,7 +366,7 @@ UINT __stdcall UpdateWebsocketConfig(MSIHANDLE hInstall)
 	ExitOnFailure(hr, "failed to read pwzCfgFile from custom action data: %ls", pwz);
 
 	FileToString(pwzCfgFile, &pwzCfgContent, &pfeEncoding);
-	StrReplaceStringAll(&pwzCfgContent, L"3080", pwzWebsocketPort);
+	StrReplaceStringAll(&pwzCfgContent, L"3088", pwzWebsocketPort);
 
 	FileFromString(pwzCfgFile, 0, pwzCfgContent, pfeEncoding);
 

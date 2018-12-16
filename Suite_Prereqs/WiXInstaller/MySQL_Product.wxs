@@ -20,14 +20,40 @@
 
     <CustomAction Id="EncodePassword" BinaryKey="WiXCustomAction" DllEntry="EncodePassword" Return="check" />
 
-    <!-- I use differnt CustomActions based on MSI platform -->
+    <!-- MySQL init: 
+          https://dev.mysql.com/doc/refman/8.0/en/data-directory-initialization-mysqld.html
+          On Windows, use the -_-console option to direct messages to the console. (underscore for xml comment)
+          
+          -_-console option may have to be last in any parameters
+          -_-defaults-file="my.ini" must be first in any parameters
+          
+          mysql and mysql_upgrade will not accept -_-log-error-verbosity
+
+          Was getting failure at InitializeDataDir:
+            MSI (s) (5C:80) [18:22:08:245]: Executing op: CustomActionSchedule(Action=QTExec_InitializeDataDir,ActionType=3073,Source=BinaryData,Target=WixQuietExec64,CustomActionData="C:\IESSP\MySQL\bin\mysqld.exe" - -defaults-file="C:\IESSP\MySQL\my.ini" - -initialize-insecure - -user=mysql >> "C:\IESSP\MySQL\mysql.log" 2>&1)
+            MSI (s) (5C:F4) [18:22:08:277]: Invoking remote custom action. DLL: C:\WINDOWS\Installer\MSI6584.tmp, Entrypoint: WixQuietExec64
+            WixQuietExec64:  Error 0x80070001: Command line returned an error.
+            WixQuietExec64:  Error 0x80070001: QuietExec64 Failed
+            WixQuietExec64:  Error 0x80070001: Failed in ExecCommon method
+            CustomAction QTExec_InitializeDataDir returned actual error code 1603 (note this may not be 100% accurate if translation happened inside sandbox)
+          Error 1603 is generic failure, and even though the MySQL data directory was getting created and looked successful, mysqld was returning %errorlevel% 1.
+            echo Exit Code is %errorlevel%
+          Adding the - -console option to the mysqld command line, and inspecting the mysql.log file, several options were no longer valid in v8. 
+            https://mysqlserverteam.com/mysql-8-0-retiring-support-for-the-query-cache/
+            https://dev.mysql.com/doc/refman/8.0/en/added-deprecated-removed.html#optvars-removed
+          Remove those, mysqld returns 0 now as manual operation.
+          Wix Return="check" requires that %errorlevel% be 0 after execution.
+          
+          Still can't get >> mysql.log 2>&1 to generate a file, at least not persistent file.
+          Remove -_-console as I believe it's causing the custom action to fail now.
+        -->
     <SetProperty Id="QTExec_CleanupDataDir" Sequence="execute" Value="&quot;[System64Folder]cmd.exe&quot; /C &quot;RD /S /Q &quot;[DIR_MYSQL_DATA]&quot;&quot;" Before="QTExec_CleanupDataDir" />
     <CustomAction Id="QTExec_CleanupDataDir" BinaryKey="WixCA" DllEntry="WixQuietExec64" Execute="deferred" Return="ignore" Impersonate="no"/>
-    <SetProperty Id="QTExec_InitializeDataDir" Sequence="execute" Value="&quot;[#mysqld.exe]&quot; --defaults-file=&quot;[#my.ini]&quot; --initialize-insecure --user=mysql" Before="QTExec_InitializeDataDir" />
+    <SetProperty Id="QTExec_InitializeDataDir" Sequence="execute" Value="&quot;[#mysqld.exe]&quot; --defaults-file=&quot;[#my.ini]&quot; --log-error-verbosity=3 --initialize-insecure --user=mysql" Before="QTExec_InitializeDataDir" />
     <CustomAction Id="QTExec_InitializeDataDir" BinaryKey="WixCA" DllEntry="WixQuietExec64" Execute="deferred" Return="check" Impersonate="no"/>
-    <SetProperty Id="QTExec_SetRootPassword" Sequence="execute" Value="&quot;[#mysql.exe]&quot; -u root --skip-password -e &quot;ALTER USER `root`@`localhost` IDENTIFIED BY '[MYSQL_ROOT_PASS]';&quot;" Before="QTExec_SetRootPassword" />
+    <SetProperty Id="QTExec_SetRootPassword" Sequence="execute" Value="&quot;[#mysql.exe]&quot; -u root --skip-password -P [MYSQL_PORT] -e &quot;ALTER USER `root`@`localhost` IDENTIFIED BY '[MYSQL_ROOT_PASS]';&quot;" Before="QTExec_SetRootPassword" />
     <CustomAction Id="QTExec_SetRootPassword" BinaryKey="WixCA" DllEntry="WixQuietExec64" Execute="deferred" Return="check" Impersonate="no"/>
-    <SetProperty Id="QTExec_DBEngineUpgrade" Sequence="execute" Value="&quot;[#mysql_upgrade.exe]&quot; -u root -p&quot;[MYSQL_ROOT_PASS]&quot; -P [MYSQL_PORT]&quot;" Before="QTExec_DBEngineUpgrade" />
+    <SetProperty Id="QTExec_DBEngineUpgrade" Sequence="execute" Value="&quot;[#mysql_upgrade.exe]&quot; -u root -p&quot;[MYSQL_ROOT_PASS]&quot; -P [MYSQL_PORT]" Before="QTExec_DBEngineUpgrade" />
     <CustomAction Id="QTExec_DBEngineUpgrade" BinaryKey="WixCA" DllEntry="WixQuietExec64" Execute="deferred" Return="ignore" Impersonate="no"/>
 
     <InstallExecuteSequence>
@@ -68,10 +94,11 @@
     <ComponentGroup Id="CG_MySQL_ProductConfiguration">
       <Component Id="Cmp_Update_MyIniFile" Guid="{5EBF42D6-59B3-4E2C-A84F-113961917191}" Directory="DIR_MYSQL">
         <IniFile Id="Set_CliPort" Directory="DIR_MYSQL" Name="my.ini" Action="addLine" Section="client" Key="port" Value="[MYSQL_PORT]" />
+        <IniFile Id="Set_ClientPort" Directory="DIR_MYSQL" Name="my.ini" Action="addLine" Section="mysql" Key="port" Value="[MYSQL_PORT]" />
         <IniFile Id="Set_SrvPort" Directory="DIR_MYSQL" Name="my.ini" Action="addLine" Section="mysqld" Key="port" Value="[MYSQL_PORT]" />
         <IniFile Id="Set_BaseDir" Directory="DIR_MYSQL" Name="my.ini" Action="addLine" Section="mysqld" Key="basedir" Value="[DIR_MYSQL]" />
         <IniFile Id="Set_DataDir" Directory="DIR_MYSQL" Name="my.ini" Action="addLine" Section="mysqld" Key="datadir" Value="[DIR_MYSQL_DATA]" />
-        <IniFile Id="Set_KeyDir"  Directory="DIR_MYSQL" Name="my.ini" Action="addLine" Section="mysqld" Key="loose_keyring_file_data" Value="[DIR_MYSQL_DATA]keyring" />
+        <!--v8 invalid variable <IniFile Id="Set_KeyDir"  Directory="DIR_MYSQL" Name="my.ini" Action="addLine" Section="mysqld" Key="loose_keyring_file_data" Value="[DIR_MYSQL_DATA]keyring" />-->
         <CreateFolder />
       </Component>
 
@@ -79,6 +106,12 @@
         <CreateFolder />
       </Component>
 
+      <!-- Manual install: (extra spaces for xml comments)
+            Will not accept - -console option.
+            Service name is MySQL as specified
+            "C:\SuiteDir\MySQL\bin\mysqld.exe" - -install MySQL - -defaults-file="C:\SuiteDir\MySQL\my.ini            
+            "C:\SuiteDir\MySQL\bin\mysqld.exe" - -remove MySQL - -defaults-file="C:\SuiteDir\MySQL\my.ini"
+            -->
       <Component Id="CMP_Setup_MySQLService"  Guid="{03DB9DDD-516D-4B6D-8FEE-3E504F092FE1}" Directory="bin" >
         <File Id="mysqld.exe" KeyPath="yes" Source="$(var.MySQL_ProductFiles_x64)\bin\mysqld.exe" />
         <ServiceInstall Id="MySQLService_SvcInstall" Name="$(var.MySQL_SVC_Name)" DisplayName="$(var.MySQL_SVC_DisplayName)" Description="$(var.MySQL_SVC_Description)" Arguments="--defaults-file=&quot;[DIR_MYSQL]my.ini&quot; $(var.MySQL_SVC_Name)" Type="ownProcess" Start="auto" ErrorControl="normal" Interactive="no">

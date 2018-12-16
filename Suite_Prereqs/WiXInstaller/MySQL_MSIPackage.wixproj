@@ -40,6 +40,11 @@
     </WixExtension>
   </ItemGroup>
   <Import Project="$(WixTargetsPath)" />
+  <PropertyGroup>
+    <PreBuildEvent>if  $(PlatformName) == x64 (
+"%25WIX%25\bin\heat.exe" dir "$(SolutionDir)..\ProductFiles_Prereqs\mysql-8.0.13-winx64" -t "$(SolutionDir)WiXInstaller\MySQL_Translate_x64.xsl" -cg CG_MySQL_ProductFiles -dr DIR_MYSQL -gg -ke -scom -sfrag -srd -suid -sreg -var var.MySQL_ProductFiles_x64 -o "$(SolutionDir)WiXInstaller\MySQL_ProductFiles_x64.wxs"
+)</PreBuildEvent>
+  </PropertyGroup>
   <!--
 	To modify your build process, add your task inside one of the targets below and uncomment it.
 	Other similar extension points exist, see Wix.targets.
@@ -48,9 +53,4 @@
 	<Target Name="AfterBuild">
 	</Target>
 	-->
-  <PropertyGroup>
-    <PreBuildEvent>if  $(PlatformName) == x64 (
-"%25WIX%25\bin\heat.exe" dir "$(SolutionDir)..\ProductFiles_Prereqs\mysql-5.7.22-win64" -t "$(SolutionDir)WiXInstaller\MySQL_Translate_x64.xsl" -cg CG_MySQL_ProductFiles -dr DIR_MYSQL -gg -ke -scom -sfrag -srd -suid -sreg -var var.MySQL_ProductFiles_x64 -o "$(SolutionDir)WiXInstaller\MySQL_ProductFiles_x64.wxs"
-)</PreBuildEvent>
-  </PropertyGroup>
 </Project>

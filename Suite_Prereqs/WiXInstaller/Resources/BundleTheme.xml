@@ -43,17 +43,17 @@
 		<Editbox Name="FolderEditbox" X="24" Y="173" Width="-104" Height="21" TabStop="yes" FontId="0" FileSystemAutoComplete="yes" />
 		<Button Name="BrowseButton" X="-24" Y="172" Width="75" Height="23" TabStop="yes" FontId="0">#(loc.OptionsBrowseButton)</Button>
 
-		<Text X="24" Y="210" Width="200" Height="17" FontId="0">#(loc.OptionsMySQLRootPassLabel)</Text>
-		<Editbox Name="MySQLRootPass" X="280" Y="208" Width="140" Height="21" TabStop="yes" FontId="0" HexStyle="0x20"/>
-		<Text X="24" Y="236" Width="200" Height="17" FontId="0">#(loc.OptionsMySQLPortLabel)</Text>
-		<Editbox Name="MySQLPort" X="280" Y="234" Width="80" Height="21" TabStop="yes" FontId="0"  />
+    <Text X="24" Y="210" Width="250" Height="17" FontId="0">#(loc.OptionsMySQLRootPassLabel)</Text>
+    <Editbox Name="MySQLRootPass" X="280" Y="208" Width="140" Height="21" TabStop="yes" FontId="0" HexStyle="0x20"/>
+    <Text X="24" Y="236" Width="250" Height="17" FontId="0">#(loc.OptionsMySQLPortLabel)</Text>
+    <Editbox Name="MySQLPort" X="280" Y="234" Width="80" Height="21" TabStop="yes" FontId="0"  />
 
-		<Text X="24" Y="270" Width="200" Height="17" FontId="0">#(loc.OptionsApachePortLabel)</Text>
-		<Editbox Name="ApachePort" X="280" Y="268" Width="80" Height="21" TabStop="yes" FontId="0" />
-		<Text X="24" Y="300" Width="200" Height="17" FontId="0">#(loc.OptionsRedisPortLabel)</Text>
-		<Editbox Name="RedisPort" X="280" Y="298" Width="80" Height="21" TabStop="yes" FontId="0" />
-		<Text X="24" Y="330" Width="200" Height="17" FontId="0">#(loc.OptionsWebsocketPortLabel)</Text>
-		<Editbox Name="WebsocketPort" X="280" Y="328" Width="80" Height="21" TabStop="yes" FontId="0" />
+    <Text X="24" Y="270" Width="250" Height="17" FontId="0">#(loc.OptionsApachePortLabel)</Text>
+    <Editbox Name="ApachePort" X="280" Y="268" Width="80" Height="21" TabStop="yes" FontId="0" />
+    <Text X="24" Y="300" Width="250" Height="17" FontId="0">#(loc.OptionsRedisPortLabel)</Text>
+    <Editbox Name="RedisPort" X="280" Y="298" Width="80" Height="21" TabStop="yes" FontId="0" />
+    <Text X="24" Y="330" Width="250" Height="17" FontId="0">#(loc.OptionsWebsocketPortLabel)</Text>
+    <Editbox Name="WebsocketPort" X="280" Y="328" Width="80" Height="21" TabStop="yes" FontId="0" />
 
 		<Button Name="OptionsOkButton" X="-140" Y="-10" Width="110" Height="23" TabStop="yes" FontId="0">#(loc.OptionsOkButton)</Button>
 		<Button Name="OptionsCancelButton" X="-24" Y="-10" Width="110" Height="23" TabStop="yes" FontId="0">#(loc.OptionsCancelButton)</Button>

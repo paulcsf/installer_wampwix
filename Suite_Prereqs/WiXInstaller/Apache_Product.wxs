@@ -36,6 +36,8 @@ C:\Program Files\Apache Software Foundation\Apache2.2\conf\httpd.conf
 -d
 C:\Program Files\Apache Software Foundation\Apache2.2\.      
       
+      
+      To test Apache config: httpd -t
       -->
     <SetProperty Id="UpdateApacheConfig1" Sequence="execute" Value="[SUITE_INSTALLDIR]|[APACHE_PORT]|[#local.conf]" Before="UpdateApacheConfig1" />
     <CustomAction Id="UpdateApacheConfig1" BinaryKey="WiXCustomAction" DllEntry="UpdateApacheConfig" Execute="deferred" Return="check" />
@@ -43,6 +45,7 @@ C:\Program Files\Apache Software Foundation\Apache2.2\.
       <Custom Action="UpdateApacheConfig1" After="InstallFiles">NOT Installed</Custom>
     </InstallExecuteSequence>
 
+    <!--
     <SetProperty Id="UpdateApacheConfig2" Sequence="execute" Value="[SUITE_INSTALLDIR]|[APACHE_PORT]|[#hosted.com.conf]" Before="UpdateApacheConfig2" />
     <CustomAction Id="UpdateApacheConfig2" BinaryKey="WiXCustomAction" DllEntry="UpdateApacheConfig" Execute="deferred" Return="check" />
     <InstallExecuteSequence>
@@ -54,6 +57,7 @@ C:\Program Files\Apache Software Foundation\Apache2.2\.
     <InstallExecuteSequence>
       <Custom Action="UpdateApacheConfig3" After="InstallFiles">NOT Installed</Custom>
     </InstallExecuteSequence>
+      -->
 
     <Feature Id="ProductFeature" Title="Apache_MSIPackage" Level="1">
       <ComponentGroupRef Id="CG_Apache_ProductFiles" />

@@ -39,6 +39,11 @@
     <Compile Include="PHP_Product.wxs" />
   </ItemGroup>
   <Import Project="$(WixTargetsPath)" />
+  <PropertyGroup>
+    <PreBuildEvent>if  $(PlatformName) == x64 (
+"%25WIX%25\bin\heat.exe" dir "$(SolutionDir)..\ProductFiles_Prereqs\php-7.2.13-Win32-VC15-x64" -t "$(SolutionDir)WiXInstaller\PHP_Translate_x64.xsl" -cg CG_PHP_ProductFiles -dr DIR_PHP -gg -ke -scom -sfrag -srd -suid -sreg -var var.PHP_ProductFiles_x64 -o "$(SolutionDir)WiXInstaller\PHP_ProductFiles_x64.wxs"
+)</PreBuildEvent>
+  </PropertyGroup>
   <!--
 	To modify your build process, add your task inside one of the targets below and uncomment it.
 	Other similar extension points exist, see Wix.targets.
@@ -47,9 +52,4 @@
 	<Target Name="AfterBuild">
 	</Target>
 	-->
-  <PropertyGroup>
-    <PreBuildEvent>if  $(PlatformName) == x64 (
-"%25WIX%25\bin\heat.exe" dir "$(SolutionDir)..\ProductFiles_Prereqs\php-7.2.5-Win32-VC15-x64" -t "$(SolutionDir)WiXInstaller\PHP_Translate_x64.xsl" -cg CG_PHP_ProductFiles -dr DIR_PHP -gg -ke -scom -sfrag -srd -suid -sreg -var var.PHP_ProductFiles_x64 -o "$(SolutionDir)WiXInstaller\PHP_ProductFiles_x64.wxs"
-)</PreBuildEvent>
-  </PropertyGroup>
 </Project>
