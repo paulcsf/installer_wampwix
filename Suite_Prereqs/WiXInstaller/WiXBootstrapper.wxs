@@ -78,7 +78,7 @@
         <MsiProperty Name="INSTALL_REG_PATH" Value="[InstallRegPath]"/>
       </MsiPackage>
 
-      <MsiPackage Id="Suite_PHPMyAdmin" Compressed="yes" SourceFile="bin\$(var.Configuration)\Suite_PHPMyAdmin.msi" Vital="yes" ForcePerMachine="yes" >
+      <MsiPackage Id="Suite_PHPMyAdmin" Compressed="yes" InstallCondition="VersionNT64" SourceFile="bin\$(var.Configuration)\Suite_PHPMyAdmin.msi" Vital="yes" ForcePerMachine="yes" >
         <MsiProperty Name="SUITE_INSTALLDIR" Value="[InstallFolder]" />
         <MsiProperty Name="INSTALL_REG_PATH" Value="[InstallRegPath]"/>
         <MsiProperty Name="MYSQL_PORT" Value="[MySQLPort]"/>
