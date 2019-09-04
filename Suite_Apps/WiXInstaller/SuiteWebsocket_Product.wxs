@@ -15,18 +15,24 @@
     <!-- To generate a separate MSI and Cab file 
         <Media Id="1" Cabinet="SuiteWS.cab" EmbedCab="no"/> -->
 
+    <Icon Id="ProductIcon" SourceFile="Resources\Product.ico" />
+
     <Property Id="APACHE_PORT">
       <RegistrySearch Id="RegSearch_APACHE_PORT" Root="HKLM" Key="[INSTALL_REG_PATH]" Name="APACHE_PORT" Type="raw" />
     </Property>
+
     <Property Id="MYSQL_PORT">
       <RegistrySearch Id="RegSearch_MYSQL_PORT" Root="HKLM" Key="[INSTALL_REG_PATH]" Name="MYSQL_PORT" Type="raw" />
     </Property>
+
     <Property Id="REDIS_PORT">
       <RegistrySearch Id="RegSearch_REDIS_PORT" Root="HKLM" Key="[INSTALL_REG_PATH]" Name="REDIS_PORT" Type="raw" />
     </Property>
+
     <Property Id="WEBSOCKET_PORT">
       <RegistrySearch Id="RegSearch_WEBSOCKET_PORT" Root="HKLM" Key="[INSTALL_REG_PATH]" Name="WEBSOCKET_PORT" Type="raw" />
     </Property>
+
     <Property Id="MYSQL_ROOT_ENCPASS" Hidden="yes">
       <RegistrySearch Id="RegSearch_MYSQL_ROOT_ENCPASS" Root="HKLM" Key="[INSTALL_REG_PATH]" Name="MYSQL_ROOT_ENCPASS" Type="raw" />
     </Property>
@@ -37,6 +43,9 @@
     <CustomAction Id="UpdateRedisConfig" BinaryKey="WiXCustomAction" DllEntry="UpdateRedisConfig" Execute="deferred" Return="check" />
     <SetProperty Id="UpdateWebsocketConfig" Sequence="execute" Value="[WEBSOCKET_PORT]|[#socket.js]" Before="UpdateWebsocketConfig" />
     <CustomAction Id="UpdateWebsocketConfig" BinaryKey="WiXCustomAction" DllEntry="UpdateWebsocketConfig" Execute="deferred" Return="check" />
+    <SetProperty Id="UpdateWebsocketInstallerConfig" Sequence="execute" Value="[SUITE_INSTALLDIR]|[#ServiceInstall.js]" Before="UpdateWebsocketInstallerConfig" />
+    <CustomAction Id="UpdateWebsocketInstallerConfig" BinaryKey="WiXCustomAction" DllEntry="UpdateWebsocketInstallerConfig" Execute="deferred" Return="check" />
+    <CustomAction Id="DecodePassword" BinaryKey="WiXCustomAction" DllEntry="DecodePassword" Return="check" />
 
     <!-- http://wixtoolset.org/documentation/manual/v3/xsd/wix/customaction.html -->
     <!-- TODO: figure out this: http://wixtoolset.org/documentation/manual/v3/customactions/qtexec.html -->
@@ -85,10 +94,14 @@
 
 
     <InstallExecuteSequence>
+      <!-- Including DecodePassword fixed REDIS_PORT, WEBSOCKET_PORT being empty strings !?!?! -->
+      <Custom Action="DecodePassword" After="ValidateProductID"></Custom>
+
       <Custom Action="UpdateRedisConfig" After="InstallFiles">NOT Installed</Custom>
       <Custom Action="UpdateWebsocketConfig" After="UpdateRedisConfig">NOT Installed</Custom>
+      <Custom Action="UpdateWebsocketInstallerConfig" After="UpdateWebsocketConfig">NOT Installed</Custom>
 
-      <Custom Action="ExecNPMInstall" After="UpdateWebsocketConfig">NOT Installed</Custom>
+      <Custom Action="ExecNPMInstall" After="UpdateWebsocketInstallerConfig">NOT Installed</Custom>
       <Custom Action="ExecNPMGInstall" After="ExecNPMInstall">NOT Installed</Custom>
       <Custom Action="ExecNPMLink" After="ExecNPMGInstall">NOT Installed</Custom>
       <Custom Action="ExecNodeSVCInstall" After="ExecNPMLink">NOT Installed</Custom>

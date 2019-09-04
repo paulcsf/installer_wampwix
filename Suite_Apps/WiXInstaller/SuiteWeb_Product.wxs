@@ -10,7 +10,10 @@
 
     <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
 
-    <Media Id="1" Cabinet="SuiteWeb.cab" EmbedCab="no"/>
+    <!-- To generate the embedded cabinet file, ie just the MSI -->
+    <MediaTemplate EmbedCab="yes" />
+    <!-- To generate a separate MSI and Cab file 
+        <Media Id="1" Cabinet="SuiteWeb.cab" EmbedCab="no"/>-->
 
     <Icon Id="ProductIcon" SourceFile="Resources\Product.ico" />
 
@@ -22,6 +25,14 @@
       <RegistrySearch Id="RegSearch_MYSQL_PORT" Root="HKLM" Key="[INSTALL_REG_PATH]" Name="MYSQL_PORT" Type="raw" />
     </Property>
 
+    <Property Id="REDIS_PORT">
+      <RegistrySearch Id="RegSearch_REDIS_PORT" Root="HKLM" Key="[INSTALL_REG_PATH]" Name="REDIS_PORT" Type="raw" />
+    </Property>
+
+    <Property Id="WEBSOCKET_PORT">
+      <RegistrySearch Id="RegSearch_WEBSOCKET_PORT" Root="HKLM" Key="[INSTALL_REG_PATH]" Name="WEBSOCKET_PORT" Type="raw" />
+    </Property>
+
     <Property Id="MYSQL_ROOT_ENCPASS" Hidden="yes">
       <RegistrySearch Id="RegSearch_MYSQL_ROOT_ENCPASS" Root="HKLM" Key="[INSTALL_REG_PATH]" Name="MYSQL_ROOT_ENCPASS" Type="raw" />
     </Property>
@@ -29,13 +40,19 @@
     <Binary Id="WiXCustomAction" SourceFile="$(var.WiXCAProjectPath)\bin\$(var.Configuration)\Win64\WiXCustomAction.dll"/>
 
     <SetProperty Id="SUITEWEB_URL" Value="http://localhost:[APACHE_PORT]" Sequence="execute" Before="CreateShortcuts" />
-    <SetProperty Id="UpdateSuiteWebConfig" Sequence="execute" Value="[MYSQL_PORT]|[MYSQL_ROOT_PASS]|[#database.php]" Before="UpdateSuiteWebConfig" />
-    <CustomAction Id="UpdateSuiteWebConfig" BinaryKey="WiXCustomAction" DllEntry="UpdateSuiteWebConfig" Execute="deferred" Return="check" />
+    <SetProperty Id="UpdateWebConfig" Sequence="execute" Value="[MYSQL_PORT]|[MYSQL_ROOT_PASS]|[#database.php]" Before="UpdateWebConfig" />
+    <CustomAction Id="UpdateWebConfig" BinaryKey="WiXCustomAction" DllEntry="UpdateWebConfig" Execute="deferred" Return="check" />
+    <SetProperty Id="UpdateRedisConfig" Sequence="execute" Value="[REDIS_PORT]|[#database.php]" Before="UpdateRedisConfig" />
+    <CustomAction Id="UpdateRedisConfig" BinaryKey="WiXCustomAction" DllEntry="UpdateRedisConfig" Execute="deferred" Return="check" />
+    <SetProperty Id="UpdateWebsocketConfig" Sequence="execute" Value="[WEBSOCKET_PORT]|[#database.php]" Before="UpdateWebsocketConfig" />
+    <CustomAction Id="UpdateWebsocketConfig" BinaryKey="WiXCustomAction" DllEntry="UpdateWebsocketConfig" Execute="deferred" Return="check" />
     <CustomAction Id="DecodePassword" BinaryKey="WiXCustomAction" DllEntry="DecodePassword" Return="check" />
 
     <InstallExecuteSequence>
       <Custom Action="DecodePassword" After="ValidateProductID"></Custom>
-      <Custom Action="UpdateSuiteWebConfig" After="InstallFiles">NOT Installed</Custom>
+      <Custom Action="UpdateWebConfig" After="InstallFiles">NOT Installed</Custom>
+      <Custom Action="UpdateRedisConfig" After="UpdateWebConfig">NOT Installed</Custom>
+      <Custom Action="UpdateWebsocketConfig" After="UpdateRedisConfig">NOT Installed</Custom>
     </InstallExecuteSequence>
 
     <Feature Id="ProductFeature" Title="SuiteWeb_MSIPackage" Level="1">

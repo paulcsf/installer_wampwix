@@ -4,7 +4,7 @@ var Service = require('node-windows').Service;
 var svc = new Service({
   name:'Suite Websocket Server',
   description: 'The nodejs.org example web server.',
-  script: 'C:\\SuiteDir\\WebSocket\\socket.js',
+  script: 'C:/SuiteDir/WebSocket/socket.js',
   wait: 1,
   grow: 0,
   maxRestarts: 60

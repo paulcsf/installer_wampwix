@@ -106,7 +106,7 @@
         <CreateFolder />
       </Component>
 
-      <!-- Manual install: (extra spaces for xml comments)
+      <!-- Manual install: (extra spaces for xml comments - -)
             Will not accept - -console option.
             Service name is MySQL as specified
             "C:\SuiteDir\MySQL\bin\mysqld.exe" - -install MySQL - -defaults-file="C:\SuiteDir\MySQL\my.ini            

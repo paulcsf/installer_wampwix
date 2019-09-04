@@ -7,5 +7,6 @@ UpdatePHPMyAdminConfig
 UpdateWebConfig
 UpdateRedisConfig
 UpdateWebsocketConfig
+UpdateWebsocketInstallerConfig
 EncodePassword
 DecodePassword

@@ -5,8 +5,15 @@
 #include "fileutil.h"
 #include <string>
 
-#define BUF_LEN 1024
+/*
+A general rule with C++ CAs that I follow:  Put ALL of your local/stack variables above the WcaInitialize call.  I run into weird behaviour (crashes, access violations, etc.) if I don't.
+  This is true when running in VS2010 and VS2013 compilers. 
+  http://windows-installer-xml-wix-toolset.687559.n2.nabble.com/Writing-a-C-Custom-Action-Project-td7599554.html
 
+
+*/
+
+#define BUF_LEN 1024
 
 static const std::string base64_chars = 
 	"ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -61,7 +68,7 @@ std::string base64_encode(unsigned char const* bytes_to_encode, unsigned int in_
 }
 
 std::string base64_decode(std::string const& encoded_string) {
-  int in_len = encoded_string.size();
+  int in_len = (int)encoded_string.size();
   int i = 0;
   int j = 0;
   int in_ = 0;
@@ -72,7 +79,7 @@ std::string base64_decode(std::string const& encoded_string) {
     char_array_4[i++] = encoded_string[in_]; in_++;
     if (i ==4) {
       for (i = 0; i <4; i++)
-        char_array_4[i] = base64_chars.find(char_array_4[i]);
+        char_array_4[i] = (unsigned char)base64_chars.find(char_array_4[i]);
 
       char_array_3[0] = (char_array_4[0] << 2) + ((char_array_4[1] & 0x30) >> 4);
       char_array_3[1] = ((char_array_4[1] & 0xf) << 4) + ((char_array_4[2] & 0x3c) >> 2);
@@ -89,7 +96,7 @@ std::string base64_decode(std::string const& encoded_string) {
       char_array_4[j] = 0;
 
     for (j = 0; j <4; j++)
-      char_array_4[j] = base64_chars.find(char_array_4[j]);
+      char_array_4[j] = (unsigned char)base64_chars.find(char_array_4[j]);
 
     char_array_3[0] = (char_array_4[0] << 2) + ((char_array_4[1] & 0x30) >> 4);
     char_array_3[1] = ((char_array_4[1] & 0xf) << 4) + ((char_array_4[2] & 0x3c) >> 2);
@@ -194,7 +201,7 @@ UINT __stdcall UpdateApacheConfig(MSIHANDLE hInstall)
 	ExitOnFailure(hr, "failed to read pwzApachePort from custom action data: %ls", pwz);
 
 	hr = ReadStringFromCAData(&pwz, &pwzApacheConfFile);
-	ExitOnFailure(hr, "failed to read SQL User from custom action data: %ls", pwz);
+	ExitOnFailure(hr, "failed to read pwzApacheConfFile from custom action data: %ls", pwz);
 
 	FileToString(pwzApacheConfFile, &pwzApacheConfContent, &pfeEncoding);
 	StrReplaceStringAll(&pwzApacheConfContent, L"C:\\SuiteDir\\", pwzSuiteInstallDir);
@@ -375,6 +382,62 @@ LExit:
 	er = SUCCEEDED(hr) ? ERROR_SUCCESS : ERROR_INSTALL_FAILURE;
 	return WcaFinalize(er);
 }
+UINT __stdcall UpdateWebsocketInstallerConfig(MSIHANDLE hInstall)
+{
+	HRESULT hr = S_OK;
+	UINT er = ERROR_SUCCESS;
+
+	hr = WcaInitialize(hInstall, "UpdateWebsocketInstallerConfig");
+	ExitOnFailure(hr, "Failed to initialize");
+
+	WcaLog(LOGMSG_STANDARD, "UpdateWebsocketInstallerConfig initialized.");
+
+	LPWSTR pwzData = NULL;
+	LPWSTR pwz = NULL;
+	LPWSTR pwzSuiteInstallDir = NULL;
+	LPWSTR pwzSuiteInstallDirFS = NULL;
+	LPWSTR pwzWebsocketInstallerFile = NULL;
+	LPWSTR pwzContent = NULL;
+	FILE_ENCODING pfeEncoding;
+
+	hr = WcaGetProperty( L"CustomActionData", &pwzData);
+	ExitOnFailure(hr, "failed to get CustomActionData");
+
+	//pwzData points to the original
+	//pwz is moved along the string with each ReadStringFromCAData
+	pwz = pwzData;
+
+	WcaLog(LOGMSG_STANDARD, "Getting Parameters");
+	hr = ReadStringFromCAData(&pwz, &pwzSuiteInstallDir);
+	ExitOnFailure(hr, "failed to read pwzSuiteInstallDir from custom action data: %ls", pwz);
+	WcaLog(LOGMSG_STANDARD, "Got pwzSuiteInstallDir=%s",pwzSuiteInstallDir);
+	//Make a copy and swap the back slashes to forward slashes.
+	pwzSuiteInstallDirFS=(LPWSTR)malloc((wcslen(pwzSuiteInstallDir)+1)*sizeof(wchar_t));		//init memory for copy destination
+	wcscpy(pwzSuiteInstallDirFS,pwzSuiteInstallDir);
+	WcaLog(LOGMSG_STANDARD, "Copied pwzSuiteInstallDir to pwzSuiteInstallDirFS=%s",pwzSuiteInstallDirFS);
+	StrReplaceStringAll(&pwzSuiteInstallDirFS,L"\\",L"/");
+	WcaLog(LOGMSG_STANDARD, "Replaced slashes pwzSuiteInstallDirFS=%s",pwzSuiteInstallDirFS);
+
+	hr = ReadStringFromCAData(&pwz, &pwzWebsocketInstallerFile);
+	ExitOnFailure(hr, "failed to read WebsocketInstallerFile from custom action data: %ls", pwz);
+	WcaLog(LOGMSG_STANDARD, "Parameters: %s %s %s",pwzSuiteInstallDir,pwzSuiteInstallDirFS,pwzWebsocketInstallerFile);
+
+	WcaLog(LOGMSG_STANDARD, "Getting File Content");
+	FileToString(pwzWebsocketInstallerFile, &pwzContent, &pfeEncoding);
+	WcaLog(LOGMSG_STANDARD, "Replacing variables");
+	StrReplaceStringAll(&pwzContent, L"C:\\SuiteDir\\", pwzSuiteInstallDir);
+	StrReplaceStringAll(&pwzContent, L"C:/SuiteDir/", pwzSuiteInstallDirFS);
+
+	WcaLog(LOGMSG_STANDARD, "Writing File Content");
+	FileFromString(pwzWebsocketInstallerFile, 0, pwzContent, pfeEncoding);
+
+	free(pwzSuiteInstallDirFS);
+	WcaLog(LOGMSG_STANDARD, "UpdateWebsocketInstallerConfig completed.");
+LExit:
+	er = SUCCEEDED(hr) ? ERROR_SUCCESS : ERROR_INSTALL_FAILURE;
+	return WcaFinalize(er);
+}
+
 
 UINT __stdcall EncodePassword(MSIHANDLE hInstall)				
 {
@@ -402,7 +465,7 @@ UINT __stdcall EncodePassword(MSIHANDLE hInstall)
 		wsPass = wzPass;
 		sPass.resize(wsPass.size());
 		std::copy(wsPass.begin(), wsPass.end(), sPass.begin());
-		sEncPass = base64_encode(reinterpret_cast<const unsigned char*>(sPass.c_str()), sPass.length());
+		sEncPass = base64_encode(reinterpret_cast<const unsigned char*>(sPass.c_str()), (unsigned int)sPass.length());
 		mbstowcs_s(&n, wzEncPass, BUF_LEN, sEncPass.c_str(), BUF_LEN);
 		WcaLog(LOGMSG_STANDARD, "Using encoded password: %S", wzEncPass);
 

@@ -33,7 +33,7 @@ app.get("/", function(request, response){
     ...
 })*/
 var Redis = require('ioredis');
-var redis = new Redis('127.0.0.1','6880');
+var redis = new Redis('127.0.0.1','6888');
 redis.on('message', function(channel, message) {
     console.log('Message Recieved: channel: ' + channel + '   message: ' + message);
     if(LogEnable) log.info('Message Recieved: channel: ' + channel + '   message: ' + message);
@@ -61,9 +61,9 @@ redis.on('pmessage', function(subscribed, channel, iMsg) {
 });
 
 
-server.listen(20500, function(){
-    console.log('Listening on Port 20500');
-	log.info('Listening on Port 20500');
+server.listen(3088, function(){
+    console.log('Listening on Port 3088');
+	log.info('Listening on Port 3088');
 });
  
 //Extra line is important, Wix installer loses last semi-colon otherwise.

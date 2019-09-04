@@ -1,0 +1,6 @@
+wacs.exe --target manual --host beta.suite.com --validation filesystem --webroot "c:\SuiteDir\laravel\public" --store pemfiles --accepttos --pemfilespath "c:\SuiteDir\SSL" --emailaddress letsencrypt@suite.com
+
+wacs.exe --target manual --host suite.com --validation filesystem --webroot "c:\SuiteDir\laravel\public" --store pemfiles --accepttos --pemfilespath "c:\SuiteDir\SSL" --emailaddress letsencrypt@suite.com
+
+
+
