@@ -32,6 +32,6 @@ build.log
 /Suite_WixExt/build/*
 !/Suite_WixExt/build/WixBalExtensionExt.dll
 
-
+sources/
 
 
