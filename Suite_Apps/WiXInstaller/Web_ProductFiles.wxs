@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <?include Configuration.wxi?>
+    <Fragment><DirectoryRef Id="DIR_WEB"><Component Id="index.htm" Guid="{5B128551-42F5-40B7-BD66-E581DBBFB729}"><File Id="index.htm" KeyPath="yes" Source="$(var.Web_ProductFiles)\index.htm" /></Component><Component Id="index.html" Guid="{7EED35E3-6F1A-4025-8B31-C34AA05E531C}"><File Id="index.html" KeyPath="yes" Source="$(var.Web_ProductFiles)\index.html" /></Component><Component Id="index.php" Guid="{56C350F1-D202-43B7-A442-A4BB634331BD}"><File Id="index.php" KeyPath="yes" Source="$(var.Web_ProductFiles)\index.php" /></Component><Component Id="phpinfo.php" Guid="{2E921696-3EF3-42D0-A125-ABF0F448FBB2}"><File Id="phpinfo.php" KeyPath="yes" Source="$(var.Web_ProductFiles)\phpinfo.php" /></Component><Directory Name="constants" Id="SuiteWeb_dir_constants">
+                <Component Id="database.example.php" Guid="{BF1AA46F-803A-4E65-A2EF-3644E63547CE}"><File Id="database.example.php" KeyPath="yes" Source="$(var.Web_ProductFiles)\constants\database.example.php" /></Component>
+                <Component Id="database.php" Guid="{67C31865-7C8E-4F9E-BFB7-E341E014FF97}"><File Id="database.php" KeyPath="yes" Source="$(var.Web_ProductFiles)\constants\database.php" /></Component>
+            </Directory><Directory Name="css" Id="SuiteWeb_dir_css">
+                <Component Id="yui_3.4.1_cssreset_min.css" Guid="{60661276-3916-4074-ACA4-2EEB9B8B00D9}"><File Id="yui_3.4.1_cssreset_min.css" KeyPath="yes" Source="$(var.Web_ProductFiles)\css\yui_3.4.1_cssreset-min.css" /></Component>
+            </Directory><Directory Name="functions" Id="SuiteWeb_dir_functions">
+                <Component Id="safemysql.class.php" Guid="{F53BA66F-AD88-4038-9343-542981DBB782}"><File Id="safemysql.class.php" KeyPath="yes" Source="$(var.Web_ProductFiles)\functions\safemysql.class.php" /></Component>
+            </Directory><Directory Name="js" Id="SuiteWeb_dir_js">
+                <Directory Name="jquery" Id="SuiteWeb_dir_jquery">
+                    <Component Id="jquery_2.1.0.js" Guid="{879205CF-1463-4A3A-8DFF-72941A1A197A}"><File Id="jquery_2.1.0.js" KeyPath="yes" Source="$(var.Web_ProductFiles)\js\jquery\jquery-2.1.0.js" /></Component>
+                </Directory>
+            </Directory></DirectoryRef></Fragment>
+    <Fragment><ComponentGroup Id="CG_Web_ProductFiles"><ComponentRef Id="index.htm" /><ComponentRef Id="index.html" /><ComponentRef Id="index.php" /><ComponentRef Id="phpinfo.php" /><ComponentRef Id="database.example.php" /><ComponentRef Id="database.php" /><ComponentRef Id="yui_3.4.1_cssreset_min.css" /><ComponentRef Id="safemysql.class.php" /><ComponentRef Id="jquery_2.1.0.js" /></ComponentGroup></Fragment>
+</Wix>

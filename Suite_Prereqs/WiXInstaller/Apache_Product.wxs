@@ -11,7 +11,7 @@
     <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
     <MediaTemplate EmbedCab="yes" />
 
-    <!-- These propertiese will be provided by bootstrapper and will be overrided -->
+    <!-- These properties will be provided by bootstrapper and will be overrided -->
     <Property Id="INSTALL_REG_PATH" Value="SOFTWARE\$(var.Suite_ManufShort)\$(var.Suite_ProdShort)" />
 
 
@@ -69,7 +69,7 @@ C:\Program Files\Apache Software Foundation\Apache2.2\.
     <Directory Id="TARGETDIR" Name="SourceDir">
       <Directory Id="SUITE_INSTALLDIR" Name="$(var.Suite_InstallDir)">
         <Directory Id="DIR_APACHE" Name="Apache" />
-        <Directory Id="DIR_SUITEWEB" Name="SuiteWeb" />
+        <Directory Id="DIR_WEB" Name="Web" />
       </Directory>
     </Directory>
   </Fragment>
@@ -88,13 +88,16 @@ C:\Program Files\Apache Software Foundation\Apache2.2\.
         <ServiceControl Id="ApacheService_SvcControl" Name="$(var.Apache_SVC_Name)" Start="install" Stop="uninstall" Remove="uninstall" Wait="yes"/>
       </Component>
 
-      <Component Id="suiteweb.index.html" Guid="{C7312F5D-07E2-49D2-B0C5-B4D3D923C4D8}" Directory="DIR_SUITEWEB">
+      <Component Id="suiteweb.index.html" Guid="{C7312F5D-07E2-49D2-B0C5-B4D3D923C4D8}" Directory="DIR_WEB">
         <File Id="suiteweb.index.html" Source="$(var.Apache_ProductFiles_x64)\htdocs\index.html" KeyPath="yes" />
+      </Component>
+      <Component Id="suiteweb.phpinfo.php" Guid="{B8002ACA-4760-466B-89CD-822C41CA3313}" Directory="DIR_WEB">
+        <File Id="suiteweb.phpinfo.php" Source="$(var.Apache_ProductFiles_x64)\htdocs\phpinfo.php" KeyPath="yes" />
       </Component>
 
       <Component Id="CMP_RegistryEntries" Guid="{06AA9055-D6DD-40CC-B409-0E2EC76A1A80}" Directory="logs">
         <RegistryValue Root="HKLM" Key="[INSTALL_REG_PATH]" Name="DIR_APACHE" Type="string" Value="[DIR_APACHE]" KeyPath="yes" />
-        <RegistryValue Root="HKLM" Key="[INSTALL_REG_PATH]" Name="DIR_SUITEWEB" Type="string" Value="[DIR_SUITEWEB]" />
+        <RegistryValue Root="HKLM" Key="[INSTALL_REG_PATH]" Name="DIR_WEB" Type="string" Value="[DIR_WEB]" />
         <RegistryValue Root="HKLM" Key="[INSTALL_REG_PATH]" Name="APACHE_PORT" Type="string" Value="[APACHE_PORT]" />
         <RemoveFile Id="RemoveFile_TextLogFiles" Name="*.log" On="uninstall"/>
       </Component>

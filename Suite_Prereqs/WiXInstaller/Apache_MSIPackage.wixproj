@@ -43,11 +43,7 @@
   <Import Project="$(WixTargetsPath)" />
   <PropertyGroup>
     <PreBuildEvent>if  $(PlatformName) == x64 (
-copy "$(SolutionDir)..\ProductFiles_Prereqs\php-7.2.13-Win32-VC15-x64\libeay32.dll" "$(SolutionDir)..\ProductFiles_Prereqs\httpd-2.4.37-Win64-VC15\Apache24\bin" /Y
-copy "$(SolutionDir)..\ProductFiles_Prereqs\php-7.2.13-Win32-VC15-x64\ssleay32.dll" "$(SolutionDir)..\ProductFiles_Prereqs\httpd-2.4.37-Win64-VC15\Apache24\bin" /Y
-copy "$(SolutionDir)..\ProductFiles_Prereqs\php-7.2.13-Win32-VC15-x64\libssh2.dll" "$(SolutionDir)..\ProductFiles_Prereqs\httpd-2.4.37-Win64-VC15\Apache24\bin" /Y
-copy "$(SolutionDir)..\ProductFiles_Prereqs\php-7.2.13-Win32-VC15-x64\nghttp2.dll" "$(SolutionDir)..\ProductFiles_Prereqs\httpd-2.4.37-Win64-VC15\Apache24\bin" /Y
-"%25WIX%25\bin\heat.exe" dir "$(SolutionDir)..\ProductFiles_Prereqs\httpd-2.4.37-Win64-VC15\Apache24" -t "$(SolutionDir)WiXInstaller\Apache_Translate_x64.xsl" -cg CG_Apache_ProductFiles -dr DIR_APACHE -gg -ke -scom -sfrag -srd -suid -sreg -var var.Apache_ProductFiles_x64 -o "$(SolutionDir)WiXInstaller\Apache_ProductFiles_x64.wxs"
+"%25WIX%25\bin\heat.exe" dir "$(SolutionDir)..\ProductFiles_Prereqs\httpd-2.4.39-Win64-VS16\Apache24" -t "$(SolutionDir)WiXInstaller\Apache_Translate_x64.xsl" -cg CG_Apache_ProductFiles -dr DIR_APACHE -gg -ke -scom -sfrag -srd -suid -sreg -var var.Apache_ProductFiles_x64 -o "$(SolutionDir)WiXInstaller\Apache_ProductFiles_x64.wxs"
 )</PreBuildEvent>
   </PropertyGroup>
   <!--

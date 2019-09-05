@@ -10,7 +10,10 @@
 
     <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
 
-    <Media Id="1" Cabinet="SuiteEng.cab" EmbedCab="no"/>
+    <!-- To generate the embedded cabinet file, ie just the MSI -->
+    <MediaTemplate EmbedCab="yes" />
+    <!-- To generate a separate MSI and Cab file 
+        <Media Id="1" Cabinet="SuiteEng.cab" EmbedCab="no"/>-->
 
     <Property Id="DIR_MYSQL">
       <RegistrySearch Id="RegSearch_DIR_MYSQL" Root="HKLM" Key="[INSTALL_REG_PATH]" Name="DIR_MYSQL" Type="raw" />
@@ -28,6 +31,10 @@
       <RegistrySearch Id="RegSearch_REDIS_PORT" Root="HKLM" Key="[INSTALL_REG_PATH]" Name="REDIS_PORT" Type="raw" />
     </Property>
 
+    <Property Id="WEBSOCKET_PORT">
+      <RegistrySearch Id="RegSearch_WEBSOCKET_PORT" Root="HKLM" Key="[INSTALL_REG_PATH]" Name="WEBSOCKET_PORT" Type="raw" />
+    </Property>
+
     <Property Id="MYSQL_ROOT_ENCPASS" Hidden="yes">
       <RegistrySearch Id="RegSearch_MYSQL_ROOT_ENCPASS" Root="HKLM" Key="[INSTALL_REG_PATH]" Name="MYSQL_ROOT_ENCPASS" Type="raw" />
     </Property>
@@ -36,10 +43,10 @@
 
     <CustomAction Id="DecodePassword" BinaryKey="WiXCustomAction" DllEntry="DecodePassword" Return="check" />
 
-    <SetProperty Id="UpdateCreateDB" Sequence="execute" Value="[MYSQL_PORT]|[MYSQL_ROOT_PASS]|[#SuiteCreateDatabase.sql]" Before="UpdateCreateDB" />
+    <SetProperty Id="UpdateCreateDB" Sequence="execute" Value="[MYSQL_PORT]|[MYSQL_ROOT_PASS]|[#CreateDatabase.sql]" Before="UpdateCreateDB" />
     <CustomAction Id="UpdateCreateDB" BinaryKey="WiXCustomAction" DllEntry="UpdateWebConfig" Execute="deferred" Return="check" />
 
-    <SetProperty Id="QTExec_CreateDatabase" Sequence="execute" Value="&quot;[System64Folder]cmd.exe&quot; /C &quot;&quot;[DIR_MYSQL]bin\mysql.exe&quot; --port=[MYSQL_PORT] --user=root --password=&quot;[MYSQL_ROOT_PASS]&quot; &lt; &quot;[#SuiteCreateDatabase.sql]&quot;&quot;" Before="QTExec_CreateSuiteDatabase" />
+    <SetProperty Id="QTExec_CreateDatabase" Sequence="execute" Value="&quot;[System64Folder]cmd.exe&quot; /C &quot;&quot;[DIR_MYSQL]bin\mysql.exe&quot; --port=[MYSQL_PORT] --user=root --password=&quot;[MYSQL_ROOT_PASS]&quot; &lt; &quot;[#CreateDatabase.sql]&quot;&quot;" Before="QTExec_CreateDatabase" />
     <CustomAction Id="QTExec_CreateDatabase" BinaryKey="WixCA" DllEntry="WixQuietExec64" Execute="deferred" Return="ignore" Impersonate="no"/>
 
     <InstallExecuteSequence>
@@ -66,8 +73,8 @@
 
   <Fragment>
     <ComponentGroup Id="CG_SuiteEng_ProductFiles" Directory="DIR_SUITEENG">
-      <Component Id="SuiteCreateDatabase.sql" Guid="{58661D68-78F9-4AEE-B96F-8ACD0F943966}">
-        <File Id="SuiteCreateDatabase.sql" KeyPath="yes" Source="..\SuiteEngScripts\SuiteCreateDatabase.sql"/>
+      <Component Id="CreateDatabase.sql" Guid="{58661D68-78F9-4AEE-B96F-8ACD0F943966}">
+        <File Id="CreateDatabase.sql" KeyPath="yes" Source="..\Scripts\CreateDatabase.sql"/>
       </Component>
       <Component Id="SuiteEng.exe.config" Guid="{406D4138-8ADA-4D3D-929F-00EF7BDCBD87}">
         <File Id="SuiteEng.exe.config" KeyPath="yes" Name="SuiteEng.exe.config" Source="$(var.SuiteEng.ProjectDir)bin\$(var.Configuration)\app.config"/>
@@ -93,7 +100,7 @@
 
     <ComponentGroup Id="CG_SuiteEng_ProductConfiguration">
       <Component Id="CMP_AppConfiguration" Guid="{7D7BD2F8-122D-4B33-A3D9-02825341616B}" Directory="TARGETDIR">
-        <util:XmlFile Id="XMLConfig_01" Action="setValue" File="[DIR_SUITEENG]SuiteEng.exe.config" ElementPath="/configuration/connectionStrings/add[\[]@name='Name'[\]]" Name="connectionString" Value="Provider=MSDASQL;DRIVER={MySQL ODBC 5.2 Unicode Driver};SERVER=localhost;PORT=[MYSQL_PORT];DATABASE=suitedatabase;UID=suiteuser;PASSWORD=suitedbpass;OPTION=3;"/>
+        <util:XmlFile Id="XMLConfig_01" Action="setValue" File="[DIR_SUITEENG]SuiteEng.exe.config" ElementPath="/configuration/connectionStrings/add[\[]@name='MySQL'[\]]" Name="connectionString" Value="Provider=MSDASQL;DRIVER={MySQL ODBC 5.3 Unicode Driver};SERVER=localhost;PORT=[MYSQL_PORT];DATABASE=suitedatabase;UID=root;PASSWORD=[MYSQL_ROOT_PASS];OPTION=3;"/>
         <util:XmlFile Id="XMLConfig_02" Action="setValue" File="[DIR_SUITEENG]SuiteEng.exe.config" ElementPath="/configuration/connectionStrings/add[\[]@name='Redis'[\]]" Name="connectionString" Value="localhost:[REDIS_PORT],defaultDatabase=2"/>
       </Component>
       <Component Id="CMP_RemoveSuiteFolder" Guid="{24DE8740-1919-447F-9C58-620F26B3DE80}" Directory="SUITE_INSTALLDIR" KeyPath="yes">

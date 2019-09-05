@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x64</Platform>
+    <ProductVersion>3.10</ProductVersion>
+    <ProjectGuid>0e825cc0-15e9-4090-8735-ddbd56e0acc8</ProjectGuid>
+    <SchemaVersion>2.0</SchemaVersion>
+    <OutputType>Package</OutputType>
+    <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' AND '$(MSBuildExtensionsPath32)' != '' ">$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
+    <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(MSBuildExtensionsPath)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
+    <Name>Websocket_MSIPackage</Name>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
+    <DefineConstants>Debug</DefineConstants>
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>obj\$(Configuration)\$(Platform)\</IntermediateOutputPath>
+    <OutputName>Websocket_x64</OutputName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
+    <SuppressPdbOutput>True</SuppressPdbOutput>
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>obj\$(Configuration)\$(Platform)\</IntermediateOutputPath>
+    <OutputName>Websocket_x64</OutputName>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="Configuration.wxi">
+      <Link>Configuration.wxi</Link>
+    </Content>
+    <Content Include="Websocket_Translate.xsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <WixExtension Include="WixUtilExtension">
+      <HintPath>$(WixExtDir)\WixUtilExtension.dll</HintPath>
+      <Name>WixUtilExtension</Name>
+    </WixExtension>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Websocket_Product.wxs" />
+    <Compile Include="Websocket_ProductFiles.wxs" />
+  </ItemGroup>
+  <Import Project="$(WixTargetsPath)" />
+  <PropertyGroup>
+    <PreBuildEvent>REM php/del calls work as direct call/execution, no "call" required.
+REM npm, batch files, and ioncube all require "call", or they are skipped(%3f)
+REM call $(ProjectDir)\Websocket_PreBuild.bat "$(ProjectDir)" "$(SolutionDir)"
+REM delete node_cache and node_modules
+rd /s /q "$(SolutionDir)Websocket\node_cache"
+rd /s /q "$(SolutionDir)Websocket\node_modules"
+REM setup npm cached install
+cd "$(SolutionDir)Websocket"
+call npm --cache node_cache install
+call npm shrinkwrap
+call npm --cache node_cache install -g node-windows@^0.1.14
+REM finally regenerate Websocket_ProductFiles file
+"%25WIX%25\bin\heat.exe" dir "$(SolutionDir)Websocket" -t "$(SolutionDir)WixInstaller\Websocket_Translate.xsl" -sfrag -cg CG_Websocket_ProductFiles -dr DIR_WEBSOCKET -gg -ke -scom -sfrag -srd -suid -sreg -var var.Websocket_ProductFiles -o "$(SolutionDir)WiXInstaller\Websocket_ProductFiles.wxs"</PreBuildEvent>
+  </PropertyGroup>
+  <!--
+	To modify your build process, add your task inside one of the targets below and uncomment it.
+	Other similar extension points exist, see Wix.targets.
+	<Target Name="BeforeBuild">
+	</Target>
+	<Target Name="AfterBuild">
+	</Target>
+	-->
+</Project>

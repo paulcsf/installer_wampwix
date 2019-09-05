@@ -22,7 +22,7 @@
           ShowFilesInUse="yes" ShowVersion="yes" SuppressOptionsUI="yes" />
     </BootstrapperApplicationRef>
 
-    <Variable Name="CustomProductName" Persisted="yes" Type="string" Value="$(var.Suite_ProdShort)" />
+    <Variable Name="CustomProductName" Persisted="yes" Type="string" Value="$(var.Suite_ProductName)" /><!--Change from Suite_ProdShort to Suite_ProductName for full name in header in installer.-->
 
     <Variable Name="TermsUrl"       Persisted="yes" Type="string" Value="[WixBundleTempPath]License.rtf" />
     <Variable Name="InstallRegPath" Persisted="yes" Type="string" Value="SOFTWARE\$(var.Suite_ManufShort)\$(var.Suite_ProdShort)" />
@@ -31,12 +31,12 @@
     <util:RegistrySearch  Id="Detect_InstallFolder_x64" Variable="InstallFolder" Result="value" Root="HKLM" Key="[InstallRegPath]" Value="SUITE_INSTALLDIR" Win64="yes" Condition="VersionNT64"/>
 
     <Chain>
-      <MsiPackage Id="SuiteWeb_x64" Compressed="yes" InstallCondition="VersionNT64" SourceFile="bin\$(var.Configuration)\SuiteWeb_x64.msi" Vital="yes" ForcePerMachine="yes" >
+      <MsiPackage Id="Web_x64" Compressed="yes" InstallCondition="VersionNT64" SourceFile="bin\$(var.Configuration)\Web_x64.msi" Vital="yes" ForcePerMachine="yes" >
         <MsiProperty Name="SUITE_INSTALLDIR" Value="[InstallFolder]" />
         <MsiProperty Name="INSTALL_REG_PATH" Value="[InstallRegPath]"/>
       </MsiPackage>
 
-      <MsiPackage Id="SuiteWebsocket" Compressed="yes" InstallCondition="VersionNT64" SourceFile="bin\$(var.Configuration)\SuiteWebsocket.msi" Vital="yes" ForcePerMachine="yes" >
+      <MsiPackage Id="Websocket" Compressed="yes" InstallCondition="VersionNT64" SourceFile="bin\$(var.Configuration)\Websocket_x64.msi" Vital="yes" ForcePerMachine="yes" >
         <MsiProperty Name="SUITE_INSTALLDIR" Value="[InstallFolder]" />
         <MsiProperty Name="INSTALL_REG_PATH" Value="[InstallRegPath]"/>
       </MsiPackage>

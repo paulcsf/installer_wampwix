@@ -27,10 +27,6 @@
     <String Id="InstallUpgradeLinkText">Version [WixBundleVersion] &lt;a href="#"&gt;upgrade available&lt;/a&gt;</String>
     <String Id="OptionsHeader">Setup Options</String>
     <String Id="OptionsLabel">Adjust setup parameters in order to your needs.</String>
-    <String Id="OptionsLocationLabel">Install location:</String>
-    <String Id="OptionsMySQLRootPassLabel">Database root password:</String>
-    <String Id="OptionsMySQLPortLabel">Database service port:</String>
-    <String Id="OptionsApachePortLabel">Web service port:</String>	
     <String Id="OptionsBrowseButton">&amp;Browse...</String>
     <String Id="OptionsOkButton">&amp;OK</String>
     <String Id="OptionsCancelButton">&amp;Cancel</String>

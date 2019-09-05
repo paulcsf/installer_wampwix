@@ -309,18 +309,17 @@ UINT __stdcall UpdateRedisConfig(MSIHANDLE hInstall)
 {
 	HRESULT hr = S_OK;
 	UINT er = ERROR_SUCCESS;
-
-	hr = WcaInitialize(hInstall, "UpdateRedisConfig");
-	ExitOnFailure(hr, "Failed to initialize");
-
-	WcaLog(LOGMSG_STANDARD, "UpdateRedisConfig initialized.");
-
 	LPWSTR pwzData = NULL;
 	LPWSTR pwz = NULL;
 	LPWSTR pwzRedisPort = NULL;
 	LPWSTR pwzCfgFile = NULL;
 	LPWSTR pwzCfgContent = NULL;
 	FILE_ENCODING pfeEncoding;
+
+	hr = WcaInitialize(hInstall, "UpdateRedisConfig");
+	ExitOnFailure(hr, "Failed to initialize");
+
+	WcaLog(LOGMSG_STANDARD, "UpdateRedisConfig initialized.");
 
 	hr = WcaGetProperty( L"CustomActionData", &pwzData);
 	ExitOnFailure(hr, "failed to get CustomActionData");
@@ -348,18 +347,18 @@ UINT __stdcall UpdateWebsocketConfig(MSIHANDLE hInstall)
 {
 	HRESULT hr = S_OK;
 	UINT er = ERROR_SUCCESS;
+	LPWSTR pwzData = NULL;
+	LPWSTR pwz = NULL;
+	LPWSTR pwzWebsocketPort = NULL;
+	//LPWSTR pwzRedisPort = NULL;
+	LPWSTR pwzCfgFile = NULL;
+	LPWSTR pwzCfgContent = NULL;
+	FILE_ENCODING pfeEncoding;
 
 	hr = WcaInitialize(hInstall, "UpdateWebsocketConfig");
 	ExitOnFailure(hr, "Failed to initialize");
 
 	WcaLog(LOGMSG_STANDARD, "UpdateWebsocketConfig initialized.");
-
-	LPWSTR pwzData = NULL;
-	LPWSTR pwz = NULL;
-	LPWSTR pwzWebsocketPort = NULL;
-	LPWSTR pwzCfgFile = NULL;
-	LPWSTR pwzCfgContent = NULL;
-	FILE_ENCODING pfeEncoding;
 
 	hr = WcaGetProperty( L"CustomActionData", &pwzData);
 	ExitOnFailure(hr, "failed to get CustomActionData");
@@ -368,9 +367,11 @@ UINT __stdcall UpdateWebsocketConfig(MSIHANDLE hInstall)
 
 	hr = ReadStringFromCAData(&pwz, &pwzWebsocketPort);
 	ExitOnFailure(hr, "failed to read pwzWebsocketPort from custom action data: %ls", pwz);
+	WcaLog(LOGMSG_STANDARD, "Got pwzWebsocketPort=%s",pwzWebsocketPort);
 
 	hr = ReadStringFromCAData(&pwz, &pwzCfgFile);
 	ExitOnFailure(hr, "failed to read pwzCfgFile from custom action data: %ls", pwz);
+	WcaLog(LOGMSG_STANDARD, "Got pwzCfgFile=%s",pwzCfgFile);
 
 	FileToString(pwzCfgFile, &pwzCfgContent, &pfeEncoding);
 	StrReplaceStringAll(&pwzCfgContent, L"3088", pwzWebsocketPort);
@@ -386,12 +387,6 @@ UINT __stdcall UpdateWebsocketInstallerConfig(MSIHANDLE hInstall)
 {
 	HRESULT hr = S_OK;
 	UINT er = ERROR_SUCCESS;
-
-	hr = WcaInitialize(hInstall, "UpdateWebsocketInstallerConfig");
-	ExitOnFailure(hr, "Failed to initialize");
-
-	WcaLog(LOGMSG_STANDARD, "UpdateWebsocketInstallerConfig initialized.");
-
 	LPWSTR pwzData = NULL;
 	LPWSTR pwz = NULL;
 	LPWSTR pwzSuiteInstallDir = NULL;
@@ -399,6 +394,11 @@ UINT __stdcall UpdateWebsocketInstallerConfig(MSIHANDLE hInstall)
 	LPWSTR pwzWebsocketInstallerFile = NULL;
 	LPWSTR pwzContent = NULL;
 	FILE_ENCODING pfeEncoding;
+
+	hr = WcaInitialize(hInstall, "UpdateWebsocketInstallerConfig");
+	ExitOnFailure(hr, "Failed to initialize");
+
+	WcaLog(LOGMSG_STANDARD, "UpdateWebsocketInstallerConfig initialized.");
 
 	hr = WcaGetProperty( L"CustomActionData", &pwzData);
 	ExitOnFailure(hr, "failed to get CustomActionData");

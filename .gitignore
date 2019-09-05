@@ -24,8 +24,9 @@ build.log
 
 /Suite_Apps/SuiteEng/bin/
 /Suite_Apps/SuiteEngConf/bin/
-/Suite_Prereqs/WiXInstaller/bin/
 /Suite_Apps/WiXInstaller/bin/
+
+/Suite_Prereqs/WiXInstaller/bin/
 /Suite_WixExt/wixstdba/Release
 /Suite_WixExt/wixlib/bin
 /Suite_WixExt/wixext/bin

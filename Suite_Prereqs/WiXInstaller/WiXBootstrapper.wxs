@@ -20,7 +20,7 @@
           ShowFilesInUse="yes" ShowVersion="yes" SuppressOptionsUI="no" />
     </BootstrapperApplicationRef>
 
-    <Variable Name="CustomProductName" Persisted="yes" Type="string" Value="$(var.Suite_ProdShort)" />
+    <Variable Name="CustomProductName" Persisted="yes" Type="string" Value="$(var.Suite_ProductName)" /><!--Change from Suite_ProdShort to Suite_ProductName for full name in header in installer.-->
 
     <Variable Name="TermsUrl"       Persisted="yes" Type="string" Value="[WixBundleTempPath]License.rtf" />
     <Variable Name="InstallFolder"  Persisted="yes" Type="string" Value="[WindowsVolume]$(var.Suite_InstallDir)" />
@@ -48,8 +48,7 @@
     <Chain>
       <PackageGroupRef Id="VC2010SP1_Redistributable"/>
       <PackageGroupRef Id="VC2012UP4_Redistributable" />
-      <PackageGroupRef Id="VC2015UP1_Redistributable"/>
-      <PackageGroupRef Id="VC2017_Redistributable"/>
+      <PackageGroupRef Id="VC2015_19_Redistributable"/>
 
       <!-- Required by MySQL ODBC Connector v.5.3.9 -->
       <!-- MySQL v.5.7.19 appears to need both x86 and x64 versions of VC++2013 -->
@@ -122,8 +121,7 @@
     <util:RegistrySearch Id="RegSerach_VC2010SP1REDISTX64" Variable="VC2010SP1REDISTX64" Root="HKLM" Key="SOFTWARE\Wow6432Node\Microsoft\VisualStudio\10.0\VC\VCRedist\x64" Value="Installed" Result="value" Win64="no" />
     <util:RegistrySearch Id="RegSerach_VC2012UP4REDISTX64" Variable="VC2012UP4REDISTX64" Root="HKLM" Key="SOFTWARE\Wow6432Node\Microsoft\VisualStudio\11.0\VC\Runtimes\x64" Value="Installed" Result="value" Win64="no" />
     <util:RegistrySearch Id="RegSerach_VC2013UP5REDISTX64" Variable="VC2013UP5REDISTX64" Root="HKLM" Key="SOFTWARE\Wow6432Node\Microsoft\VisualStudio\12.0\VC\Runtimes\x64" Value="Installed" Result="value" Win64="no" />
-    <util:RegistrySearch Id="RegSerach_VC2015UP1REDISTX64" Variable="VC2015UP1REDISTX64" Root="HKLM" Key="SOFTWARE\Wow6432Node\Microsoft\VisualStudio\14.0\VC\Runtimes\x64" Value="Installed" Result="value" Win64="no" />
-    <util:RegistrySearch Id="RegSerach_VC2017REDISTX64" Variable="VC2017REDISTX64" Root="HKLM" Key="SOFTWARE\Wow6432Node\Microsoft\VisualStudio\15.0\VC\Runtimes\x64" Value="Installed" Result="value" Win64="no" />
+    <util:RegistrySearch Id="RegSerach_VC2015_19REDISTX64" Variable="VC2015_19REDISTX64" Root="HKLM" Key="SOFTWARE\Wow6432Node\Microsoft\VisualStudio\14.21\VC\Runtimes\x64" Value="Installed" Result="value" Win64="no" />
 
 
     <PackageGroup Id="VC2010SP1_Redistributable">
@@ -149,32 +147,23 @@
     <PackageGroup Id="VC2013UP5_Redistributable">
       <ExePackage
           Id="VC2013Up5Redistx64" DisplayName="Microsoft Visual C++ 2013 Up5 Redistributable (x64)"
-          InstallCondition="NOT Installed" DetectCondition="VC2013UP5REDISTX64"
+          InstallCondition="NOT Installed AND VersionNT64" DetectCondition="VC2013UP5REDISTX64"
           SourceFile="$(var.PrerequisitesPath)\VC++2013U5_vcredist_x64.exe"
           Permanent="yes" PerMachine="yes" Vital="yes" Compressed="yes"
           InstallCommand="/quiet /norestart /ChainingPackage &quot;[WixBundleName]&quot;">
       </ExePackage>
     </PackageGroup>
 
-    <PackageGroup Id="VC2015UP1_Redistributable">
+    <PackageGroup Id="VC2015_19_Redistributable">
       <ExePackage
-          Id="VC2015Up1Redistx64" DisplayName="Microsoft Visual C++ 2015 Up1 Redistributable (x64)"
-          InstallCondition="NOT Installed AND VersionNT64" DetectCondition="VC2015UP1REDISTX64"
-          SourceFile="$(var.PrerequisitesPath)\VC++2015U1_vcredist_x64.exe"
+          Id="VC2015_19Redistx64" DisplayName="Microsoft Visual C++ 2015-19 14.21.27702.2 Redistributable (x64)"
+          InstallCondition="NOT Installed AND VersionNT64" DetectCondition="VC2015_19REDISTX64"
+          SourceFile="$(var.PrerequisitesPath)\vc2015-2019_14.21.27702.2_redist.x64.exe"
           Permanent="yes" PerMachine="yes" Vital="yes" Compressed="yes"
           InstallCommand="/quiet /norestart /ChainingPackage &quot;[WixBundleName]&quot;">
       </ExePackage>
     </PackageGroup>
 
-    <PackageGroup Id="VC2017_Redistributable">
-      <ExePackage
-          Id="VC2017Redistx64" DisplayName="Microsoft Visual C++ 2017 Redistributable (x64)"
-          InstallCondition="NOT Installed AND VersionNT64" DetectCondition="VC2017REDISTX64"
-          SourceFile="$(var.PrerequisitesPath)\VC++2017_redist_x64.exe"
-          Permanent="yes" PerMachine="yes" Vital="yes" Compressed="yes"
-          InstallCommand="/quiet /norestart /ChainingPackage &quot;[WixBundleName]&quot;">
-      </ExePackage>
-    </PackageGroup>
   </Fragment>
 
   <Fragment>
