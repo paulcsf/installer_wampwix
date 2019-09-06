@@ -2,24 +2,25 @@
 
 ### What is this repository for? ###
 
-Custom installer for WAMP (Windows, Apache, MySQL, PHP) designed to be extended for your project's use. Installs WAMP, phpMyAdmin, C# Windows service, default database creation.
+Custom installer for WAMP (Windows, Apache, MySQL, PHP) using WIX designed to be extended for your project's use. Installs WAMP, phpMyAdmin, C# Windows service, default database creation.
 
 * Release\SuiteSetup-Prereqs.exe will install all of the prerequisites (no longer included due to repository size limitations).
 * Release\SuiteSetup-Apps.exe will install the web content and engine/service (no longer included due to repository size limitations).
 
 ### What's Installed (Now only 64bit)###
 
-* Apache 2.4.39
-* MySQL 8.0.13
-* MySQL ODBC Connector 5.3.10
-* PHP 7.2.20
+* Apache 2.4.41
+* MySQL 8.0.17
+* MySQL ODBC Connector 8.0.17
+* PHP 7.3.9
 * VC Redistributable 2010SP1, 2012U4, 2013U5, 2015-2019
 * phpMyAdmin 4.9.0.1
 * PHP example web content
-* Redis 4.0.2.2
+* Redis 4.0.2.3
 * Let's Encrypt Win Acme 2.0.4.227
-* NodeJS 8.11.2
+* NodeJS 10.16.3
 * NodeJS Websocket server
+* ionCube loader 10.3.8
 * (See older commits if you need 32/64 bit capable)
 
 ### Defaults ###

@@ -4,6 +4,26 @@
     xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
 
   <?include Configuration.wxi?>
+  <!-- https://docs.microsoft.com/en-us/windows/win32/msi/sequence-table-detailed-example 
+       https://docs.microsoft.com/en-us/windows/win32/msi/suggested-installexecutesequence 
+       
+    InstallExecuteSequence: (https://codingbee.net/wix/wix-the-installation-sequence)
+      InstallValidate - double checks that there is enough disk space, and relevant files have not been locked by running processes
+      InstallInitialize   - a bit like taking a snapshot, so that rollbacks can happen easily. This prevents any partial installs.
+      ProcessComponents
+      UnpublishFeatures - only occurs when uninstalling an msi. It is ignored during the install.
+      RemoveRegistryValues - only occurs when uninstalling an msi. It is ignored during the install.
+      RemoveShortcuts - only occurs when uninstalling an msi. It is ignored during the install.
+      RemoveFiles - only occurs when uninstalling an msi. It is ignored during the install.
+      InstallFiles -
+      CreateShortcuts
+      WriteRegistryValues
+      RegisterUser
+      RegisterProduct - registers your product with Programs and Features and stores a copy of the MSI package in the Windows Installer Cache, found at %WINDIR%\Installer.
+      PublishFeatures
+      PublishProduct
+      InstallFinalize              
+       -->
 
   <Product Id="$(var.Tools_ProductCode)" Name="$(var.Tools_ProductName)" Language="1033" Version="$(var.Tools_ProductVersion)" Manufacturer="$(var.Suite_Manufacturer)" UpgradeCode="$(var.Tools_UpgradeCode)">
     <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" InstallPrivileges="elevated" />
@@ -22,21 +42,30 @@
     <SetProperty Id="UpdateRedisServiceConfig" Sequence="execute" Value="[REDIS_PORT]|[#redis.windows_service.conf]" Before="UpdateRedisServiceConfig" />
     <CustomAction Id="UpdateRedisServiceConfig" BinaryKey="WiXCustomAction" DllEntry="UpdateRedisConfig" Execute="deferred" Return="check" />
 
-    <InstallExecuteSequence>
-      <Custom Action="UpdateRedisServiceConfig" After="InstallFiles">NOT Installed</Custom>
-    </InstallExecuteSequence>
-
     <SetProperty Id="UpdateRedisConfig" Sequence="execute" Value="[REDIS_PORT]|[#redis.windows.conf]" Before="UpdateRedisConfig" />
     <CustomAction Id="UpdateRedisConfig" BinaryKey="WiXCustomAction" DllEntry="UpdateRedisConfig" Execute="deferred" Return="check" />
 
     <InstallExecuteSequence>
+      <Custom Action="UpdateRedisServiceConfig" After="InstallFiles">NOT Installed</Custom>
       <Custom Action="UpdateRedisConfig" After="InstallFiles">NOT Installed</Custom>
+
+      <!-- Last thing, pop up "It Works" page. -->
+      <Custom Action='LaunchBrowser' Before='InstallFinalize'>NOT Installed</Custom>
     </InstallExecuteSequence>
 
     <Feature Id="ProductFeature" Title="Tools_MSIPackage" Level="1">
       <ComponentGroupRef Id="CG_Tools_ProductFiles" />
       <ComponentGroupRef Id="CG_Redis_ProductConfiguration" />
     </Feature>
+
+    <!-- Find user's configured browser. -->
+    <Property Id="BROWSER">
+      <RegistrySearch Id='DefaultBrowser' Type='raw' Root='HKCR' Key='http\shell\open\command' />
+    </Property>
+    <!-- Setup CA for launching "It Works" page. -->
+    <!-- Doesn't work<CustomAction Id='LaunchBrowser' Property='BROWSER' ExeCommand='http://127.0.0.1:[APACHE_PORT]' Return='asyncNoWait' />-->
+    <CustomAction Id="LaunchBrowser" Directory="SUITE_INSTALLDIR" Impersonate="no" Execute="deferred"
+          ExeCommand='[BROWSER] "http://127.0.0.1:[APACHE_PORT]"' Return="asyncNoWait"/>
 
   </Product>
 

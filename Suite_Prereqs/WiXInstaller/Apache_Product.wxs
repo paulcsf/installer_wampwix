@@ -91,6 +91,9 @@ C:\Program Files\Apache Software Foundation\Apache2.2\.
       <Component Id="suiteweb.index.html" Guid="{C7312F5D-07E2-49D2-B0C5-B4D3D923C4D8}" Directory="DIR_WEB">
         <File Id="suiteweb.index.html" Source="$(var.Apache_ProductFiles_x64)\htdocs\index.html" KeyPath="yes" />
       </Component>
+      <Component Id="suiteweb.index.php" Guid="{62A500B5-5AE4-4C72-B0C1-F3F628B19D7B}" Directory="DIR_WEB">
+        <File Id="suiteweb.index.php" Source="$(var.Apache_ProductFiles_x64)\htdocs\index.php" KeyPath="yes" />
+      </Component>
       <Component Id="suiteweb.phpinfo.php" Guid="{B8002ACA-4760-466B-89CD-822C41CA3313}" Directory="DIR_WEB">
         <File Id="suiteweb.phpinfo.php" Source="$(var.Apache_ProductFiles_x64)\htdocs\phpinfo.php" KeyPath="yes" />
       </Component>

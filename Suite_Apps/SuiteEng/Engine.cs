@@ -56,6 +56,7 @@ namespace SuiteEngNS
         //  With a single connection, I have to worry about order of mutex's and logging. 
         //
         private string DBConStr = "";
+        private string DBDriverStr = "";
         static private OdbcConnection dbMainCon = null; // create a static connection to db for main thread execution use
         //static private OdbcConnection dbLogCon = null;  // create a static connection to db for main thread logging events
                                                         // more efficent and if db max's out connection, this will still be able to log to the db
@@ -78,10 +79,20 @@ namespace SuiteEngNS
             try
             {
                 InitializeComponent();
+                try
+                {
+                    DBDriverStr = GetOdbcMySQLDriverName();
+                }
+                catch (Exception e)
+                {
+                    //If database test fails, quit.
+                    LogEventLocal(LogPrefix + "Quitting, could not get ODBC driver name.");
+                    Environment.Exit(1);
+                }
                 if (!GetAppSettings())
                 {
                     //If database test fails, quit.
-                    LogEventLocal(LogPrefix + "Quitting. Please use Suite Configuration to set, test, and save the database connection variables.");
+                    LogEventLocal(LogPrefix + "Quitting, could not get AppSettings.");
                     Environment.Exit(1);
                 }
             }
@@ -331,6 +342,7 @@ namespace SuiteEngNS
             catch (Exception e)
             {
                 LogEventLocal(LogPrefix + "OpenCheckRedis: Exception: " + e.ToString());
+                ExCount++;
             }
             return RetVal;
         }
@@ -391,6 +403,8 @@ namespace SuiteEngNS
                         if (cs.Name == "MySQL")
                         {
                             DBConStr = cs.ConnectionString;
+                            //Now swap out the driver string.
+                            DBConStr = Regex.Replace(DBConStr, "DRIVER={MySQL ODBC [a-zA-Z0-9.\\s]* Driver};", "DRIVER={"+DBDriverStr+"};");
                             LogEventLocal(DBConStr);
                         }
                         else if (cs.Name == "Redis")
@@ -910,12 +924,16 @@ namespace SuiteEngNS
         /// Gets the name of an ODBC driver for MySQL Server giving preference to the most recent one.
         /// </summary>
         /// <returns>the name of an ODBC driver for MySQL Server, if one is present; null, otherwise.</returns>
+        //20180204 - Remove 3.51 as an option.
         public static string GetOdbcMySQLDriverName()
         {
-            List<string> driverPrecedence = new List<string>() { "MySQL ODBC 5.3 Unicode Driver", "MySQL ODBC 5.3 ANSI Driver",
+            //When adding to this list, open ODBC Data Source Administrator (32-bit) --OR-- ODBC Data Source Administrator (64-bit) as appropriate, 
+            //  select the drivers tab, and retrieve the driver names.
+            List<string> driverPrecedence = new List<string>() { 
+                "MySQL ODBC 8.0 Unicode Driver", "MySQL ODBC 8.0 ANSI Driver",
+                "MySQL ODBC 5.3 Unicode Driver", "MySQL ODBC 5.3 ANSI Driver",
                 "MySQL ODBC 5.2 Unicode Driver", "MySQL ODBC 5.2 ANSI Driver",
-                "MySQL ODBC 5.1 Unicode Driver", "MySQL ODBC 5.1 ANSI Driver",
-                "MySQL ODBC 3.51 Driver" };
+                "MySQL ODBC 5.1 Unicode Driver", "MySQL ODBC 5.1 ANSI Driver"};
             string[] OdbcDrivers32 = GetOdbcDriverNames32();
             string[] OdbcDrivers64 = GetOdbcDriverNames64();
             string driverName = null;

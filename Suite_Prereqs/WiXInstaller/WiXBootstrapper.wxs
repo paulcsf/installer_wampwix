@@ -5,6 +5,7 @@
     xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
 
   <?include Configuration.wxi?>
+  <!-- Todo https://wixtoolset.org/documentation/manual/v3/howtos/ui_and_localization/run_program_after_install.html use in place of Tools-'It Works' page launch. -->
 
   <Bundle	Name="$(var.Suite_ProductName)" Version="$(var.Suite_Version)" Manufacturer="$(var.Suite_Manufacturer)"
   UpgradeCode="$(var.Suite_UpgradeCode)" AboutUrl="$(var.Suite_ProductUrl)"
@@ -20,7 +21,8 @@
           ShowFilesInUse="yes" ShowVersion="yes" SuppressOptionsUI="no" />
     </BootstrapperApplicationRef>
 
-    <Variable Name="CustomProductName" Persisted="yes" Type="string" Value="$(var.Suite_ProductName)" /><!--Change from Suite_ProdShort to Suite_ProductName for full name in header in installer.-->
+    <!--Change from Suite_ProdShort to Suite_ProductName for full name in header in installer.-->
+    <Variable Name="CustomProductName" Persisted="yes" Type="string" Value="$(var.Suite_ProductName)" />
 
     <Variable Name="TermsUrl"       Persisted="yes" Type="string" Value="[WixBundleTempPath]License.rtf" />
     <Variable Name="InstallFolder"  Persisted="yes" Type="string" Value="[WindowsVolume]$(var.Suite_InstallDir)" />
@@ -46,6 +48,8 @@
     <!--<Variable Name="DoNotCleanUpDataDir" Type="numeric"/>-->
 
     <Chain>
+      <!-- Chain lists all the packages that have to be installed, in sequence. -->
+
       <PackageGroupRef Id="VC2010SP1_Redistributable"/>
       <PackageGroupRef Id="VC2012UP4_Redistributable" />
       <PackageGroupRef Id="VC2015_19_Redistributable"/>
@@ -58,12 +62,21 @@
       <PackageGroupRef Id="NetFX452_Redistributable"/>
       <!-- Required by Apps -->
 
+
+      <!-- A RollbackBoundary tag can be used to mark what should be rolled back and what not if the user decides to roll back our installation. -->
+      <RollbackBoundary />
+
+
       <MsiPackage Id="MySQL_ODBCConn_x64" Compressed="yes" Visible="yes" Permanent="yes" InstallCondition="VersionNT64"
-  SourceFile="$(var.PrerequisitesPath)\mysql-connector-odbc-5.3.10-winx64.msi" Vital="yes" ForcePerMachine="yes" >
+          SourceFile="$(var.PrerequisitesPath)\mysql-connector-odbc-8.0.17-winx64.msi" Vital="yes" ForcePerMachine="yes" >
+      </MsiPackage>
+
+      <MsiPackage Id="MySQL_NETConn_x64" Compressed="yes" Visible="yes" Permanent="yes" InstallCondition="VersionNT64"
+          SourceFile="$(var.PrerequisitesPath)\mysql-connector-net-8.0.17.msi" Vital="yes" ForcePerMachine="yes" >
       </MsiPackage>
 
       <MsiPackage Id="Suite_MySQL_x64" Compressed="yes" InstallCondition="VersionNT64"
-  SourceFile="bin\$(var.Configuration)\Suite_MySQL_x64.msi" Vital="yes" ForcePerMachine="yes" >
+          SourceFile="bin\$(var.Configuration)\Suite_MySQL_x64.msi" Vital="yes" ForcePerMachine="yes" >
         <MsiProperty Name="SUITE_INSTALLDIR" Value="[InstallFolder]" />
         <MsiProperty Name="INSTALL_REG_PATH" Value="[InstallRegPath]"/>
         <MsiProperty Name="MYSQL_ROOT_PASS" Value="[MySQLRootPass]"/>
@@ -72,7 +85,7 @@
       </MsiPackage>
 
       <MsiPackage Id="Suite_PHP_x64" Compressed="yes" InstallCondition="VersionNT64"
-  SourceFile="bin\$(var.Configuration)\Suite_PHP_x64.msi" Vital="yes" ForcePerMachine="yes" >
+          SourceFile="bin\$(var.Configuration)\Suite_PHP_x64.msi" Vital="yes" ForcePerMachine="yes" >
         <MsiProperty Name="SUITE_INSTALLDIR" Value="[InstallFolder]" />
         <MsiProperty Name="INSTALL_REG_PATH" Value="[InstallRegPath]"/>
       </MsiPackage>
@@ -84,6 +97,23 @@
         <MsiProperty Name="APACHE_PORT" Value="[ApachePort]"/>
       </MsiPackage>
 
+      <ExePackage Id="setup_espeak" DisplayName="eSpeak 1.48.04"
+          SourceFile="$(var.PrerequisitesPath)\setup_espeak-1.48.04.exe"
+          PerMachine="yes" Vital="yes" Compressed="yes" InstallCommand="/silent" UninstallCommand="/silent">
+      </ExePackage>
+
+      <MsiPackage Id="Node_x64" Compressed="yes" Visible="yes" Permanent="yes" InstallCondition="VersionNT64"
+          SourceFile="$(var.PrerequisitesPath)\node-v10.16.3-x64.msi" Vital="yes" ForcePerMachine="yes" >
+      </MsiPackage>
+
+      <MsiPackage Id="Suite_Apache_x64" Compressed="yes" InstallCondition="VersionNT64"
+          SourceFile="bin\$(var.Configuration)\Suite_Apache_x64.msi" Vital="yes" ForcePerMachine="yes" >
+        <MsiProperty Name="SUITE_INSTALLDIR" Value="[InstallFolder]" />
+        <MsiProperty Name="INSTALL_REG_PATH" Value="[InstallRegPath]"/>
+        <MsiProperty Name="APACHE_PORT" Value="[ApachePort]"/>
+      </MsiPackage>
+
+      <!-- Run Tools installer last, as it has a collection of random things that can't go in the bootstrapper. -->
       <MsiPackage Id="Suite_Tools_x64" Compressed="yes" InstallCondition="VersionNT64" SourceFile="bin\$(var.Configuration)\Suite_Tools_x64.msi" Vital="yes" ForcePerMachine="yes" >
         <MsiProperty Name="SUITE_INSTALLDIR" Value="[InstallFolder]" />
         <MsiProperty Name="INSTALL_REG_PATH" Value="[InstallRegPath]"/>
@@ -93,21 +123,6 @@
         <MsiProperty Name="WEBSOCKET_PORT" Value="[WebsocketPort]"/>
       </MsiPackage>
 
-      <ExePackage Id="setup_espeak" DisplayName="eSpeak 1.48.04"
-          SourceFile="$(var.PrerequisitesPath)\setup_espeak-1.48.04.exe"
-          PerMachine="yes" Vital="yes" Compressed="yes" InstallCommand="/silent" UninstallCommand="/silent">
-      </ExePackage>
-
-      <MsiPackage Id="Node_x64" Compressed="yes" Visible="yes" Permanent="yes" InstallCondition="VersionNT64"
-        SourceFile="$(var.PrerequisitesPath)\node-v8.11.2-x64.msi" Vital="yes" ForcePerMachine="yes" >
-      </MsiPackage>
-
-      <MsiPackage Id="Suite_Apache_x64" Compressed="yes" InstallCondition="VersionNT64"
-  SourceFile="bin\$(var.Configuration)\Suite_Apache_x64.msi" Vital="yes" ForcePerMachine="yes" >
-        <MsiProperty Name="SUITE_INSTALLDIR" Value="[InstallFolder]" />
-        <MsiProperty Name="INSTALL_REG_PATH" Value="[InstallRegPath]"/>
-        <MsiProperty Name="APACHE_PORT" Value="[ApachePort]"/>
-      </MsiPackage>
     </Chain>
   </Bundle>
 
