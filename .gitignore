@@ -25,6 +25,8 @@ build.log
 /Suite_Apps/SuiteEng/bin/
 /Suite_Apps/SuiteEngConf/bin/
 /Suite_Apps/WiXInstaller/bin/
+/Suite_Apps/Websocket/node_cache/
+/Suite_Apps/Websocket/node_modules/
 
 /Suite_Prereqs/WiXInstaller/bin/
 /Suite_WixExt/wixstdba/Release

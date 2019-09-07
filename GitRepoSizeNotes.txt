@@ -1,0 +1,34 @@
+Find largest files in repository:
+  python3 git-largest-files.py
+
+If there are un-named/path results from above, that means they are extraneous objects (?) so git garbage collection will clean them up.
+
+Git garbage collection:
+  git -c gc.reflogExpire=0 -c gc.reflogExpireUnreachable=0 -c gc.rerereresolved=0 -c gc.rerereunresolved=0 -c gc.pruneExpire=now gc
+
+I think this cleaned it up locally.
+
+Had changes to the .gitignore file, so
+  git commit -a -m "Noisy commit."
+
+Then reset and force push.
+  git reset --hard HEAD~1
+  git push -f
+
+This still gave me the warning, so I went on.
+I do wonder if this worked, but after the force push, asynchronously, and thus the warning was generated in the immediate.
+
+Make changes to .gitignore again.
+  git commit -a -m "Noisy commit."
+Now run the full recommendation:
+  git reflog expire --expire-unreachable="30m" --all
+  git prune --expire="30m" -v
+  git gc --prune="30m"
+  git reset --hard HEAD~1
+  git push -f
+
+And now no warning. 
+  20190907 .git 667M
+
+
+
