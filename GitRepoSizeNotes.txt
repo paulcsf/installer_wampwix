@@ -28,7 +28,7 @@ Now run the full recommendation:
   git push -f
 
 And now no warning. 
-  20190907 .git 667M
+  20190907 local .git 667M
 
-
+Nope, apparently no warning was we don't tell you again in a short amount of time. So contacted support as the documentation says. We'll see.
 

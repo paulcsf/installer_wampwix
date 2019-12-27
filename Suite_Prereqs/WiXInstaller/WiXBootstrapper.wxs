@@ -68,11 +68,11 @@
 
 
       <MsiPackage Id="MySQL_ODBCConn_x64" Compressed="yes" Visible="yes" Permanent="yes" InstallCondition="VersionNT64"
-          SourceFile="$(var.PrerequisitesPath)\mysql-connector-odbc-8.0.17-winx64.msi" Vital="yes" ForcePerMachine="yes" >
+          SourceFile="$(var.PrerequisitesPath)\mysql-connector-odbc-8.0.18-winx64.msi" Vital="yes" ForcePerMachine="yes" >
       </MsiPackage>
 
       <MsiPackage Id="MySQL_NETConn_x64" Compressed="yes" Visible="yes" Permanent="yes" InstallCondition="VersionNT64"
-          SourceFile="$(var.PrerequisitesPath)\mysql-connector-net-8.0.17.msi" Vital="yes" ForcePerMachine="yes" >
+          SourceFile="$(var.PrerequisitesPath)\mysql-connector-net-8.0.18.msi" Vital="yes" ForcePerMachine="yes" >
       </MsiPackage>
 
       <MsiPackage Id="Suite_MySQL_x64" Compressed="yes" InstallCondition="VersionNT64"
@@ -103,7 +103,7 @@
       </ExePackage>
 
       <MsiPackage Id="Node_x64" Compressed="yes" Visible="yes" Permanent="yes" InstallCondition="VersionNT64"
-          SourceFile="$(var.PrerequisitesPath)\node-v10.16.3-x64.msi" Vital="yes" ForcePerMachine="yes" >
+          SourceFile="$(var.PrerequisitesPath)\node-v12.14.0-x64.msi" Vital="yes" ForcePerMachine="yes" >
       </MsiPackage>
 
       <MsiPackage Id="Suite_Apache_x64" Compressed="yes" InstallCondition="VersionNT64"

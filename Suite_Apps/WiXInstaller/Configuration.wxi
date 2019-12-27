@@ -2,22 +2,22 @@
 <Include>
   <!-- Wix install log files: C:\Users\<user>\AppData\Local\Temp -->
 
-  <?define Suite_ProductName   = "Suite - Apps" ?>
-  <?define Suite_ProdShort     = "Suite" ?>
+  <?define Suite_ProductName    = "Suite - Apps" ?>
+  <?define Suite_ProdShort      = "Suite" ?>
   <!-- Registry key where install info is saved - HKEY_LOCAL_MACHINE\SOFTWARE\$(var.Suite_ManufShort)\$(var.Suite_ProdShort) -->
   <!-- Registry service info: HKEY_LOCAL_MACHINE\SYSTEM\ControlSet001\Services\$(var.Apache_SVC_Name) -->
-  <?define Suite_UpgradeCode   = "C9072391-7861-4E00-ACD5-8A8ABE37D6CA" ?>
-  <?define Suite_Manufacturer  = "SuiteCompany, LLC" ?>
-  <?define Suite_ManufShort    = "SuiteCompany" ?>
+  <?define Suite_UpgradeCode    = "C9072391-7861-4E00-ACD5-8A8ABE37D6CA" ?>
+  <?define Suite_Manufacturer   = "SuiteCompany, LLC" ?>
+  <?define Suite_ManufShort     = "SuiteCompany" ?>
   <?ifdef env.BUILD_NUMBER ?>
-  <?define Suite_Version   = "1.0.0.$(env.BUILD_NUMBER)"?>
+  <?define Suite_Version        = "1.0.0.$(env.BUILD_NUMBER)"?>
   <?else?>
-  <?define Suite_Version   = "1.0.0.0"?>
+  <?define Suite_Version        = "1.0.0.0"?>
   <?endif?>
-  <?define Suite_InstallDir    = "SuiteDir" ?>
-  <?define Suite_StartMenuDir  = "Suite StartMenu" ?>
-  <?define Suite_ProductUrl    = "http://www.suite.com" ?>
-  <?define Suite_PrereqsName   = "Suite - Prereqs" ?>
+  <?define Suite_InstallDir     = "SuiteDir" ?>
+  <?define Suite_StartMenuDir   = "Suite StartMenu" ?>
+  <?define Suite_ProductUrl     = "http://www.suite.com" ?>
+  <?define Suite_PrereqsName    = "Suite - Prereqs" ?>
 
 
   <?define Web_ProductName            = "Suite Web Content" ?>
@@ -25,6 +25,7 @@
   <?define Web_ProductCode            = "*" ?>
   <?define Web_UpgradeCode            = "9229C764-5BD1-4605-B14C-E976267DD509" ?>
   <?define Web_ProductFiles           = "..\Web\" ?>
+  <?define Web_ShortCutName           = "Suite Web Content" ?>
 
   <?define Websocket_ProductName      = "Suite Websocket" ?>
   <?define Websocket_ProductVersion   = "$(var.Suite_Version)" ?>
@@ -32,14 +33,14 @@
   <?define Websocket_UpgradeCode      = "D673DB00-3328-4047-82A9-E791C7925678" ?>
   <?define Websocket_ProductFiles     = "..\Websocket\" ?>
 
-  <?define SuiteEng_ProductName      = "Suite Engine" ?>
-  <?define SuiteEng_ProductVersion   = "$(var.Suite_Version)" ?>
-  <?define SuiteEng_ProductCode      = "*" ?>
-  <?define SuiteEng_UpgradeCode      = "9229C764-5BD1-4605-B14C-E976267DD50A" ?>
+  <?define Engine_ProductName         = "Suite Engine" ?>
+  <?define Engine_ProductVersion      = "$(var.Suite_Version)" ?>
+  <?define Engine_ProductCode         = "*" ?>
+  <?define Engine_UpgradeCode         = "9229C764-5BD1-4605-B14C-E976267DD50A" ?>
 
-  <?define SuiteEng_SVC_Name         = "SuiteEng" ?>
-  <?define SuiteEng_SVC_DisplayName  = "Suite Engine" ?>
-  <?define SuiteEng_SVC_Description  = "A C# Windows service example" ?>
+  <?define Engine_SVC_Name            = "SuiteEng" ?>
+  <?define Engine_SVC_DisplayName     = "Suite Engine" ?>
+  <?define Engine_SVC_Description     = "A C# Windows service example" ?>
 
 
   <?define WiXCAProjectPath           = "..\..\Suite_Prereqs\WiXCustomAction\" ?>

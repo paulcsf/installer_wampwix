@@ -11,7 +11,7 @@
     <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
     <MediaTemplate EmbedCab="yes" />
 
-    <!-- These properties will be provided by bootstrapper and will be overrided -->
+    <!-- These properties will be provided by bootstrapper and will be overridden -->
     <Property Id="INSTALL_REG_PATH" Value="SOFTWARE\$(var.Suite_ManufShort)\$(var.Suite_ProdShort)" />
 
 
@@ -38,6 +38,10 @@ C:\Program Files\Apache Software Foundation\Apache2.2\.
       
       
       To test Apache config: httpd -t
+      
+      If we ended up using httpd.exe -k install -n $(var.Apache_SVC_Name), then we could use:
+      sc failure IESSPApache actions= restart/15000/restart/15000/restart/15000/ reset= 86400
+      To set the service restart options after.
       -->
     <SetProperty Id="UpdateApacheConfig1" Sequence="execute" Value="[SUITE_INSTALLDIR]|[APACHE_PORT]|[#local.conf]" Before="UpdateApacheConfig1" />
     <CustomAction Id="UpdateApacheConfig1" BinaryKey="WiXCustomAction" DllEntry="UpdateApacheConfig" Execute="deferred" Return="check" />
@@ -105,6 +109,17 @@ C:\Program Files\Apache Software Foundation\Apache2.2\.
         <RemoveFile Id="RemoveFile_TextLogFiles" Name="*.log" On="uninstall"/>
       </Component>
 
+      <!--  AH00435: No installed ConfigArgs for the service "Suite Web Service", using Apache defaults.  
+            Is caused by no Registry Key HKLM\SYSTEM\ControlSet001\Services\IESSPApache\Parameters\ConfigArgs REG_MULTI_SZ.
+            An empty string is all that is necesssary. -->
+      <Component Id="CMP_RegistryEntries1" Guid="{ACBF2407-9E01-46E8-B33F-3B6D677708D0}" Directory="logs" KeyPath="yes">
+          <RegistryKey Root="HKLM" Key="SYSTEM\ControlSet001\Services\$(var.Apache_SVC_Name)\Parameters" ForceCreateOnInstall="yes">
+              <RegistryValue Name="ConfigArgs" Action="write" Type="multiString">
+                <MultiStringValue Name="ConfigArgs" Action="write" Type="multiString"></MultiStringValue>
+              </RegistryValue>
+            </RegistryKey>
+        </Component>
+      
       <Component Id="CMP_RemoveSuiteFolder" Guid="{13057E46-5C10-4081-9D0E-EA1B6487A809}" Directory="SUITE_INSTALLDIR" KeyPath="yes" >
         <RemoveFolder Id="RemoveSuiteFolder" On="uninstall"/>
       </Component>

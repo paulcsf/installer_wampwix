@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix
+    xmlns="http://schemas.microsoft.com/wix/2006/wi"
+    xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+
+  <?include Configuration.wxi?>
+
+  <Product Id="$(var.Engine_ProductCode)" Name="$(var.Engine_ProductName)" Language="1033" Version="$(var.Engine_ProductVersion)" Manufacturer="$(var.Suite_Manufacturer)" UpgradeCode="$(var.Engine_UpgradeCode)">
+    <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" InstallPrivileges="elevated" />
+
+    <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+
+    <!-- To generate the embedded cabinet file, ie just the MSI -->
+    <MediaTemplate EmbedCab="yes" />
+    <!-- To generate a separate MSI and Cab file 
+        <Media Id="1" Cabinet="Engine.cab" EmbedCab="no"/>-->
+
+    <Property Id="DIR_MYSQL">
+      <RegistrySearch Id="RegSearch_DIR_MYSQL" Root="HKLM" Key="[INSTALL_REG_PATH]" Name="DIR_MYSQL" Type="raw" />
+    </Property>
+
+    <Property Id="MYSQL_PORT">
+      <RegistrySearch Id="RegSearch_MYSQL_PORT" Root="HKLM" Key="[INSTALL_REG_PATH]" Name="MYSQL_PORT" Type="raw" />
+    </Property>
+
+    <Property Id="APACHE_PORT">
+      <RegistrySearch Id="RegSearch_APACHE_PORT" Root="HKLM" Key="[INSTALL_REG_PATH]" Name="APACHE_PORT" Type="raw" />
+    </Property>
+
+    <Property Id="REDIS_PORT">
+      <RegistrySearch Id="RegSearch_REDIS_PORT" Root="HKLM" Key="[INSTALL_REG_PATH]" Name="REDIS_PORT" Type="raw" />
+    </Property>
+
+    <Property Id="WEBSOCKET_PORT">
+      <RegistrySearch Id="RegSearch_WEBSOCKET_PORT" Root="HKLM" Key="[INSTALL_REG_PATH]" Name="WEBSOCKET_PORT" Type="raw" />
+    </Property>
+
+    <Property Id="MYSQL_ROOT_ENCPASS" Hidden="yes">
+      <RegistrySearch Id="RegSearch_MYSQL_ROOT_ENCPASS" Root="HKLM" Key="[INSTALL_REG_PATH]" Name="MYSQL_ROOT_ENCPASS" Type="raw" />
+    </Property>
+
+    <Binary Id="WiXCustomAction" SourceFile="$(var.WiXCAProjectPath)bin\$(var.Configuration)\Win64\WiXCustomAction.dll"/>
+
+    <CustomAction Id="DecodePassword" BinaryKey="WiXCustomAction" DllEntry="DecodePassword" Return="check" />
+
+    <SetProperty Id="UpdateCreateDB" Sequence="execute" Value="[MYSQL_PORT]|[MYSQL_ROOT_PASS]|[#CreateDatabase.sql]" Before="UpdateCreateDB" />
+    <CustomAction Id="UpdateCreateDB" BinaryKey="WiXCustomAction" DllEntry="UpdateWebConfig" Execute="deferred" Return="check" />
+
+    <SetProperty Id="QTExec_CreateDatabase" Sequence="execute" Value="&quot;[System64Folder]cmd.exe&quot; /C &quot;&quot;[DIR_MYSQL]bin\mysql.exe&quot; --port=[MYSQL_PORT] --user=root --password=&quot;[MYSQL_ROOT_PASS]&quot; &lt; &quot;[#CreateDatabase.sql]&quot;&quot;" Before="QTExec_CreateDatabase" />
+    <CustomAction Id="QTExec_CreateDatabase" BinaryKey="WixCA" DllEntry="WixQuietExec64" Execute="deferred" Return="ignore" Impersonate="no"/>
+
+    <InstallExecuteSequence>
+      <Custom Action="DecodePassword" After="ValidateProductID"></Custom>
+      <Custom Action="UpdateCreateDB" After="InstallFiles">NOT Installed</Custom>
+      <Custom Action="QTExec_CreateDatabase" After="InstallFiles">NOT Installed AND NOT(REMOVE="ALL") AND NOT WIX_UPGRADE_DETECTED</Custom>
+    </InstallExecuteSequence>
+
+    <Feature Id="ProductFeature" Title="Engine_MSIPackage" Level="1">
+      <ComponentGroupRef Id="CG_Engine_ProductFiles" />
+      <ComponentGroupRef Id="CG_Engine_ProductConfiguration" />
+    </Feature>
+  </Product>
+
+  <Fragment>
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="SUITE_INSTALLDIR" Name="$(var.Suite_InstallDir)">
+        <Directory Id="DIR_ENGINE" Name="SuiteEngine" />
+      </Directory>
+      <Directory Id="ProgramMenuFolder" Name="ProgramMenuFolder">
+      </Directory>
+    </Directory>
+  </Fragment>
+
+  <Fragment>
+    <ComponentGroup Id="CG_Engine_ProductFiles" Directory="DIR_ENGINE">
+      <Component Id="CreateDatabase.sql" Guid="{58661D68-78F9-4AEE-B96F-8ACD0F943966}">
+        <File Id="CreateDatabase.sql" KeyPath="yes" Source="..\Scripts\CreateDatabase.sql"/>
+      </Component>
+      <Component Id="SuiteEng.exe.config" Guid="{406D4138-8ADA-4D3D-929F-00EF7BDCBD87}">
+        <File Id="SuiteEng.exe.config" KeyPath="yes" Name="SuiteEng.exe.config" Source="$(var.Engine.ProjectDir)bin\$(var.Configuration)\app.config"/>
+      </Component>
+      <Component Id="SuiteEng.exe" Guid="{EC523D52-7022-45FF-87FF-E2AD91F7FFDD}">
+        <File Id="SuiteEng.exe" KeyPath="yes" Source="$(var.Engine.ProjectDir)bin\$(var.Configuration)\SuiteEng.exe"/>
+        <ServiceInstall Id="Engine_SvcInstall" Name="$(var.Engine_SVC_Name)" DisplayName="$(var.Engine_SVC_DisplayName)" Description="$(var.Engine_SVC_Description)" Type="ownProcess" Start="auto" ErrorControl="normal" Interactive="no">
+          <ServiceDependency Id="$(var.MySQL_SVC_Name)"/>
+          <util:ServiceConfig ServiceName="$(var.Engine_SVC_Name)" FirstFailureActionType="restart" SecondFailureActionType="restart" ThirdFailureActionType="restart" RestartServiceDelayInSeconds="15" ResetPeriodInDays="1"/>
+        </ServiceInstall>
+        <ServiceControl Id="Engine_SvcControl" Name="$(var.Engine_SVC_Name)" Start="install" Stop="uninstall" Remove="uninstall" Wait="yes"/>
+      </Component>
+      <Component Id="StackExchange.Redis.dll" Guid="{9B2D3618-E103-4826-B8D1-F073BE553E07}">
+        <File Id="StackExchange.Redis.dll" KeyPath="yes" Name="StackExchange.Redis.dll" Source="$(var.Engine.ProjectDir)bin\$(var.Configuration)\StackExchange.Redis.dll"/>
+      </Component>
+      <Component Id="Newtonsoft.Json.dll" Guid="{8C9B16CF-85B2-4096-AB6C-5BF0FF711888}">
+        <File Id="Newtonsoft.Json.dll" KeyPath="yes" Name="Newtonsoft.Json.dll" Source="$(var.Engine.ProjectDir)bin\$(var.Configuration)\Newtonsoft.Json.dll"/>
+      </Component>
+      <Component Id="TimeZoneConverter.dll" Guid="{B37DC0E5-9E6D-4CE3-BB34-3A743DF02CA0}">
+        <File Id="TimeZoneConverter.dll" KeyPath="yes" Name="TimeZoneConverter.dll" Source="$(var.Engine.ProjectDir)bin\$(var.Configuration)\TimeZoneConverter.dll"/>
+      </Component>
+    </ComponentGroup>
+
+    <ComponentGroup Id="CG_Engine_ProductConfiguration">
+      <Component Id="CMP_AppConfiguration" Guid="{7D7BD2F8-122D-4B33-A3D9-02825341616B}" Directory="TARGETDIR">
+        <util:XmlFile Id="XMLConfig_01" Action="setValue" File="[DIR_ENGINE]SuiteEng.exe.config" ElementPath="/configuration/connectionStrings/add[\[]@name='MySQL'[\]]" Name="connectionString" Value="Provider=MSDASQL;DRIVER={MySQL ODBC 5.3 Unicode Driver};SERVER=localhost;PORT=[MYSQL_PORT];DATABASE=suitedatabase;UID=root;PASSWORD=[MYSQL_ROOT_PASS];OPTION=3;"/>
+        <util:XmlFile Id="XMLConfig_02" Action="setValue" File="[DIR_ENGINE]SuiteEng.exe.config" ElementPath="/configuration/connectionStrings/add[\[]@name='Redis'[\]]" Name="connectionString" Value="localhost:[REDIS_PORT],defaultDatabase=2"/>
+      </Component>
+      <Component Id="CMP_RemoveSuiteFolder" Guid="{24DE8740-1919-447F-9C58-620F26B3DE80}" Directory="SUITE_INSTALLDIR" KeyPath="yes">
+        <RemoveFolder Id="RemoveSuiteFolder" On="uninstall" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+</Wix>

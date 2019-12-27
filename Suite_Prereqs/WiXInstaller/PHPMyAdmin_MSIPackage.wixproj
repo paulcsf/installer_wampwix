@@ -36,7 +36,7 @@
   </ItemGroup>
   <Import Project="$(WixTargetsPath)" />
   <PropertyGroup>
-    <PreBuildEvent>"%25WIX%25\bin\heat.exe" dir "$(SolutionDir)..\ProductFiles_Prereqs\phpMyAdmin-4.9.0.1-english" -t "$(SolutionDir)WiXInstaller\PHPMyAdmin_Translate.xsl" -cg CG_PHPMyAdmin_ProductFiles -dr DIR_PHPMYADMIN -gg -ke -scom -sfrag -srd -suid -sreg -var var.PHPMyAdmin_ProductFiles -o "$(SolutionDir)WiXInstaller\PHPMyAdmin_ProductFiles.wxs"</PreBuildEvent>
+    <PreBuildEvent>"%25WIX%25\bin\heat.exe" dir "$(SolutionDir)..\ProductFiles_Prereqs\phpMyAdmin-5.0.0-english" -t "$(SolutionDir)WiXInstaller\PHPMyAdmin_Translate.xsl" -cg CG_PHPMyAdmin_ProductFiles -dr DIR_PHPMYADMIN -gg -ke -scom -sfrag -srd -suid -sreg -var var.PHPMyAdmin_ProductFiles -o "$(SolutionDir)WiXInstaller\PHPMyAdmin_ProductFiles.wxs"</PreBuildEvent>
   </PropertyGroup>
   <!--
 	To modify your build process, add your task inside one of the targets below and uncomment it.

@@ -39,7 +39,7 @@
 
     <Binary Id="WiXCustomAction" SourceFile="$(var.WiXCAProjectPath)bin\$(var.Configuration)\Win64\WiXCustomAction.dll"/>
 
-    <SetProperty Id="SUITEWEB_URL" Value="http://localhost:[APACHE_PORT]" Sequence="execute" Before="CreateShortcuts" />
+    <SetProperty Id="WEB_URL" Value="http://localhost:[APACHE_PORT]" Sequence="execute" Before="CreateShortcuts" />
     <SetProperty Id="UpdateWebConfig" Sequence="execute" Value="[MYSQL_PORT]|[MYSQL_ROOT_PASS]|[#database.php]" Before="UpdateWebConfig" />
     <CustomAction Id="UpdateWebConfig" BinaryKey="WiXCustomAction" DllEntry="UpdateWebConfig" Execute="deferred" Return="check" />
     <SetProperty Id="UpdateRedisConfig" Sequence="execute" Value="[REDIS_PORT]|[#database.php]" Before="UpdateRedisConfig" />
@@ -75,8 +75,8 @@
   <Fragment>
     <ComponentGroup Id="CG_Web_ProductConfiguration">
       <Component Id="CMP_StartMenuShortcuts" Guid="{C65D7E84-27C2-4BFF-AAEE-A26BE8A17A26}" Directory="StartMenuAppFolder">
-        <Shortcut Id="ProductShortcut" Name="Suite Web Content" Description="Suite Web Content" Target="[SUITEWEB_URL]" Icon="ProductIcon" Directory="StartMenuAppFolder"/>
-        <RegistryValue Root="HKCU" Key="[INSTALL_REG_PATH]" Name="SuiteWeb_StartMenuShortcut" Type="integer" Value="1" KeyPath="yes" />
+        <Shortcut Id="ProductShortcut" Name="$(var.Web_ShortCutName)" Description="$(var.Web_ShortCutName)" Target="[WEB_URL]" Icon="ProductIcon" Directory="StartMenuAppFolder"/>
+        <RegistryValue Root="HKCU" Key="[INSTALL_REG_PATH]" Name="Web_StartMenuShortcut" Type="integer" Value="1" KeyPath="yes" />
         <RemoveFolder Id="StartMenuAppFolder" On="uninstall"/>
       </Component>
 

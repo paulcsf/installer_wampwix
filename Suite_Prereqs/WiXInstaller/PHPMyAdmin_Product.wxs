@@ -50,7 +50,7 @@
   <Fragment>
     <ComponentGroup Id="CG_PHPMyAdmin_ProductConfiguration">
       <Component Id="CMP_StartMenuShortcuts" Guid="{C65D7E84-27C2-4BFF-AAEE-A26BE8A17A26}" Directory="StartMenuAppFolder">
-        <Shortcut Id="ProductShortcut" Name="Suite Database Admin" Description="Database administration tool" Target="[PHPMYADMIN_URL]" Icon="ProductIcon" Directory="StartMenuAppFolder"/>
+        <Shortcut Id="ProductShortcut" Name="$(var.PHPMyAdmin_ShortCutName)" Description="Database administration tool" Target="[PHPMYADMIN_URL]" Icon="ProductIcon" Directory="StartMenuAppFolder"/>
         <RegistryValue Root="HKCU" Key="[INSTALL_REG_PATH]" Name="PHPMyAdmin_StartMenuShortcut" Type="integer" Value="1" KeyPath="yes" />
         <RemoveFolder Id="StartMenuAppFolder" On="uninstall"/>
       </Component>

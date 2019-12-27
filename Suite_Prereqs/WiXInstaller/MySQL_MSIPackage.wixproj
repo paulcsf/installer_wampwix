@@ -42,7 +42,7 @@
   <Import Project="$(WixTargetsPath)" />
   <PropertyGroup>
     <PreBuildEvent>if  $(PlatformName) == x64 (
-"%25WIX%25\bin\heat.exe" dir "$(SolutionDir)..\ProductFiles_Prereqs\mysql-8.0.17-winx64" -t "$(SolutionDir)WiXInstaller\MySQL_Translate_x64.xsl" -cg CG_MySQL_ProductFiles -dr DIR_MYSQL -gg -ke -scom -sfrag -srd -suid -sreg -var var.MySQL_ProductFiles_x64 -o "$(SolutionDir)WiXInstaller\MySQL_ProductFiles_x64.wxs"
+"%25WIX%25\bin\heat.exe" dir "$(SolutionDir)..\ProductFiles_Prereqs\mysql-8.0.18-winx64" -t "$(SolutionDir)WiXInstaller\MySQL_Translate_x64.xsl" -cg CG_MySQL_ProductFiles -dr DIR_MYSQL -gg -ke -scom -sfrag -srd -suid -sreg -var var.MySQL_ProductFiles_x64 -o "$(SolutionDir)WiXInstaller\MySQL_ProductFiles_x64.wxs"
 )</PreBuildEvent>
   </PropertyGroup>
   <!--

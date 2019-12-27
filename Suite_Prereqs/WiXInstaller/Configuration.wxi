@@ -33,27 +33,28 @@
 
   <?define MySQL_ProductName      = "Suite MySQL" ?>
   <!-- Version has to be changed here (twice) and in MySQL_MSIPackage pre-build events. -->
-  <?define MySQL_ProductVersion   = "8.0.17.0" ?>
+  <?define MySQL_ProductVersion   = "8.0.18.0" ?>
   <?define MySQL_ProductCode      = "*" ?>
   <?define MySQL_UpgradeCode      = "F1FABF7B-8BB6-47B9-818C-36AF293C274B" ?>
   <?define MySQL_SVC_Name         = "SuiteMySQL" ?>
   <?define MySQL_SVC_DisplayName  = "Suite Database Service" ?>
   <?define MySQL_SVC_Description  = "Suite Database Service" ?>
-  <?define MySQL_ProductFiles_x64 = "..\..\ProductFiles_Prereqs\mysql-8.0.17-winx64\" ?>
+  <?define MySQL_ProductFiles_x64 = "..\..\ProductFiles_Prereqs\mysql-8.0.18-winx64\" ?>
 
   <?define PHP_ProductName      = "Suite PHP" ?>
   <!-- Version has to be changed here (twice) and in PHP_MSIPackage pre-build events. -->
-  <?define PHP_ProductVersion   = "7.3.9" ?>
+  <?define PHP_ProductVersion   = "7.3.13" ?>
   <?define PHP_ProductCode      = "*" ?>
   <?define PHP_UpgradeCode      = "32506798-0F11-40F3-BF98-5E762449AA70" ?>
-  <?define PHP_ProductFiles_x64 = "..\..\ProductFiles_Prereqs\php-7.3.9-Win32-VC15-x64\" ?>
+  <?define PHP_ProductFiles_x64 = "..\..\ProductFiles_Prereqs\php-7.3.13-Win32-VC15-x64\" ?>
 
   <?define PHPMyAdmin_ProductName      = "Suite phpMyAdmin" ?>
   <!-- Version has to be changed here (twice) and in PHPMyAdmin_MSIPackage pre-build events. -->
-  <?define PHPMyAdmin_ProductVersion   = "4.9.0.1" ?>
+  <?define PHPMyAdmin_ProductVersion   = "5.0.0" ?>
   <?define PHPMyAdmin_ProductCode      = "*" ?>
   <?define PHPMyAdmin_UpgradeCode      = "8F1DFD69-A3B4-431A-AAD7-909BE3ACFF14" ?>
-  <?define PHPMyAdmin_ProductFiles     = "..\..\ProductFiles_Prereqs\phpMyAdmin-4.9.0.1-english\" ?>
+  <?define PHPMyAdmin_ProductFiles     = "..\..\ProductFiles_Prereqs\phpMyAdmin-5.0.0-english\" ?>
+  <?define PHPMyAdmin_ShortCutName     = "Suite Database Admin" ?>
 
   <?define Tools_ProductName            = "Suite Tools" ?>
   <?define Tools_ProductVersion         = $(var.Suite_Version) ?>

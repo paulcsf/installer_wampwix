@@ -326,6 +326,17 @@ class SafeMySQL
 	}
 
 	/**
+	 * Conventional function to fetch field info.
+	 *
+	 * @param resource $result - myqli result
+	 * @return object whatever mysqli_fetch_fields returns
+	 */
+	public function fetch_fields($result)
+	{
+		return mysqli_fetch_fields($result);
+	}
+
+	/**
 	 * Conventional function to fetch field info of specific field (0 - numfields-1).
 	 *
 	 * @param resource $result - myqli result
